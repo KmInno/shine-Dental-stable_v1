@@ -1,0 +1,482 @@
+<style>
+    .invoice-container {
+        max-width: 900px;
+        width: 100%;
+        margin: auto;
+        background: white;
+        padding: 30px;
+    }
+
+    .blk,
+    .blk-02 {
+        display: inline;
+    }
+
+    /* COMPANY HEADER */
+
+    .company-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .company-header h2 {
+        margin: 0;
+    }
+
+    .company-info {
+        font-size: 13px;
+    }
+
+    /* CLIENT + INVOICE BOX */
+
+    .top-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .box {
+        width: 45%;
+    }
+
+    .box table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .box td {
+        border: 1px solid #000;
+        padding: 4px;
+    }
+
+    /* ITEM TABLE */
+
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .items-table th,
+    .items-table td {
+        border: 1px solid black;
+        padding: 8px;
+    }
+
+    .items-table th {
+        background: #eee;
+    }
+
+    /* TOTAL BOX */
+
+    .total-box {
+        width: 300px;
+        /* float removed to allow flex layout in summary container */
+        margin-top: 20px;
+    }
+
+    .total-box table {
+        width: 100%;
+    }
+
+    .total-box td {
+        padding: 6px;
+    }
+
+    /* summary layout with payment info */
+    .summary-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: flex-start;
+        margin-top: 20px;
+    }
+
+    .payment-info {
+        width: 320px;
+        border: 1px solid #000;
+        padding: 10px;
+        font-size: 13px;
+        background: #fff;
+        border-radius: 4px;
+    }
+
+    .payment-info .label {
+        font-weight: bold;
+        margin-top: 6px;
+    }
+
+    /* FOOTER */
+
+    .footer {
+        margin-top: 80px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .actions {
+        margin-top: 20px;
+    }
+
+    button {
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-print {
+        background: #007bff;
+        color: white;
+    }
+
+    .btn-edit {
+        background: #28a745;
+        color: white;
+    }
+
+    .btn-back {
+        background: #6c757d;
+        color: white;
+    }
+
+    .company-header img {
+        width: 100%;
+        max-width: 840px;
+    }
+
+
+
+    @media print {
+
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+
+        body {
+            background: white;
+            font-size: 12px;
+            margin-top: 0;
+        }
+
+        .invoice-container {
+            width: 100%;
+            margin: 10;
+            /* padding: 20; */
+            box-shadow: none;
+            background: white;
+        }
+
+        /* Keep layout intact */
+        .top-section {
+            page-break-inside: avoid;
+        }
+
+        .items-table {
+            page-break-inside: auto;
+        }
+
+        .items-table tr {
+            page-break-inside: avoid;
+        }
+
+        /* Resize logo nicely */
+        .company-header img {
+            width: 100%;
+            max-width: 750px;
+        }
+
+        /* Hide buttons */
+        .actions,
+        button {
+            display: none !important;
+        }
+
+    }
+</style>
+
+<div class="invoice-container">
+
+    <!-- COMPANY HEADER -->
+
+    <div class="company-header">
+
+        <img src="/images/reciept_logo.png" alt="Receipt Logo">
+
+
+    </div>
+
+
+    <!-- CLIENT + INVOICE -->
+
+    <div class="top-section">
+
+        <div class="box">
+
+            <b>CLIENT</b>
+
+            <table>
+
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <%= invoice.client_name %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Address</td>
+                    <td>
+                        <%= invoice.client_address || '-' %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Telephone</td>
+                    <td>
+                        <%= invoice.client_tel %>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <div class="box">
+
+            <b>INVOICE</b>
+
+            <table>
+
+                <tr>
+                    <td>Invoice</td>
+                    <td>
+                        <strong>
+                            <%= invoice.invoice_number %>
+                        </strong>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Date</td>
+                    <td>
+                        <%= new Date(invoice.invoice_date).toLocaleDateString('en-GB') %>
+                    </td>
+                </tr>
+
+                <!-- LPO removed -->
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <script>
+        function numberToWordsFull(num) {
+            if (!num) return 'zero';
+            const a = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+            const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+            const scales = ['', 'thousand', 'million', 'billion'];
+
+            function chunkToWords(n) {
+                let str = '';
+                if (n >= 100) {
+                    str += a[Math.floor(n / 100)] + ' hundred';
+                    n = n % 100;
+                    if (n) str += ' and ';
+                }
+                if (n >= 20) {
+                    str += b[Math.floor(n / 10)];
+                    if (n % 10) str += '-' + a[n % 10];
+                } else if (n > 0) {
+                    str += a[n];
+                }
+                return str;
+            }
+
+            const words = [];
+            let scale = 0;
+            let n = Math.floor(num);
+
+            while (n > 0) {
+                const chunk = n % 1000;
+                if (chunk) {
+                    const chunkWords = chunkToWords(chunk) + (scales[scale] ? ' ' + scales[scale] : '');
+                    words.unshift(chunkWords.trim());
+                }
+                n = Math.floor(n / 1000);
+                scale++;
+            }
+
+            return words.join(', ').replace(/, (?=[^,]*$)/, ' and');
+        }
+
+        const invoiceTotalAmount = Math.round(Number('<%= parseFloat(invoice.total) || 0 %>') || 0);
+        const words = numberToWordsFull(invoiceTotalAmount);
+        document.addEventListener('DOMContentLoaded', function () {
+            const el = document.getElementById('amount-in-words');
+            if (el) el.innerText = words.charAt(0).toUpperCase() + words.slice(1) + ' shillings';
+        });
+    </script>
+
+
+    <!-- ITEMS -->
+
+    <table class="items-table">
+
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Item Name</th>
+                <th>Qty</th>
+                <th>Unit</th>
+                <th>Unit Price</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <% let i=1; invoice.items.forEach(item=> { %>
+
+                <tr>
+
+                    <td>
+                        <%= i++ %>
+                    </td>
+
+                    <td>
+                        <%= item.item_name %>
+                    </td>
+
+                    <td>
+                        <%= item.qty %>
+                    </td>
+
+                    <td>
+                        <%= item.unit || 'Piece' %>
+                    </td>
+
+                    <td>UGX <%= parseFloat(item.unit_price).toLocaleString() %>
+                    </td>
+
+                    <td>UGX <%= parseFloat(item.amount).toLocaleString() %>
+                    </td>
+
+                </tr>
+
+                <% }) %>
+
+        </tbody>
+
+    </table>
+
+
+    <!-- TOTALS -->
+
+    <div class="summary-container">
+
+        <div class="payment-info">
+            <div class="blk">
+                <div class="label">Amount in Words</div>
+                <div id="amount-in-words" style="margin-bottom:8px;font-style:italic"></div>
+            </div>
+
+            <div class="blk-02">
+                <div class="label">Served by:</div>
+                <div>
+                    <%= (typeof servedBy !=='undefined' ? servedBy : (user && (user.name || user.email ||
+                        user.username)) || '_________' ) %>
+                </div>
+
+            </div>
+
+            <div class="terms">
+                <br>
+                <strong>
+                    <div>Terms $ Conditions</div>
+                </strong>
+                <div>Total Payment due in 30 days</div>
+            </div>
+
+            <div class="label">Payment details:</div>
+            <strong></strong>
+            <div>Merchant code:</div></strong>
+            <!-- <div>Airtelcode: 6072511</div> -->
+
+        </div>
+
+        <div class="total-box">
+
+            <table>
+
+                <tr>
+                    <td>Sub Total</td>
+                    <td>UGX <%= parseFloat(invoice.total).toLocaleString() %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Tax</td>
+                    <td> 0.0%
+                    </td>
+                </tr>
+
+                <!-- Discount row removed -->
+
+                <tr>
+                    <td>Net Amount</td>
+                    <td>UGX <%= parseFloat(invoice.total).toLocaleString() %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <!-- <td>WHT 6%</td>
+                        <td>0</td> -->
+                </tr>
+
+                <tr>
+                    <td><b>Total Amount</b></td>
+                    <td><b>UGX <%= parseFloat(invoice.total).toLocaleString() %></b></td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div style="clear:both"></div>
+
+
+    <div class="footer">
+        Thank you for choosing SHINE DENTAL SURGERY
+        <p class="copyright">© Shine Dental Surgery <%= new Date().getFullYear() %>
+        </p>
+
+    </div>
+
+
+    <!-- ACTION BUTTONS -->
+
+    <div class="actions">
+
+        <button class="btn-print" onclick="window.print()">Print</button>
+
+        <% if (user && user.usertype==='admin' ) { %>
+            <a href="/invoices/edit/<%= invoice.id %>">
+                <button class="btn-edit">Edit</button>
+            </a>
+            <% } %>
+
+                <a href="/invoices">
+                    <button class="btn-back">Back</button>
+                </a>
+
+    </div>
+
+
+</div>

@@ -1,0 +1,24 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <% if (typeof user !== 'undefined' && user) { %>
+      <button class="mobile-toggle" id="mobileToggle" type="button" aria-label="Toggle menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    <% } %>
+    <a href="/" class="brand-link">
+      <img src="/images/shinedental.jpeg" alt="Logo" class="logo">
+      <span class="brand-name">Shine Dental Surgery</span>
+    </a>
+  </div>
+  <div class="navbar-right">
+    <% if (typeof user !== 'undefined' && user) { %>
+      <span class="user-badge">
+        <i class="fa-solid fa-user-gear"></i>
+        <%= user.name %>
+      </span>
+      <a href="/account/logout" class="account-link">Logout</a>
+    <% } else { %>
+      <a href="/account/login" class="account-link" style="color: #ffffff; background: #0284c7;">Login</a>
+    <% } %>
+  </div>
+</nav>

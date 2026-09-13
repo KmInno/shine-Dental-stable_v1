@@ -1,0 +1,59 @@
+<%
+    const nextVisitValue = receipt.next_visit
+        ? (receipt.next_visit instanceof Date
+            ? receipt.next_visit.toISOString().split('T')[0]
+            : String(receipt.next_visit).split('T')[0])
+        : '';
+%>
+
+<form action="/receipts/edit/<%= receipt.id %>" method="POST">
+    <label for="receipt_number">Receipt Number:</label>
+    <input type="text" id="receipt_number" value="<%= receipt.id %>" readonly>
+
+    <label for="patient_name">Patient Name:</label>
+    <input type="text" id="patient_name" name="patient_name" value="<%= receipt.patient_name %>" required>
+
+    <label for="patient_phone">Patient Phone:</label>
+    <input type="text" id="patient_phone" name="patient_phone" value="<%= receipt.patient_phone %>" required>
+
+    <label for="patient_address">Patient Address:</label>
+    <input type="text" id="patient_address" name="patient_address" value="<%= receipt.patient_address %>"> 
+
+    <label for="patient_gender">Gender:</label>
+    <select id="patient_gender" name="patient_gender">
+        <option value="">Select</option>
+        <option value="Male" <%= receipt.gender === 'Male' ? 'selected' : '' %>>Male</option>
+        <option value="Female" <%= receipt.gender === 'Female' ? 'selected' : '' %>>Female</option>
+        <option value="Other" <%= receipt.gender === 'Other' ? 'selected' : '' %>>Other</option>
+    </select>
+
+    <label for="patient_age">Age:</label>
+    <input type="number" id="patient_age" name="patient_age" value="<%= receipt.age || '' %>" min="0" max="150">
+
+    <label for="patient_next_visit">Next Visit Date:</label>
+    <input type="date" id="patient_next_visit" name="patient_next_visit" value="<%= nextVisitValue %>">
+
+    <label for="room_number">Next Visit Room Number:</label>
+    <input type="text" id="room_number" name="room_number" value="<%= receipt.room_number || '' %>">
+
+    <label for="service">Service:</label>
+    <input type="text" id="service" name="service" value="<%= formatService(receipt.service) %>" required>
+
+    <label for="total">Total:</label>
+    <input type="number" id="total" name="total" value="<%= receipt.total %>" required>
+
+    <label for="mode_of_payment">Mode of Payment:</label>
+    <select id="mode_of_payment" name="mode_of_payment">
+        <option value="cash" <%= receipt.mode_of_payment === 'cash' ? 'selected' : '' %>>Cash</option>
+        <option value="mobile money" <%= receipt.mode_of_payment === 'mobile money' ? 'selected' : '' %>>Mobile Money</option>
+        <option value="visa" <%= receipt.mode_of_payment === 'visa' ? 'selected' : '' %>>Visa</option>
+    </select>
+
+    <label for="amount_paid">Amount Paid:</label>
+    <input type="number" id="amount_paid" name="amount_paid" value="<%= receipt.amount_paid %>" required>
+
+    <label for="balance">Balance:</label>
+    <input type="number" id="balance" name="balance" value="<%= receipt.balance %>" required>
+
+    <button type="submit">Update Receipt</button>
+</form>

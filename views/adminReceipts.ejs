@@ -1,0 +1,535 @@
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px 50px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            color: #2f3542;
+            font-size: 30px;
+            line-height: 1.2;
+        }
+
+        .btn-create {
+            background: #589f14;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-create:hover {
+            background: #467f10;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .admin-content {
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        #receiptsTable {
+            width: 100%;
+            min-width: 1050px;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        #receiptsTable thead {
+            background: #f8fafc;
+        }
+
+        #receiptsTable th {
+            padding: 13px 16px;
+            color: #6b7280;
+            text-align: left;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        #receiptsTable td {
+            padding: 15px 16px;
+            color: #4b5563;
+            font-size: 13px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f0f1f3;
+        }
+
+        #receiptsTable tbody tr:hover {
+            background: #fafcff;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 9px;
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 700;
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .badge-cash {
+            background: #ecfdf3;
+            color: #15803d;
+        }
+
+        .badge-mobile {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .amount {
+            font-weight: 700;
+            color: #17202b;
+        }
+
+        .amount.negative {
+            color: #dc2626;
+        }
+
+        .amount.positive {
+            color: #16a34a;
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .btn-delete {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #f4cccc;
+        }
+
+        .btn-delete:hover {
+            background: #fee2e2;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #dbe5f5;
+        }
+
+        .btn-edit:hover {
+            background: #e5efff;
+            color: white;
+        }
+
+        .btn-view {
+            background: #eef7e6;
+            color: #467f10;
+            border: 1px solid #cfe2bd;
+        }
+
+        .btn-view:hover {
+            background: #dff0cf;
+            color: white;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #8a94a3;
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .table-title {
+            margin: 0;
+            color: #2f3542;
+            font-size: 16px;
+        }
+
+        .table-count {
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: #eef7e6;
+            color: #467f10;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .receipt-id {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 9px;
+            border-radius: 7px;
+            background: #f3f4f6;
+            color: #2f3542;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .date-cell,
+        .patient-details {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .date-main,
+        .patient-name {
+            color: #2f3542;
+            font-weight: 700;
+        }
+
+        .date-secondary,
+        .patient-label {
+            color: #8a94a3;
+            font-size: 10px;
+        }
+
+        .patient-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+        }
+
+        .patient-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #eef7e6;
+            color: #467f10;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .phone-link {
+            color: #2f3542;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .phone-link i {
+            margin-right: 6px;
+            color: #25d366;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #receiptsTable th, #receiptsTable td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Admin Receipts</h1>
+            <a href="/receipt" class="btn-create">
+                <i class="fas fa-plus"></i> Create Receipt
+            </a>
+            <form class="search-box" method="GET" action="/receipts" style="display:flex; gap:8px; width:100%; max-width:480px;">
+                <input type="text" name="search" id="searchInput" placeholder="Search by patient name, phone, or ID..." value="<%= search || '' %>" style="flex:1; padding:10px; border-radius:4px; border:1px solid #ced4da;">
+                <button type="submit" class="btn" style="padding:10px 16px;">Search</button>
+            </form>
+        </div>
+
+        <div class="admin-content">
+            <div class="table-header">
+                <h2 class="table-title">
+                    <i class="fas fa-list"></i> Receipt Records
+                </h2>
+                <span class="table-count"><%= receipts ? receipts.length : 0 %></span>
+            </div>
+
+            <% if (receipts && receipts.length > 0) { %>
+                <div class="table-wrapper">
+                    <table id="receiptsTable">
+                        <thead>
+                            <tr>
+                                <th>Receipt</th>
+                                <th>Date</th>
+                                <th>Patient</th>
+                                <th>Contact</th>
+                                <th>Amount Paid</th>
+                                <th>Payment</th>
+                                <th>Balance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% receipts.forEach(receipt => { %>
+                                <%
+                                    const patientName = receipt.patient_name || 'N/A';
+                                    const patientInitial = patientName.trim().charAt(0).toUpperCase();
+                                    const balance = Number(receipt.balance || 0);
+                                    const paymentMethod = String(receipt.mode_of_payment || '').toLowerCase();
+                                    const paymentClass = paymentMethod.includes('cash')
+                                        ? 'badge-cash'
+                                        : paymentMethod.includes('mobile')
+                                            ? 'badge-mobile'
+                                            : '';
+                                %>
+                                <tr>
+                                    <td>
+                                        <span class="receipt-id">
+                                            <i class="fas fa-hashtag"></i><%= receipt.id %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="date-cell">
+                                            <span class="date-main"><%= new Date(receipt.created_at).toLocaleDateString('en-GB') %></span>
+                                            <span class="date-secondary">Receipt date</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="patient-cell">
+                                            <div class="patient-avatar"><%= patientInitial %></div>
+                                            <div class="patient-details">
+                                                <span class="patient-name"><%= patientName %></span>
+                                                <span class="patient-label">Patient</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <% if (receipt.patient_phone) { %>
+                                            <a class="phone-link" href="https://wa.me/<%= String(receipt.patient_phone).replace(/\D/g, '') %>" target="_blank" rel="noopener noreferrer">
+                                                <i class="fab fa-whatsapp"></i><%= formatPhone(receipt.patient_phone) %>
+                                            </a>
+                                        <% } else { %>
+                                            <span class="date-secondary">No phone</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="amount">UGX <%= Number(receipt.amount_paid || 0).toLocaleString('en-US') %></td>
+                                    <td>
+                                        <span class="badge <%= paymentClass %>">
+                                            <i class="fas <%= paymentClass === 'badge-cash' ? 'fa-coins' : paymentClass === 'badge-mobile' ? 'fa-mobile-screen-button' : 'fa-wallet' %>"></i>
+                                            <%= receipt.mode_of_payment || 'Unknown' %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge <%= balance > 0 ? 'amount negative' : 'amount positive' %>">
+                                            <i class="fas <%= balance > 0 ? 'fa-circle-exclamation' : 'fa-circle-check' %>"></i>
+                                            <%= balance > 0 ? 'UGX ' + balance.toLocaleString('en-US') : 'Paid' %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="/receipts/patient/<%= encodeURIComponent(patientName) %>" class="btn btn-view btn-icon" title="Patient history"><i class="fas fa-user"></i></a>
+                                            <a href="/receiptDetails/<%= receipt.id %>?patient_id=<%= receipt.id %>" class="btn btn-view btn-icon" title="View receipt"><i class="fas fa-eye"></i></a>
+                                            <a href="/receipts/edit/<%= receipt.id %>" class="btn btn-edit btn-icon" title="Edit"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-delete btn-icon" onclick="deleteReceipt('<%= receipt.id %>')" title="Delete"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% if (pagination && pagination.totalPages > 1) { %>
+                    <div class="pagination">
+                        <% if (pagination.hasPrevPage) { %>
+                            <a class="btn" href="/receipts?page=<%= pagination.page - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">← Previous</a>
+                        <% } %>
+                        <span>Page <%= pagination.page %> of <%= pagination.totalPages %></span>
+                        <% if (pagination.hasNextPage) { %>
+                            <a class="btn" href="/receipts?page=<%= pagination.page + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %>">Next →</a>
+                        <% } %>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <div class="no-data">
+                    <i class="fas fa-inbox"></i>
+                    <p>No receipts found</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <button id="scrollToBottomBtn" title="Scroll to bottom">↓</button>
+
+    <script>
+        // Delete receipt
+        async function deleteReceipt(receiptId) {
+            if (confirm("Are you sure you want to delete this receipt? This action cannot be undone.")) {
+                try {
+                    const response = await fetch(`/receipts/delete/${receiptId}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert(result.message);
+                        location.reload();
+                    } else {
+                        alert(result.message || "Error deleting receipt");
+                    }
+                } catch (error) {
+                    alert("Error deleting receipt");
+                    console.error(error);
+                }
+            }
+        }
+
+        // Scroll to bottom button
+        const scrollToBottomBtn = document.getElementById('scrollToBottomBtn');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToBottomBtn.style.display = 'block';
+            } else {
+                scrollToBottomBtn.style.display = 'none';
+            }
+        });
+        
+        scrollToBottomBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+    <style>
+        #scrollToBottomBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #scrollToBottomBtn:hover {
+            background: #555;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .pagination span {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .pagination .btn {
+            min-width: 100px;
+            text-align: center;
+        }
+    </style>

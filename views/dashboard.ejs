@@ -1,0 +1,2392 @@
+
+<!-- =========================================================
+     SHINE DENTAL
+     MAIN DASHBOARD
+========================================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+>
+
+<style>
+    /* =========================================================
+       DESIGN TOKENS
+    ========================================================= */
+
+    .dental-dashboard {
+        --primary: #589f14;
+        --primary-dark: #467f10;
+        --primary-light: #eef7e6;
+
+        --blue: #2563eb;
+        --blue-dark: #1d4ed8;
+        --blue-light: #eff6ff;
+
+        --success: #16a34a;
+        --success-light: #ecfdf3;
+
+        --warning: #d97706;
+        --warning-light: #fffbeb;
+
+        --danger: #dc2626;
+        --danger-light: #fef2f2;
+
+        --purple: #7c3aed;
+        --purple-light: #f5f3ff;
+
+        --text-strong: #17202b;
+        --text: #4b5563;
+        --text-soft: #8a94a3;
+
+        --border: #e5e8ed;
+        --background: #f5f7fa;
+        --surface: #ffffff;
+
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+
+        --shadow-sm:
+            0 2px 8px rgba(15, 23, 42, 0.05);
+
+        --shadow-md:
+            0 8px 24px rgba(15, 23, 42, 0.08);
+
+        --shadow-lg:
+            0 16px 40px rgba(15, 23, 42, 0.10);
+    }
+
+
+    /* =========================================================
+       GLOBAL
+    ========================================================= */
+
+    .dental-dashboard,
+    .dental-dashboard * {
+        box-sizing: border-box;
+    }
+
+    .dental-dashboard {
+        width: 100%;
+        min-height: 100vh;
+
+        padding: 28px 24px 60px;
+
+        background: var(--background);
+
+        color: var(--text);
+
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
+    }
+
+
+    /* =========================================================
+       PAGE HEADER
+    ========================================================= */
+
+    .dashboard-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        gap: 20px;
+
+        margin-bottom: 25px;
+    }
+
+    .header-content {
+        min-width: 0;
+    }
+
+    .dashboard-title {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+
+        margin: 0 0 7px;
+
+        color: var(--text-strong);
+
+        font-size: 29px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .dashboard-title i {
+        color: var(--primary);
+    }
+
+    .dashboard-subtitle {
+        margin: 0;
+
+        color: var(--text-soft);
+
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .header-date {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+
+        padding: 10px 13px;
+
+        border: 1px solid var(--border);
+        border-radius: 10px;
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+
+        color: var(--text);
+
+        font-size: 11px;
+        font-weight: 600;
+
+        white-space: nowrap;
+    }
+
+    .header-date i {
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       TODAY'S FINANCIAL OVERVIEW
+    ========================================================= */
+
+    .overview-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            );
+
+        gap: 16px;
+
+        margin-bottom: 24px;
+    }
+
+
+    /* =========================================================
+       FINANCIAL CARD
+    ========================================================= */
+
+    .financial-card {
+        position: relative;
+
+        overflow: hidden;
+
+        min-height: 150px;
+
+        padding: 20px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .financial-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .financial-card::after {
+        content: "";
+
+        position: absolute;
+
+        right: -25px;
+        top: -25px;
+
+        width: 95px;
+        height: 95px;
+
+        border-radius: 50%;
+
+        background: rgba(88, 159, 20, .05);
+    }
+
+
+    /* Card icons */
+
+    .financial-icon {
+        position: relative;
+        z-index: 1;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 42px;
+        height: 42px;
+
+        margin-bottom: 14px;
+
+        border-radius: 10px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+
+        font-size: 18px;
+    }
+
+    .financial-card.expense .financial-icon {
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+    .financial-card.net .financial-icon {
+        background: var(--success-light);
+        color: var(--success);
+    }
+
+    .financial-card.outstanding .financial-icon {
+        background: var(--warning-light);
+        color: var(--warning);
+    }
+
+
+    /* Card text */
+
+    .financial-label {
+        position: relative;
+        z-index: 1;
+
+        margin-bottom: 5px;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+
+    .financial-value {
+        position: relative;
+        z-index: 1;
+
+        color: var(--text-strong);
+
+        font-size: 24px;
+        font-weight: 700;
+
+        line-height: 1.2;
+
+        overflow-wrap: anywhere;
+    }
+
+    .financial-value.negative {
+        color: var(--danger);
+    }
+
+    .financial-subtext {
+        position: relative;
+        z-index: 1;
+
+        margin-top: 6px;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+    }
+
+
+    /* =========================================================
+       QUICK ACTIONS
+    ========================================================= */
+
+    .quick-actions-section {
+        margin-bottom: 24px;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        margin: 0 0 12px;
+
+        color: var(--text-strong);
+
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .section-heading i {
+        color: var(--primary);
+    }
+
+    .quick-actions {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            );
+
+        gap: 12px;
+    }
+
+    .quick-action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        min-height: 68px;
+
+        padding: 13px 15px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+
+        background: var(--surface);
+
+        color: var(--text-strong);
+
+        text-decoration: none;
+
+        box-shadow: var(--shadow-sm);
+
+        transition:
+            border-color .2s ease,
+            background .2s ease,
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .quick-action:hover {
+        transform: translateY(-2px);
+
+        border-color: #ccd3dc;
+
+        background: #fcfefd;
+
+        box-shadow: var(--shadow-md);
+    }
+
+    .quick-action-main {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+
+        min-width: 0;
+    }
+
+    .quick-action-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+
+        flex-shrink: 0;
+
+        border-radius: 9px;
+
+        background: var(--blue-light);
+        color: var(--blue);
+    }
+
+    .quick-action:nth-child(1) .quick-action-icon {
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+    .quick-action:nth-child(2) .quick-action-icon {
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .quick-action:nth-child(3) .quick-action-icon {
+        background: var(--blue-light);
+        color: var(--blue);
+    }
+
+    .quick-action:nth-child(4) .quick-action-icon {
+        background: var(--purple-light);
+        color: var(--purple);
+    }
+
+    .quick-action-text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        min-width: 0;
+    }
+
+    .quick-action-title {
+        color: var(--text-strong);
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .quick-action-description {
+        color: var(--text-soft);
+
+        font-size: 9px;
+    }
+
+    .quick-action-arrow {
+        color: #b2bac4;
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       SECONDARY STATISTICS
+    ========================================================= */
+
+    .secondary-stats {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            );
+
+        gap: 14px;
+
+        margin-bottom: 24px;
+    }
+
+    .secondary-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        padding: 15px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .secondary-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+
+        border-radius: 9px;
+
+        background: #f3f4f6;
+        color: var(--primary);
+
+        flex-shrink: 0;
+    }
+
+    .secondary-content {
+        min-width: 0;
+    }
+
+    .secondary-label {
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: var(--text-soft);
+
+        font-size: 9px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    .secondary-value {
+        display: block;
+
+        color: var(--text-strong);
+
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .secondary-detail {
+        display: block;
+
+        margin-top: 2px;
+
+        color: var(--text-soft);
+
+        font-size: 9px;
+    }
+
+
+    /* =========================================================
+       CONTENT GRID
+    ========================================================= */
+
+    .dashboard-content {
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1.4fr)
+            minmax(320px, .9fr);
+
+        gap: 18px;
+    }
+
+
+    /* =========================================================
+       SECTION CARD
+    ========================================================= */
+
+    .dashboard-section {
+        overflow: hidden;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 15px;
+
+        padding: 17px 19px;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .section-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 36px;
+        height: 36px;
+
+        border-radius: 9px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .section-title-text h2 {
+        margin: 0 0 3px;
+
+        color: var(--text-strong);
+
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .section-title-text p {
+        margin: 0;
+
+        color: var(--text-soft);
+
+        font-size: 9px;
+    }
+
+    .section-count {
+        padding: 5px 9px;
+
+        border-radius: 999px;
+
+        background: #f3f4f6;
+        color: var(--text);
+
+        font-size: 10px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       TABLES
+    ========================================================= */
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .dashboard-table {
+        width: 100%;
+        min-width: 600px;
+
+        border-collapse: collapse;
+    }
+
+    .dashboard-table thead {
+        background: #fafbfc;
+    }
+
+    .dashboard-table th {
+        padding: 11px 15px;
+
+        border-bottom: 1px solid var(--border);
+
+        color: #737d8a;
+
+        font-size: 9px;
+        font-weight: 700;
+
+        text-align: left;
+
+        text-transform: uppercase;
+        letter-spacing: .4px;
+
+        white-space: nowrap;
+    }
+
+    .dashboard-table td {
+        padding: 13px 15px;
+
+        border-bottom: 1px solid #f0f2f4;
+
+        color: var(--text);
+
+        font-size: 11px;
+
+        vertical-align: middle;
+    }
+
+    .dashboard-table tbody tr {
+        transition: background .18s ease;
+    }
+
+    .dashboard-table tbody tr:hover {
+        background: #fcfefb;
+    }
+
+    .dashboard-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    /* =========================================================
+       TABLE IDENTIFIERS
+    ========================================================= */
+
+    .record-id {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        padding: 5px 8px;
+
+        border-radius: 6px;
+
+        background: #f3f4f6;
+        color: var(--text-strong);
+
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .record-id i {
+        color: var(--primary);
+    }
+
+    .person-name {
+        color: var(--text-strong);
+        font-weight: 700;
+    }
+
+    .table-date {
+        color: var(--text);
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .table-amount {
+        color: var(--text-strong);
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .table-balance {
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .table-balance.pending {
+        color: var(--danger);
+    }
+
+    .table-balance.clear {
+        color: var(--success);
+    }
+
+
+    /* =========================================================
+       STATUS BADGES
+    ========================================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        padding: 5px 8px;
+
+        border-radius: 999px;
+
+        font-size: 9px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    .status-badge.paid {
+        background: var(--success-light);
+        color: #15803d;
+    }
+
+    .status-badge.sent {
+        background: var(--blue-light);
+        color: #1d4ed8;
+    }
+
+    .status-badge.draft {
+        background: var(--warning-light);
+        color: #a16207;
+    }
+
+    .status-badge.cancelled {
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+
+    /* =========================================================
+       APPOINTMENT BADGES
+    ========================================================= */
+
+    .appointment-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        padding: 6px 9px;
+
+        border-radius: 999px;
+
+        font-size: 9px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    .appointment-badge.today {
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+    .appointment-badge.tomorrow {
+        background: var(--warning-light);
+        color: #a16207;
+    }
+
+    .appointment-badge.future {
+        background: var(--blue-light);
+        color: var(--blue);
+    }
+
+
+    /* =========================================================
+       VIEW LINK
+    ========================================================= */
+
+    .view-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        padding: 6px 9px;
+
+        border-radius: 7px;
+
+        background: var(--blue-light);
+        color: var(--blue);
+
+        font-size: 9px;
+        font-weight: 700;
+
+        text-decoration: none;
+
+        transition:
+            background .18s ease,
+            color .18s ease,
+            transform .18s ease;
+    }
+
+    .view-link:hover {
+        background: #e0ebff;
+        color: var(--blue-dark);
+
+        transform: translateY(-1px);
+    }
+
+
+    /* =========================================================
+       SECTION FOOTER
+    ========================================================= */
+
+    .section-footer {
+        padding: 12px 18px;
+
+        border-top: 1px solid var(--border);
+
+        background: #fafbfc;
+    }
+
+    .view-all-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        color: var(--primary);
+
+        font-size: 10px;
+        font-weight: 700;
+
+        text-decoration: none;
+    }
+
+    .view-all-link:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 220px;
+
+        padding: 35px 20px;
+
+        text-align: center;
+    }
+
+    .empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 62px;
+        height: 62px;
+
+        margin-bottom: 14px;
+
+        border-radius: 50%;
+
+        background: #f1f5f9;
+        color: #cbd5e1;
+
+        font-size: 26px;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 5px;
+
+        color: var(--text-strong);
+
+        font-size: 15px;
+    }
+
+    .empty-state p {
+        max-width: 340px;
+
+        margin: 0;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+    .empty-state a {
+        color: var(--primary);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1100px) {
+
+        .overview-grid {
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+        }
+
+        .secondary-stats {
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+        }
+
+        .quick-actions {
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+        }
+
+        .dashboard-content {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    @media (max-width: 700px) {
+
+        .dental-dashboard {
+            padding: 20px 14px 45px;
+        }
+
+        .dashboard-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .dashboard-title {
+            font-size: 23px;
+        }
+
+        .header-date {
+            align-self: flex-start;
+        }
+
+        .overview-grid,
+        .secondary-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .quick-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .financial-card {
+            min-height: 135px;
+        }
+
+        .section-header {
+            align-items: flex-start;
+        }
+    }
+
+
+    @media (max-width: 450px) {
+
+        .financial-value {
+            font-size: 21px;
+        }
+
+        .section-title-text h2 {
+            font-size: 14px;
+        }
+    }
+</style>
+
+
+<%
+    /* =========================================================
+       SAFE / DERIVED VALUES
+    ========================================================= */
+
+    const safeStats =
+        stats || {};
+
+    const todaySales =
+        Number(dailySales || 0);
+
+    const todayExpenses =
+        Number(dailyExpenses || 0);
+
+    const todayNet =
+        todaySales - todayExpenses;
+
+    const todayOutstanding =
+        Number(outstandingAmount || 0);
+
+    const totalReceipts =
+        Number(safeStats.totalReceipts || 0);
+
+    const totalInvoices =
+        Number(safeStats.totalInvoices || 0);
+
+    const receiptAmount =
+        Number(safeStats.totalReceiptAmount || 0);
+
+    const invoiceAmount =
+        Number(safeStats.totalInvoiceAmount || 0);
+
+    const receiptBalance =
+        Number(safeStats.totalReceiptBalance || 0);
+
+    const paidInvoices =
+        Number(safeStats.paidInvoices || 0);
+
+    const sentInvoices =
+        Number(safeStats.sentInvoices || 0);
+
+    const draftInvoices =
+        Number(safeStats.draftInvoices || 0);
+
+    const paidSales =
+        Number(paidSalesCount || 0);
+%>
+
+
+<div class="dental-dashboard">
+
+
+    <!-- =======================================================
+         HEADER
+    ======================================================== -->
+
+    <header class="dashboard-header">
+
+        <div class="header-content">
+
+            <h1 class="dashboard-title">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                Welcome back,
+                <%= user.name %>
+
+            </h1>
+
+
+            <p class="dashboard-subtitle">
+
+                Here's your clinic's financial and
+                appointment overview for today.
+
+            </p>
+
+        </div>
+
+
+        <div class="header-date">
+
+            <i class="fa-solid fa-calendar-day"></i>
+
+            <%= new Date().toLocaleDateString(
+                'en-GB',
+                {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                }
+            ) %>
+
+        </div>
+
+    </header>
+
+
+    <!-- =======================================================
+         TODAY'S FINANCIAL OVERVIEW
+    ======================================================== -->
+
+    <section class="overview-grid">
+
+
+        <!-- Sales -->
+
+        <div class="financial-card">
+
+            <div class="financial-icon">
+
+                <i class="fa-solid fa-coins"></i>
+
+            </div>
+
+            <div class="financial-label">
+                Today's Sales
+            </div>
+
+            <div class="financial-value">
+
+                UGX
+                <%= todaySales.toLocaleString('en-US') %>
+
+            </div>
+
+            <div class="financial-subtext">
+                Daily revenue
+            </div>
+
+        </div>
+
+
+        <!-- Expenses -->
+
+        <div class="financial-card expense">
+
+            <div class="financial-icon">
+
+                <i class="fa-solid fa-arrow-trend-down"></i>
+
+            </div>
+
+            <div class="financial-label">
+                Today's Expenses
+            </div>
+
+            <div class="financial-value">
+
+                UGX
+                <%= todayExpenses.toLocaleString('en-US') %>
+
+            </div>
+
+            <div class="financial-subtext">
+
+                Includes UGX
+                <%= Number(
+                    dailyLabWork || 0
+                ).toLocaleString('en-US') %>
+                lab work
+
+            </div>
+
+        </div>
+
+
+        <!-- Net -->
+
+        <div class="financial-card net">
+
+            <div class="financial-icon">
+
+                <i class="fa-solid fa-wallet"></i>
+
+            </div>
+
+            <div class="financial-label">
+                Net Balance Today
+            </div>
+
+            <div
+                class="financial-value <%= todayNet < 0 ? 'negative' : '' %>"
+            >
+
+                UGX
+                <%= todayNet.toLocaleString('en-US') %>
+
+            </div>
+
+            <div class="financial-subtext">
+                Sales minus expenses
+            </div>
+
+        </div>
+
+
+        <!-- Outstanding -->
+
+        <div class="financial-card outstanding">
+
+            <div class="financial-icon">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+            </div>
+
+            <div class="financial-label">
+                Outstanding Today
+            </div>
+
+            <div class="financial-value">
+
+                UGX
+                <%= todayOutstanding.toLocaleString('en-US') %>
+
+            </div>
+
+            <div class="financial-subtext">
+
+                <%= paidSales %>
+                fully paid transaction<%= paidSales === 1 ? '' : 's' %>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =======================================================
+         QUICK ACTIONS
+    ======================================================== -->
+
+    <section class="quick-actions-section">
+
+        <h2 class="section-heading">
+
+            <i class="fa-solid fa-bolt"></i>
+
+            Quick Actions
+
+        </h2>
+
+
+        <div class="quick-actions">
+
+
+            <!-- Create Invoice -->
+
+            <a
+                href="/invoices/new"
+                class="quick-action"
+            >
+
+                <div class="quick-action-main">
+
+                    <div class="quick-action-icon">
+
+                        <i class="fa-solid fa-file-circle-plus"></i>
+
+                    </div>
+
+
+                    <div class="quick-action-text">
+
+                        <span class="quick-action-title">
+                            Create Invoice
+                        </span>
+
+                        <span class="quick-action-description">
+                            Create a new client invoice
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <i class="fa-solid fa-chevron-right quick-action-arrow"></i>
+
+            </a>
+
+
+            <!-- Create Receipt -->
+
+            <a
+                href="/receipt"
+                class="quick-action"
+            >
+
+                <div class="quick-action-main">
+
+                    <div class="quick-action-icon">
+
+                        <i class="fa-solid fa-receipt"></i>
+
+                    </div>
+
+
+                    <div class="quick-action-text">
+
+                        <span class="quick-action-title">
+                            Create Receipt
+                        </span>
+
+                        <span class="quick-action-description">
+                            Record patient payment
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <i class="fa-solid fa-chevron-right quick-action-arrow"></i>
+
+            </a>
+
+
+            <!-- Invoices -->
+
+            <a
+                href="/invoices"
+                class="quick-action"
+            >
+
+                <div class="quick-action-main">
+
+                    <div class="quick-action-icon">
+
+                        <i class="fa-solid fa-file-invoice"></i>
+
+                    </div>
+
+
+                    <div class="quick-action-text">
+
+                        <span class="quick-action-title">
+                            View Invoices
+                        </span>
+
+                        <span class="quick-action-description">
+                            Manage client invoices
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <i class="fa-solid fa-chevron-right quick-action-arrow"></i>
+
+            </a>
+
+
+            <!-- Receipts -->
+
+            <a
+                href="/receipts"
+                class="quick-action"
+            >
+
+                <div class="quick-action-main">
+
+                    <div class="quick-action-icon">
+
+                        <i class="fa-solid fa-folder-open"></i>
+
+                    </div>
+
+
+                    <div class="quick-action-text">
+
+                        <span class="quick-action-title">
+                            View Receipts
+                        </span>
+
+                        <span class="quick-action-description">
+                            Browse payment records
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <i class="fa-solid fa-chevron-right quick-action-arrow"></i>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         OVERALL STATISTICS
+    ======================================================== -->
+
+    <section class="secondary-stats">
+
+
+        <!-- Receipts -->
+
+        <div class="secondary-card">
+
+            <div class="secondary-icon">
+
+                <i class="fa-solid fa-receipt"></i>
+
+            </div>
+
+
+            <div class="secondary-content">
+
+                <span class="secondary-label">
+                    Total Receipts
+                </span>
+
+                <span class="secondary-value">
+                    <%= totalReceipts %>
+                </span>
+
+                <span class="secondary-detail">
+
+                    UGX
+                    <%= receiptAmount.toLocaleString('en-US') %>
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Invoices -->
+
+        <div class="secondary-card">
+
+            <div class="secondary-icon">
+
+                <i class="fa-solid fa-file-invoice"></i>
+
+            </div>
+
+
+            <div class="secondary-content">
+
+                <span class="secondary-label">
+                    Total Invoices
+                </span>
+
+                <span class="secondary-value">
+                    <%= totalInvoices %>
+                </span>
+
+                <span class="secondary-detail">
+
+                    UGX
+                    <%= invoiceAmount.toLocaleString('en-US') %>
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Outstanding -->
+
+        <div class="secondary-card">
+
+            <div class="secondary-icon">
+
+                <i class="fa-solid fa-wallet"></i>
+
+            </div>
+
+
+            <div class="secondary-content">
+
+                <span class="secondary-label">
+                    Outstanding Balance
+                </span>
+
+                <span class="secondary-value">
+
+                    UGX
+                    <%= receiptBalance.toLocaleString('en-US') %>
+
+                </span>
+
+                <span class="secondary-detail">
+                    From receipts
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Invoice Status -->
+
+        <div class="secondary-card">
+
+            <div class="secondary-icon">
+
+                <i class="fa-solid fa-chart-pie"></i>
+
+            </div>
+
+
+            <div class="secondary-content">
+
+                <span class="secondary-label">
+                    Invoice Status
+                </span>
+
+                <span class="secondary-value">
+
+                    <%= paidInvoices %>/<%= totalInvoices %>
+
+                </span>
+
+                <span class="secondary-detail">
+
+                    <%= sentInvoices %> sent ·
+                    <%= draftInvoices %> draft
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =======================================================
+         RECENT ACTIVITY
+    ======================================================== -->
+
+    <div class="dashboard-content">
+
+
+        <!-- ===================================================
+             RECENT INVOICES
+        ==================================================== -->
+
+        <section class="dashboard-section">
+
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <div class="section-icon">
+
+                        <i class="fa-solid fa-file-invoice"></i>
+
+                    </div>
+
+
+                    <div class="section-title-text">
+
+                        <h2>
+                            Recent Invoices
+                        </h2>
+
+                        <p>
+                            Latest client billing activity
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <span class="section-count">
+
+                    <%= recentInvoices
+                        ? recentInvoices.length
+                        : 0 %>
+
+                </span>
+
+            </div>
+
+
+            <% if (
+                recentInvoices &&
+                recentInvoices.length > 0
+            ) { %>
+
+
+                <div class="table-wrapper">
+
+                    <table class="dashboard-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Invoice
+                                </th>
+
+                                <th>
+                                    Client
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Amount
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <% recentInvoices.forEach(
+                                invoice => {
+
+                                    const invoiceStatus =
+                                        String(
+                                            invoice.status ||
+                                            'draft'
+                                        ).toLowerCase();
+
+                                    const statusIcons = {
+                                        paid:
+                                            'fa-circle-check',
+
+                                        sent:
+                                            'fa-paper-plane',
+
+                                        draft:
+                                            'fa-pen-to-square',
+
+                                        cancelled:
+                                            'fa-circle-xmark'
+                                    };
+
+                                    const statusIcon =
+                                        statusIcons[
+                                            invoiceStatus
+                                        ] ||
+                                        'fa-file';
+                            %>
+
+
+                                <tr>
+
+
+                                    <td>
+
+                                        <span class="record-id">
+
+                                            <i class="fa-solid fa-hashtag"></i>
+
+                                            <%= invoice.invoice_number %>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="person-name">
+
+                                            <%= invoice.client_name || 'N/A' %>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="table-date">
+
+                                            <%= new Date(
+                                                invoice.invoice_date
+                                            ).toLocaleDateString(
+                                                'en-GB'
+                                            ) %>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="table-amount">
+
+                                            UGX
+                                            <%= Number(
+                                                invoice.total || 0
+                                            ).toLocaleString(
+                                                'en-US'
+                                            ) %>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span
+                                            class="status-badge <%= invoiceStatus %>"
+                                        >
+
+                                            <i
+                                                class="fa-solid <%= statusIcon %>"
+                                            ></i>
+
+                                            <%= invoiceStatus
+                                                .charAt(0)
+                                                .toUpperCase() +
+                                                invoiceStatus.slice(1) %>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <a
+                                            href="/invoices/<%= invoice.id %>"
+                                            class="view-link"
+                                        >
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                            View
+
+                                        </a>
+
+                                    </td>
+
+
+                                </tr>
+
+
+                            <% }) %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="section-footer">
+
+                    <a
+                        href="/invoices"
+                        class="view-all-link"
+                    >
+
+                        View all invoices
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+
+            <% } else { %>
+
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+
+                        <i class="fa-solid fa-file-invoice"></i>
+
+                    </div>
+
+                    <h3>
+                        No Invoices Yet
+                    </h3>
+
+                    <p>
+
+                        No invoice records are available.
+
+                        <a href="/invoices/new">
+                            Create one
+                        </a>
+
+                        to get started.
+
+                    </p>
+
+                </div>
+
+
+            <% } %>
+
+        </section>
+
+
+        <!-- ===================================================
+             UPCOMING APPOINTMENTS
+        ==================================================== -->
+
+        <section class="dashboard-section">
+
+
+            <div class="section-header">
+
+                <div class="section-title-wrap">
+
+                    <div class="section-icon">
+
+                        <i class="fa-solid fa-calendar-check"></i>
+
+                    </div>
+
+
+                    <div class="section-title-text">
+
+                        <h2>
+                            Upcoming Appointments
+                        </h2>
+
+                        <p>
+                            Next 7 days
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <span class="section-count">
+
+                    <%= upcomingAppointments
+                        ? upcomingAppointments.length
+                        : 0 %>
+
+                </span>
+
+            </div>
+
+
+            <% if (
+                upcomingAppointments &&
+                upcomingAppointments.length > 0
+            ) { %>
+
+
+                <div class="table-wrapper">
+
+                    <table class="dashboard-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Patient
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    When
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            <% upcomingAppointments.forEach(
+                                appointment => {
+
+                                    const days =
+                                        Number(
+                                            appointment.days_until_visit
+                                        );
+
+                                    let badgeClass =
+                                        'future';
+
+                                    let badgeText =
+                                        `${days} days`;
+
+                                    let badgeIcon =
+                                        'fa-calendar-day';
+
+
+                                    if (days === 0) {
+
+                                        badgeClass =
+                                            'today';
+
+                                        badgeText =
+                                            'Today';
+
+                                        badgeIcon =
+                                            'fa-circle-exclamation';
+
+                                    } else if (
+                                        days === 1
+                                    ) {
+
+                                        badgeClass =
+                                            'tomorrow';
+
+                                        badgeText =
+                                            'Tomorrow';
+
+                                        badgeIcon =
+                                            'fa-clock';
+
+                                    }
+                            %>
+
+
+                                <tr>
+
+
+                                    <td>
+
+                                        <span class="person-name">
+
+                                            <%= appointment.patient_name || 'N/A' %>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="table-date">
+
+                                            <%= new Date(
+                                                appointment.next_visit
+                                            ).toLocaleDateString(
+                                                'en-GB'
+                                            ) %>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span
+                                            class="appointment-badge <%= badgeClass %>"
+                                        >
+
+                                            <i
+                                                class="fa-solid <%= badgeIcon %>"
+                                            ></i>
+
+                                            <%= badgeText %>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <a
+                                            href="/appointments"
+                                            class="view-link"
+                                        >
+
+                                            <i class="fa-solid fa-arrow-right"></i>
+
+                                            View
+
+                                        </a>
+
+                                    </td>
+
+
+                                </tr>
+
+
+                            <% }) %>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="section-footer">
+
+                    <a
+                        href="/appointments"
+                        class="view-all-link"
+                    >
+
+                        View all appointments
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+
+            <% } else { %>
+
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+
+                        <i class="fa-solid fa-calendar-xmark"></i>
+
+                    </div>
+
+                    <h3>
+                        No Upcoming Appointments
+                    </h3>
+
+                    <p>
+                        No appointments are scheduled
+                        within the next 7 days.
+                    </p>
+
+                </div>
+
+
+            <% } %>
+
+        </section>
+
+
+    </div>
+
+
+    <!-- =======================================================
+         RECENT RECEIPTS
+    ======================================================== -->
+
+    <section
+        class="dashboard-section"
+        style="margin-top: 18px;"
+    >
+
+
+        <div class="section-header">
+
+            <div class="section-title-wrap">
+
+                <div class="section-icon">
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                </div>
+
+
+                <div class="section-title-text">
+
+                    <h2>
+                        Recent Receipts
+                    </h2>
+
+                    <p>
+                        Latest patient payment activity
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <span class="section-count">
+
+                <%= recentReceipts
+                    ? recentReceipts.length
+                    : 0 %>
+
+            </span>
+
+        </div>
+
+
+        <% if (
+            recentReceipts &&
+            recentReceipts.length > 0
+        ) { %>
+
+
+            <div class="table-wrapper">
+
+                <table class="dashboard-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Receipt
+                            </th>
+
+                            <th>
+                                Patient
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Balance
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        <% recentReceipts.forEach(
+                            receipt => {
+
+                                const balance =
+                                    Number(
+                                        receipt.balance || 0
+                                    );
+                        %>
+
+
+                            <tr>
+
+
+                                <td>
+
+                                    <span class="record-id">
+
+                                        <i class="fa-solid fa-receipt"></i>
+
+                                        #<%= receipt.id %>
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="person-name">
+
+                                        <%= receipt.patient_name || 'N/A' %>
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="table-date">
+
+                                        <%= new Date(
+                                            receipt.created_at
+                                        ).toLocaleDateString(
+                                            'en-GB'
+                                        ) %>
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="table-amount">
+
+                                        UGX
+                                        <%= Number(
+                                            receipt.total || 0
+                                        ).toLocaleString(
+                                            'en-US'
+                                        ) %>
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+
+                                    <% if (balance > 0) { %>
+
+                                        <span class="table-balance pending">
+
+                                            UGX
+                                            <%= balance.toLocaleString(
+                                                'en-US'
+                                            ) %>
+
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="table-balance clear">
+
+                                            <i class="fa-solid fa-circle-check"></i>
+
+                                            Paid
+
+                                        </span>
+
+                                    <% } %>
+
+
+                                </td>
+
+
+                                <td>
+
+                                    <a
+                                        href="/receiptDetails/<%= receipt.id %>"
+                                        class="view-link"
+                                    >
+
+                                        <i class="fa-solid fa-eye"></i>
+
+                                        View
+
+                                    </a>
+
+                                </td>
+
+
+                            </tr>
+
+
+                        <% }) %>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="section-footer">
+
+                <a
+                    href="/receipts"
+                    class="view-all-link"
+                >
+
+                    View all receipts
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+        <% } else { %>
+
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                </div>
+
+                <h3>
+                    No Receipts Yet
+                </h3>
+
+                <p>
+
+                    No patient payment records are available.
+
+                    <a href="/receipt">
+                        Create a receipt
+                    </a>
+
+                    to get started.
+
+                </p>
+
+            </div>
+
+
+        <% } %>
+
+
+    </section>
+
+
+</div>

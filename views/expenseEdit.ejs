@@ -1,0 +1,196 @@
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f7fb;
+        margin: 0;
+    }
+    .edit-expense-wrap {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #fff;
+        border: 1px solid #dfe3ea;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+        overflow: hidden;
+    }
+    .edit-expense-header {
+        padding: 24px 28px;
+        border-bottom: 1px solid #edf1f5;
+        background: linear-gradient(135deg, #f8fbff, #eef5ff);
+    }
+    .edit-expense-header h1 {
+        margin: 0;
+        color: #1f2937;
+        font-size: 1.8rem;
+    }
+    .edit-expense-body {
+        padding: 28px;
+    }
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .form-group label {
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.9rem;
+    }
+    .form-group input,
+    .form-group select {
+        padding: 10px 12px;
+        border: 1px solid #d1d9e6;
+        border-radius: 8px;
+        font-size: 0.96rem;
+        background: white;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #3b82f6;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    }
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+    }
+    .btn {
+        border: none;
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-primary {
+        background: #2563eb;
+        color: #fff;
+    }
+    .btn-secondary {
+        background: #e5e7eb;
+        color: #111827;
+    }
+    .alert {
+        display: none;
+        margin-bottom: 18px;
+        padding: 12px 14px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+    .alert-success {
+        display: block;
+        background: #ecfdf5;
+        color: #166534;
+        border: 1px solid #a7f3d0;
+    }
+    .alert-error {
+        display: block;
+        background: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+</style>
+
+<div class="edit-expense-wrap">
+    <div class="edit-expense-header">
+        <h1>Edit Expense</h1>
+    </div>
+
+    <div class="edit-expense-body">
+        <div id="formAlert" class="alert"></div>
+
+        <form id="editExpenseForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="expenseDate">Expense Date</label>
+                    <input type="date" id="expenseDate" name="expense_date" value="<%= expense.expense_date ? new Date(expense.expense_date).toISOString().split('T')[0] : '' %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="expenseCategory">Category</label>
+                    <select id="expenseCategory" name="category" required>
+                        <option value="">Select category</option>
+                        <option value="Supplies" <%= expense.category === 'Supplies' ? 'selected' : '' %>>Supplies</option>
+                        <option value="Utilities" <%= expense.category === 'Utilities' ? 'selected' : '' %>>Utilities</option>
+                        <option value="Rent" <%= expense.category === 'Rent' ? 'selected' : '' %>>Rent</option>
+                        <option value="Staff" <%= expense.category === 'Staff' ? 'selected' : '' %>>Staff</option>
+                        <option value="Maintenance" <%= expense.category === 'Maintenance' ? 'selected' : '' %>>Maintenance</option>
+                        <option value="Transport" <%= expense.category === 'Transport' ? 'selected' : '' %>>Transport</option>
+                        <option value="Other" <%= expense.category === 'Other' ? 'selected' : '' %>>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="expenseDescription">Description</label>
+                    <input type="text" id="expenseDescription" name="description" value="<%= expense.description || '' %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="expenseAmount">Amount</label>
+                    <input type="number" id="expenseAmount" name="amount" value="<%= expense.amount %>" step="0.01" min="0.01" required>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a href="/expenses" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('editExpenseForm');
+    const alertEl = document.getElementById('formAlert');
+
+    function showAlert(message, type) {
+        alertEl.textContent = message;
+        alertEl.className = `alert alert-${type}`;
+    }
+
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const payload = {
+            expense_date: document.getElementById('expenseDate').value,
+            description: document.getElementById('expenseDescription').value.trim(),
+            category: document.getElementById('expenseCategory').value,
+            amount: document.getElementById('expenseAmount').value
+        };
+
+        try {
+            const response = await fetch('/expenses/<%= expense.id %>', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                showAlert(data.message || 'Unable to update expense.', 'error');
+                return;
+            }
+
+            showAlert('Expense updated successfully.', 'success');
+            setTimeout(() => {
+                window.location.href = '/expenses';
+            }, 800);
+        } catch (error) {
+            console.error('Update expense error:', error);
+            showAlert('Something went wrong while updating this expense.', 'error');
+        }
+    });
+</script>

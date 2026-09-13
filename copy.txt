@@ -1,0 +1,4 @@
+sc create Receiptapp binPath= "C:\Program Files\nodejs\node.exe" "C:\Users\Km Inno\Desktop\projects\receipt-app\server.js" start= auto
+nssm install ReceiptApp "C:\Program Files\nodejs\node.exe" "C:\Users\Km Inno\Desktop\projects\receipt-app\server.js"
+sc create Receiptapp binPath= "\"C:\Program Files\nodejs\node.exe\" \"C:\Users\Km Inno\Desktop\projects\receipt-app/server.js\"" start= auto
+

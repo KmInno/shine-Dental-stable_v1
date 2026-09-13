@@ -1,0 +1,123 @@
+<main>
+    <h1>Database Old - Patient Records</h1>
+    <div class="container" style="margin-top: 20px;">
+        
+        <!-- Search and Year Selection Controls -->
+        <div style="margin-bottom: 25px; padding: 15px; background-color: #f5f5f5; border-radius: 4px;">
+            
+            <!-- Search by Name -->
+            <div style="margin-bottom: 15px;">
+                <label for="searchInput" style="font-weight: bold; display: block; margin-bottom: 8px;">Search by Patient Name:</label>
+                <input type="text" id="searchInput" placeholder="Enter patient name..." value="<%= searchTerm || '' %>" 
+                    style="padding: 10px 12px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
+                <button id="searchBtn" style="margin-left: 10px; padding: 10px 20px; background-color: #589f14; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Search</button>
+                <% if (searchMode) { %>
+                    <button id="clearSearchBtn" style="margin-left: 5px; padding: 10px 20px; background-color: #999; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear Search</button>
+                <% } %>
+            </div>
+
+            <!-- OR divider -->
+            <div style="text-align: center; margin: 15px 0; color: #999;">OR</div>
+
+            <!-- Year Selection -->
+            <div>
+                <label for="yearSelect" style="font-weight: bold; display: block; margin-bottom: 8px;">Select Year:</label>
+                <select id="yearSelect" style="padding: 10px 12px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                    <option value="">-- Choose a Year --</option>
+                    <% if (years && years.length > 0) { %>
+                        <% years.forEach(year => { %>
+                            <option value="<%= year %>" <% if (selectedYear === year) { %>selected<% } %>><%= year %></option>
+                        <% }); %>
+                    <% } %>
+                </select>
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        <% if (searchMode && searchTerm) { %>
+            <p style="color: #589f14; margin-bottom: 15px; font-weight: bold;">Search Results for "<%= searchTerm %>"</p>
+        <% } else if (selectedYear) { %>
+            <p style="color: #666; margin-bottom: 15px;"><strong>Showing records for:</strong> <%= selectedYear %></p>
+        <% } %>
+
+        <!-- Data Table -->
+        <% if (patients && patients.length > 0) { %>
+            <div style="overflow-x: auto; margin-top: 20px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                    <thead>
+                        <tr style="background-color: #589f14; color: white; position: sticky; top: 0;">
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">ID</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Date</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Patient ID</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Name</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Treatment</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Amount</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Balance</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">TCA</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Tel</th>
+                            <th style="padding: 12px; text-align: left; border: 1px solid #ddd;">Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% patients.forEach((patient, index) => { 
+                            const bgColor = index % 2 === 0 ? '#f9f9f9' : 'white';
+                        %>
+                            <tr style="background-color: <%= bgColor %>; border: 1px solid #ddd;">
+                                <td style="padding: 10px; border: 1px solid #ddd;"><%= patient.id %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><%= patient.date ? new Date(patient.date).toLocaleDateString() : 'N/A' %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><%= patient.patient_id %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd; font-weight: 500;"><%= patient.name %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><%= patient.treatment || 'N/A' %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd; text-align: right;"><%= patient.amount ? patient.amount.toLocaleString() : '0' %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd; text-align: right;"><%= patient.balance ? patient.balance.toLocaleString() : '0' %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><%= patient.tca || 'N/A' %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><%= patient.tel || 'N/A' %></td>
+                                <td style="padding: 10px; border: 1px solid #ddd;"><%= patient.address || 'N/A' %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 15px; color: #666;"><strong>Total Records:</strong> <%= patients.length %></p>
+        <% } else if (searchMode) { %>
+            <p style="color: #999; font-size: 16px;">No patients found matching "<%= searchTerm %>".</p>
+        <% } else if (selectedYear) { %>
+            <p style="color: #999; font-size: 16px;">No patient records found for <%= selectedYear %>.</p>
+        <% } else { %>
+            <p style="color: #999; font-size: 16px;">Enter a patient name to search or select a year to view records.</p>
+        <% } %>
+    </div>
+
+    <script>
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            if (searchTerm) {
+                window.location.href = '/databaseOld?search=' + encodeURIComponent(searchTerm);
+            }
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('searchBtn').click();
+            }
+        });
+
+        <% if (typeof clearSearchBtn !== 'undefined' || searchMode) { %>
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function() {
+                    window.location.href = '/databaseOld';
+                });
+            }
+        <% } %>
+
+        document.getElementById('yearSelect').addEventListener('change', function(e) {
+            const year = e.target.value;
+            if (year) {
+                window.location.href = '/databaseOld?year=' + year;
+            } else {
+                window.location.href = '/databaseOld';
+            }
+        });
+    </script>
+</main>

@@ -1,0 +1,2076 @@
+
+<!-- =========================================================
+     SHINE DENTAL
+     INVOICE MANAGEMENT
+========================================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+>
+
+<style>
+    /* =========================================================
+       DESIGN SYSTEM
+    ========================================================= */
+
+    .invoice-page {
+        --primary: #589f14;
+        --primary-dark: #467f10;
+        --primary-light: #eef7e6;
+
+        --blue: #2563eb;
+        --blue-light: #eff6ff;
+
+        --success: #16a34a;
+        --success-light: #ecfdf3;
+
+        --warning: #d97706;
+        --warning-light: #fffbeb;
+
+        --danger: #dc2626;
+        --danger-dark: #b91c1c;
+        --danger-light: #fef2f2;
+
+        --info: #0891b2;
+        --info-light: #ecfeff;
+
+        --text-strong: #17202b;
+        --text: #4b5563;
+        --text-soft: #8a94a3;
+
+        --border: #e5e7eb;
+        --background: #f5f7fa;
+        --surface: #ffffff;
+
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+
+        --shadow-sm:
+            0 2px 8px rgba(15, 23, 42, 0.05);
+
+        --shadow-md:
+            0 8px 25px rgba(15, 23, 42, 0.08);
+
+        box-sizing: border-box;
+    }
+
+    .invoice-page *,
+    .invoice-page *::before,
+    .invoice-page *::after {
+        box-sizing: border-box;
+    }
+
+    .invoice-page {
+        width: 100%;
+        max-width: 1450px;
+
+        margin: 0 auto;
+        padding: 28px 24px 55px;
+
+        background: var(--background);
+        color: var(--text);
+
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
+    }
+
+
+    /* =========================================================
+       PAGE HEADER
+    ========================================================= */
+
+    .invoice-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+
+        margin-bottom: 22px;
+    }
+
+    .header-content {
+        min-width: 0;
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+
+        margin: 0 0 6px;
+
+        color: var(--text-strong);
+
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .page-title i {
+        color: var(--primary);
+    }
+
+    .page-subtitle {
+        margin: 0;
+
+        color: var(--text-soft);
+
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .invoice-count {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        padding: 10px 14px;
+
+        border: 1px solid var(--border);
+        border-radius: 12px;
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+
+        white-space: nowrap;
+    }
+
+    .invoice-count-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+
+        border-radius: 9px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .invoice-count-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .invoice-count-value {
+        color: var(--text-strong);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .invoice-count-label {
+        color: var(--text-soft);
+        font-size: 9px;
+    }
+
+
+    /* =========================================================
+       TOOLBAR
+    ========================================================= */
+
+    .invoice-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+
+        margin-bottom: 18px;
+        padding: 10px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .search-form {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        width: 100%;
+        max-width: 680px;
+    }
+
+    .search-box {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-box i {
+        position: absolute;
+
+        top: 50%;
+        left: 13px;
+
+        color: var(--text-soft);
+        font-size: 13px;
+
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+
+    .search-input {
+        width: 100%;
+        min-height: 42px;
+
+        padding: 10px 13px 10px 38px;
+
+        border: 1px solid #d8dee7;
+        border-radius: var(--radius-sm);
+
+        background: #fff;
+        color: var(--text-strong);
+
+        font-family: inherit;
+        font-size: 13px;
+
+        outline: none;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .search-input::placeholder {
+        color: #a0a8b3;
+    }
+
+    .search-input:focus {
+        border-color: var(--primary);
+
+        box-shadow:
+            0 0 0 3px rgba(88, 159, 20, .10);
+    }
+
+    .search-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        min-height: 42px;
+
+        padding: 10px 17px;
+
+        border: none;
+        border-radius: var(--radius-sm);
+
+        background: var(--primary);
+        color: #fff;
+
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition:
+            background .2s ease,
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .search-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 5px 12px rgba(88, 159, 20, .20);
+    }
+
+
+    /* =========================================================
+       NEW INVOICE BUTTON
+    ========================================================= */
+
+    .new-invoice-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        min-height: 42px;
+
+        padding: 10px 17px;
+
+        border-radius: var(--radius-sm);
+
+        background:
+            linear-gradient(
+                135deg,
+                #ef4444,
+                #dc2626
+            );
+
+        color: #fff;
+
+        font-size: 12px;
+        font-weight: 700;
+
+        text-decoration: none;
+
+        white-space: nowrap;
+
+        box-shadow:
+            0 5px 12px rgba(220, 38, 38, .15);
+
+        transition:
+            background .2s ease,
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .new-invoice-btn:hover {
+        background:
+            linear-gradient(
+                135deg,
+                #dc2626,
+                #b91c1c
+            );
+
+        color: #fff;
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 7px 16px rgba(220, 38, 38, .22);
+    }
+
+
+    /* =========================================================
+       SEARCH STATUS
+    ========================================================= */
+
+    .search-status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+
+        margin-bottom: 15px;
+        padding: 10px 13px;
+
+        border: 1px solid #e1e8db;
+        border-radius: 9px;
+
+        background: #fbfdf9;
+
+        color: var(--text-soft);
+
+        font-size: 11px;
+    }
+
+    .search-status-main {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .search-status-main i {
+        color: var(--primary);
+    }
+
+    .search-status strong {
+        color: var(--text-strong);
+    }
+
+    .clear-search {
+        color: var(--primary);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .clear-search:hover {
+        text-decoration: underline;
+    }
+
+
+    /* =========================================================
+       INVOICE CARD
+    ========================================================= */
+
+    .invoice-card {
+        overflow: hidden;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+
+        padding: 17px 20px;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .card-title-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .card-title-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 36px;
+        height: 36px;
+
+        border-radius: 9px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .card-title {
+        margin: 0;
+
+        color: var(--text-strong);
+
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .card-subtitle {
+        margin: 3px 0 0;
+
+        color: var(--text-soft);
+        font-size: 10px;
+    }
+
+    .record-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        min-width: 30px;
+        height: 26px;
+
+        padding: 0 9px;
+
+        border-radius: 999px;
+
+        background: var(--primary-light);
+        color: var(--primary-dark);
+
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       TABLE
+    ========================================================= */
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .invoice-table {
+        width: 100%;
+        min-width: 1000px;
+
+        border-collapse: collapse;
+    }
+
+    .invoice-table thead {
+        background: #fafbfc;
+    }
+
+    .invoice-table th {
+        padding: 12px 16px;
+
+        border-bottom: 1px solid var(--border);
+
+        color: #737d8a;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        letter-spacing: .45px;
+        text-align: left;
+        text-transform: uppercase;
+
+        white-space: nowrap;
+    }
+
+    .invoice-table td {
+        padding: 14px 16px;
+
+        border-bottom: 1px solid #f0f2f4;
+
+        color: var(--text);
+
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    .invoice-table tbody tr {
+        transition: background .18s ease;
+    }
+
+    .invoice-table tbody tr:hover {
+        background: #fcfefb;
+    }
+
+    .invoice-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    /* =========================================================
+       INVOICE NUMBER
+    ========================================================= */
+
+    .invoice-number {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 6px 9px;
+
+        border-radius: 7px;
+
+        background: #f3f4f6;
+        color: var(--text-strong);
+
+        font-size: 10px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    .invoice-number i {
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       DATE
+    ========================================================= */
+
+    .date-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .date-main {
+        color: var(--text-strong);
+        font-weight: 600;
+    }
+
+    .date-label {
+        color: var(--text-soft);
+        font-size: 9px;
+    }
+
+
+    /* =========================================================
+       CLIENT
+    ========================================================= */
+
+    .client-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        min-width: 190px;
+    }
+
+    .client-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+
+        flex-shrink: 0;
+
+        border-radius: 50%;
+
+        background: var(--blue-light);
+        color: var(--blue);
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .client-details {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        min-width: 0;
+    }
+
+    .client-name {
+        display: block;
+
+        max-width: 200px;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        color: var(--text-strong);
+
+        font-size: 12px;
+        font-weight: 700;
+
+        text-decoration: none;
+    }
+
+    .client-name:hover {
+        color: var(--primary);
+    }
+
+    .client-label {
+        color: var(--text-soft);
+        font-size: 9px;
+    }
+
+
+    /* =========================================================
+       PHONE
+    ========================================================= */
+
+    .phone {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        color: var(--text);
+
+        font-size: 11px;
+
+        white-space: nowrap;
+    }
+
+    .phone i {
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       TOTAL
+    ========================================================= */
+
+    .invoice-total {
+        color: var(--text-strong);
+
+        font-size: 12px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    .invoice-total-label {
+        display: block;
+
+        margin-top: 2px;
+
+        color: var(--text-soft);
+
+        font-size: 9px;
+    }
+
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 6px 9px;
+
+        border-radius: 999px;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    .status-badge i {
+        font-size: 7px;
+    }
+
+    .status-badge.draft {
+        background: var(--warning-light);
+        color: #a16207;
+    }
+
+    .status-badge.sent {
+        background: var(--info-light);
+        color: #0e7490;
+    }
+
+    .status-badge.paid {
+        background: var(--success-light);
+        color: #15803d;
+    }
+
+    .status-badge.cancelled {
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+
+    /* =========================================================
+       STATUS DROPDOWN
+    ========================================================= */
+
+    .status-dropdown {
+        min-width: 100px;
+
+        padding: 7px 9px;
+
+        border: 1px solid transparent;
+        border-radius: 999px;
+
+        font-family: inherit;
+        font-size: 10px;
+        font-weight: 700;
+
+        text-transform: capitalize;
+
+        cursor: pointer;
+        outline: none;
+
+        transition:
+            opacity .2s ease,
+            box-shadow .2s ease,
+            transform .2s ease;
+    }
+
+    .status-dropdown:hover {
+        transform: translateY(-1px);
+    }
+
+    .status-dropdown:focus {
+        box-shadow:
+            0 0 0 3px rgba(88, 159, 20, .10);
+    }
+
+    .status-dropdown.draft {
+        background: var(--warning-light);
+        color: #a16207;
+    }
+
+    .status-dropdown.sent {
+        background: var(--info-light);
+        color: #0e7490;
+    }
+
+    .status-dropdown.paid {
+        background: var(--success-light);
+        color: #15803d;
+    }
+
+    .status-dropdown.cancelled {
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+    .status-updating {
+        opacity: .55;
+        pointer-events: none;
+    }
+
+
+    /* =========================================================
+       ACTION BUTTONS
+    ========================================================= */
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        white-space: nowrap;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+
+        min-height: 31px;
+
+        padding: 6px 10px;
+
+        border: 1px solid transparent;
+        border-radius: 7px;
+
+        font-family: inherit;
+        font-size: 10px;
+        font-weight: 700;
+
+        text-decoration: none;
+        cursor: pointer;
+
+        transition:
+            background .18s ease,
+            color .18s ease,
+            border-color .18s ease,
+            transform .18s ease;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .view-btn {
+        border-color: #dbe5f5;
+        background: var(--blue-light);
+        color: var(--blue);
+    }
+
+    .view-btn:hover {
+        border-color: #bfd0f0;
+        background: #e5efff;
+        color: #1d4ed8;
+    }
+
+    .edit-btn {
+        border-color: #dcebd1;
+        background: var(--primary-light);
+        color: var(--primary-dark);
+    }
+
+    .edit-btn:hover {
+        border-color: #c6dfb5;
+        background: #e3f0d8;
+        color: #3f7210;
+    }
+
+    .delete-btn {
+        border-color: #f2c8cc;
+        background: var(--danger-light);
+        color: var(--danger);
+    }
+
+    .delete-btn:hover {
+        border-color: #ecadb3;
+        background: #fee2e2;
+        color: var(--danger-dark);
+    }
+
+
+    /* =========================================================
+       CARD FOOTER
+    ========================================================= */
+
+    .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+
+        padding: 13px 20px;
+
+        border-top: 1px solid var(--border);
+
+        background: #fafbfc;
+    }
+
+    .footer-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        color: var(--text-soft);
+        font-size: 10px;
+    }
+
+    .footer-info strong {
+        color: var(--text-strong);
+    }
+
+    .footer-info i {
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 330px;
+
+        padding: 50px 20px;
+
+        text-align: center;
+    }
+
+    .empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 78px;
+        height: 78px;
+
+        margin-bottom: 18px;
+
+        border-radius: 50%;
+
+        background: #f1f5f9;
+        color: #cbd5e1;
+
+        font-size: 30px;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 7px;
+
+        color: var(--text-strong);
+        font-size: 18px;
+    }
+
+    .empty-state p {
+        max-width: 450px;
+
+        margin: 0;
+
+        color: var(--text-soft);
+
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+
+    /* =========================================================
+       SCROLL BUTTON
+    ========================================================= */
+
+    #invoiceScrollBtn {
+        position: fixed;
+
+        right: 22px;
+        bottom: 22px;
+        z-index: 1000;
+
+        display: none;
+        align-items: center;
+        justify-content: center;
+
+        width: 46px;
+        height: 46px;
+
+        border: none;
+        border-radius: 50%;
+
+        background: var(--primary);
+        color: #fff;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 8px 20px rgba(88, 159, 20, .25);
+
+        transition:
+            background .2s ease,
+            transform .2s ease;
+    }
+
+    #invoiceScrollBtn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    #invoiceScrollBtn:active {
+        transform: scale(.94);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 900px) {
+
+        .invoice-page {
+            padding: 22px 15px 45px;
+        }
+
+        .invoice-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .invoice-count {
+            align-self: flex-start;
+        }
+
+        .invoice-toolbar {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .search-form {
+            max-width: none;
+        }
+
+        .new-invoice-btn {
+            width: 100%;
+        }
+    }
+
+
+    @media (max-width: 600px) {
+
+        .page-title {
+            font-size: 23px;
+        }
+
+        .search-form {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .search-btn {
+            width: 100%;
+        }
+
+        .search-status {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .card-header {
+            padding: 15px 16px;
+        }
+
+        .card-footer {
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 12px 16px;
+        }
+
+        #invoiceScrollBtn {
+            right: 15px;
+            bottom: 15px;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="invoice-page">
+
+
+    <!-- =======================================================
+         HEADER
+    ======================================================== -->
+
+    <header class="invoice-header">
+
+        <div class="header-content">
+
+            <h1 class="page-title">
+
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+
+                <%= title %>
+
+            </h1>
+
+            <p class="page-subtitle">
+
+                Create, review, update, and manage
+                patient invoices.
+
+            </p>
+
+        </div>
+
+
+        <div class="invoice-count">
+
+            <div class="invoice-count-icon">
+
+                <i class="fa-solid fa-file-invoice"></i>
+
+            </div>
+
+
+            <div class="invoice-count-content">
+
+                <span class="invoice-count-value">
+
+                    <%= invoices ? invoices.length : 0 %>
+
+                </span>
+
+                <span class="invoice-count-label">
+                    Invoices shown
+                </span>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =======================================================
+         TOOLBAR
+    ======================================================== -->
+
+    <section class="invoice-toolbar">
+
+        <form
+            id="invoiceSearchForm"
+            method="GET"
+            action="/invoices"
+            class="search-form"
+        >
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="invoiceFilter"
+                    name="search"
+                    class="search-input"
+                    placeholder="Search invoice number or client..."
+                    value="<%= typeof search !== 'undefined' ? search : '' %>"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="search-btn"
+            >
+
+                <i class="fa-solid fa-search"></i>
+
+                Search
+
+            </button>
+
+        </form>
+
+
+        <a
+            href="/invoices/new"
+            class="new-invoice-btn"
+        >
+
+            <i class="fa-solid fa-plus"></i>
+
+            New Invoice
+
+        </a>
+
+    </section>
+
+
+    <!-- =======================================================
+         INVOICE CONTENT
+    ======================================================== -->
+
+    <section class="invoice-card">
+
+
+        <!-- ===================================================
+             CARD HEADER
+        ==================================================== -->
+
+        <div class="card-header">
+
+            <div class="card-title-wrapper">
+
+                <div class="card-title-icon">
+
+                    <i class="fa-solid fa-list"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h2 class="card-title">
+                        Invoice Records
+                    </h2>
+
+                    <p class="card-subtitle">
+                        Client billing and invoice status
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <span class="record-count">
+
+                <%= invoices ? invoices.length : 0 %>
+
+            </span>
+
+        </div>
+
+
+        <% if (invoices && invoices.length > 0) { %>
+
+
+            <!-- =================================================
+                 TABLE
+            ================================================== -->
+
+            <div class="table-wrapper">
+
+                <table class="invoice-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Invoice
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Client
+                            </th>
+
+                            <th>
+                                Phone
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        <% invoices.forEach(invoice => { %>
+
+                            <%
+                                const clientName =
+                                    invoice.client_name ||
+                                    'N/A';
+
+                                const clientInitial =
+                                    clientName
+                                        .trim()
+                                        .charAt(0)
+                                        .toUpperCase();
+
+                                const invoiceStatus =
+                                    String(
+                                        invoice.status ||
+                                        'draft'
+                                    ).toLowerCase();
+
+                                let statusIcon =
+                                    'fa-file';
+
+                                if (
+                                    invoiceStatus ===
+                                    'draft'
+                                ) {
+                                    statusIcon =
+                                        'fa-pen-to-square';
+
+                                } else if (
+                                    invoiceStatus ===
+                                    'sent'
+                                ) {
+                                    statusIcon =
+                                        'fa-paper-plane';
+
+                                } else if (
+                                    invoiceStatus ===
+                                    'paid'
+                                ) {
+                                    statusIcon =
+                                        'fa-circle-check';
+
+                                } else if (
+                                    invoiceStatus ===
+                                    'cancelled'
+                                ) {
+                                    statusIcon =
+                                        'fa-circle-xmark';
+                                }
+
+                                const formattedStatus =
+                                    invoiceStatus
+                                        .charAt(0)
+                                        .toUpperCase() +
+                                    invoiceStatus.slice(1);
+                            %>
+
+
+                            <tr
+                                class="invoice-row"
+                                data-search="
+                                    <%= (
+                                        invoice.invoice_number +
+                                        ' ' +
+                                        clientName +
+                                        ' ' +
+                                        (invoice.client_tel || '')
+                                    ).toLowerCase() %>
+                                "
+                            >
+
+
+                                <!-- =================================
+                                     INVOICE NUMBER
+                                ================================== -->
+
+                                <td>
+
+                                    <span class="invoice-number">
+
+                                        <i class="fa-solid fa-file-invoice"></i>
+
+                                        <%= invoice.invoice_number %>
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     DATE
+                                ================================== -->
+
+                                <td>
+
+                                    <div class="date-cell">
+
+                                        <span class="date-main">
+
+                                            <%= new Date(
+                                                invoice.invoice_date
+                                            ).toLocaleDateString(
+                                                'en-GB'
+                                            ) %>
+
+                                        </span>
+
+                                        <span class="date-label">
+                                            Invoice date
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     CLIENT
+                                ================================== -->
+
+                                <td>
+
+                                    <div class="client-cell">
+
+                                        <div class="client-avatar">
+
+                                            <%= clientInitial %>
+
+                                        </div>
+
+
+                                        <div class="client-details">
+
+                                            <a
+                                                href="/invoices/<%= invoice.id %>"
+                                                class="client-name"
+                                                title="<%= clientName %>"
+                                            >
+
+                                                <%= clientName %>
+
+                                            </a>
+
+                                            <span class="client-label">
+                                                Client
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     PHONE
+                                ================================== -->
+
+                                <td>
+
+                                    <% if (
+                                        invoice.client_tel
+                                    ) { %>
+
+                                        <span class="phone">
+
+                                            <i class="fa-solid fa-phone"></i>
+
+                                            <%= invoice.client_tel %>
+
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="phone">
+                                            No phone
+                                        </span>
+
+                                    <% } %>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     TOTAL
+                                ================================== -->
+
+                                <td>
+
+                                    <div class="invoice-total">
+
+                                        UGX
+                                        <%= Number(
+                                            invoice.total || 0
+                                        ).toLocaleString(
+                                            'en-US'
+                                        ) %>
+
+                                    </div>
+
+                                    <span class="invoice-total-label">
+                                        Invoice total
+                                    </span>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     STATUS
+                                ================================== -->
+
+                                <td>
+
+                                    <% if (
+                                        user &&
+                                        user.usertype === 'admin'
+                                    ) { %>
+
+
+                                        <select
+                                            class="status-dropdown <%= invoiceStatus %>"
+                                            data-invoice-id="<%= invoice.id %>"
+                                            data-previous-status="<%= invoiceStatus %>"
+                                        >
+
+                                            <option
+                                                value="draft"
+                                                <%= invoiceStatus === 'draft'
+                                                    ? 'selected'
+                                                    : '' %>
+                                            >
+                                                Draft
+                                            </option>
+
+                                            <option
+                                                value="sent"
+                                                <%= invoiceStatus === 'sent'
+                                                    ? 'selected'
+                                                    : '' %>
+                                            >
+                                                Sent
+                                            </option>
+
+                                            <option
+                                                value="paid"
+                                                <%= invoiceStatus === 'paid'
+                                                    ? 'selected'
+                                                    : '' %>
+                                            >
+                                                Paid
+                                            </option>
+
+                                            <option
+                                                value="cancelled"
+                                                <%= invoiceStatus === 'cancelled'
+                                                    ? 'selected'
+                                                    : '' %>
+                                            >
+                                                Cancelled
+                                            </option>
+
+                                        </select>
+
+
+                                    <% } else { %>
+
+
+                                        <span
+                                            class="status-badge <%= invoiceStatus %>"
+                                        >
+
+                                            <i
+                                                class="fa-solid <%= statusIcon %>"
+                                            ></i>
+
+                                            <%= formattedStatus %>
+
+                                        </span>
+
+
+                                    <% } %>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     ACTIONS
+                                ================================== -->
+
+                                <td>
+
+                                    <div class="action-buttons">
+
+
+                                        <!-- View -->
+
+                                        <a
+                                            href="/invoices/<%= invoice.id %>"
+                                            class="action-btn view-btn"
+                                            title="View invoice"
+                                        >
+
+                                            <i class="fa-solid fa-eye"></i>
+
+                                            View
+
+                                        </a>
+
+
+                                        <% if (
+                                            user &&
+                                            user.usertype === 'admin'
+                                        ) { %>
+
+
+                                            <!-- Edit -->
+
+                                            <a
+                                                href="/invoices/edit/<%= invoice.id %>"
+                                                class="action-btn edit-btn"
+                                                title="Edit invoice"
+                                            >
+
+                                                <i class="fa-solid fa-pen"></i>
+
+                                                Edit
+
+                                            </a>
+
+
+                                            <!-- Delete -->
+
+                                            <button
+                                                type="button"
+                                                class="action-btn delete-btn"
+                                                onclick="deleteInvoice('<%= invoice.id %>')"
+                                                title="Delete invoice"
+                                            >
+
+                                                <i class="fa-solid fa-trash"></i>
+
+                                                Delete
+
+                                            </button>
+
+
+                                        <% } %>
+
+                                    </div>
+
+                                </td>
+
+
+                            </tr>
+
+                        <% }) %>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =================================================
+                 FOOTER
+            ================================================== -->
+
+            <div class="card-footer">
+
+                <span class="footer-info">
+
+                    <i class="fa-solid fa-file-lines"></i>
+
+                    Showing
+
+                    <strong>
+                        <%= invoices.length %>
+                    </strong>
+
+                    invoice<%= invoices.length === 1 ? '' : 's' %>
+
+                </span>
+
+
+                <span class="footer-info">
+
+                    <i class="fa-solid fa-shield-heart"></i>
+
+                    Shine Dental Surgery
+
+                </span>
+
+            </div>
+
+
+        <% } else { %>
+
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-file-invoice"></i>
+
+                </div>
+
+                <h3>
+                    No Invoices Found
+                </h3>
+
+                <p>
+                    There are currently no invoices available.
+                    Create a new invoice to begin recording
+                    client billing information.
+                </p>
+
+            </div>
+
+
+        <% } %>
+
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     SCROLL TO BOTTOM
+========================================================= -->
+
+<button
+    id="invoiceScrollBtn"
+    type="button"
+    title="Scroll to bottom"
+    aria-label="Scroll to bottom"
+>
+    <i class="fa-solid fa-arrow-down"></i>
+</button>
+
+
+<script>
+    /* =========================================================
+       1. CLIENT-SIDE SEARCH
+    ========================================================= */
+
+    const invoiceFilter =
+        document.getElementById(
+            'invoiceFilter'
+        );
+
+
+    if (invoiceFilter) {
+
+        invoiceFilter.addEventListener(
+            'input',
+            function () {
+
+                const query =
+                    this.value
+                        .trim()
+                        .toLowerCase();
+
+
+                const rows =
+                    document.querySelectorAll(
+                        '.invoice-row'
+                    );
+
+
+                rows.forEach(row => {
+
+                    const searchableText =
+                        row.dataset.search || '';
+
+
+                    row.style.display =
+                        searchableText.includes(query)
+                            ? ''
+                            : 'none';
+
+                });
+
+            }
+        );
+    }
+
+
+    /* =========================================================
+       2. UPDATE INVOICE STATUS
+    ========================================================= */
+
+    async function updateInvoiceStatus(
+        selectElement
+    ) {
+
+        const invoiceId =
+            selectElement.dataset.invoiceId;
+
+        const newStatus =
+            selectElement.value;
+
+        const previousStatus =
+            selectElement.dataset.previousStatus;
+
+
+        selectElement.classList.add(
+            'status-updating'
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/invoices/${encodeURIComponent(
+                        invoiceId
+                    )}/status`,
+                    {
+                        method: 'PATCH',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json'
+                        },
+
+                        body: JSON.stringify({
+                            status:
+                                newStatus
+                        })
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.message ||
+                    'Error updating invoice status.'
+                );
+            }
+
+
+            /*
+             * Update visual status class.
+             */
+            selectElement.classList.remove(
+                'draft',
+                'sent',
+                'paid',
+                'cancelled'
+            );
+
+
+            selectElement.classList.add(
+                newStatus
+            );
+
+
+            /*
+             * Remember successful state
+             * in case another update fails.
+             */
+            selectElement.dataset.previousStatus =
+                newStatus;
+
+        } catch (error) {
+
+            console.error(
+                'Error updating invoice status:',
+                error
+            );
+
+
+            /*
+             * Restore previous value.
+             */
+            selectElement.value =
+                previousStatus;
+
+
+            selectElement.classList.remove(
+                'draft',
+                'sent',
+                'paid',
+                'cancelled'
+            );
+
+
+            selectElement.classList.add(
+                previousStatus
+            );
+
+
+            window.alert(
+                error.message ||
+                'Error updating invoice status.'
+            );
+
+        } finally {
+
+            selectElement.classList.remove(
+                'status-updating'
+            );
+        }
+    }
+
+
+    /* =========================================================
+       3. STATUS DROPDOWN EVENTS
+    ========================================================= */
+
+    document
+        .querySelectorAll(
+            '.status-dropdown'
+        )
+        .forEach(select => {
+
+            select.addEventListener(
+                'change',
+                function () {
+
+                    updateInvoiceStatus(
+                        this
+                    );
+
+                }
+            );
+
+        });
+
+
+    /* =========================================================
+       4. DELETE INVOICE
+    ========================================================= */
+
+    async function deleteInvoice(
+        invoiceId
+    ) {
+
+        const confirmed =
+            window.confirm(
+                'Are you sure you want to delete this invoice?'
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/invoices/delete/${encodeURIComponent(
+                        invoiceId
+                    )}`,
+                    {
+                        method: 'DELETE'
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    result.message ||
+                    'Error deleting invoice.'
+                );
+            }
+
+
+            window.alert(
+                result.message ||
+                'Invoice deleted successfully.'
+            );
+
+
+            window.location.reload();
+
+
+        } catch (error) {
+
+            console.error(
+                'Delete invoice error:',
+                error
+            );
+
+
+            window.alert(
+                error.message ||
+                'Unable to delete invoice.'
+            );
+        }
+    }
+
+
+    /* =========================================================
+       5. SCROLL TO BOTTOM
+    ========================================================= */
+
+    const invoiceScrollBtn =
+        document.getElementById(
+            'invoiceScrollBtn'
+        );
+
+
+    function updateInvoiceScrollButton() {
+
+        if (
+            window.scrollY > 300
+        ) {
+
+            invoiceScrollBtn.style.display =
+                'flex';
+
+        } else {
+
+            invoiceScrollBtn.style.display =
+                'none';
+        }
+    }
+
+
+    window.addEventListener(
+        'scroll',
+        updateInvoiceScrollButton,
+        {
+            passive: true
+        }
+    );
+
+
+    invoiceScrollBtn.addEventListener(
+        'click',
+        function () {
+
+            window.scrollTo({
+
+                top:
+                    document.documentElement
+                        .scrollHeight,
+
+                behavior:
+                    'smooth'
+
+            });
+        }
+    );
+
+
+    updateInvoiceScrollButton();
+</script>

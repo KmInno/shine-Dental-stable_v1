@@ -1,0 +1,187 @@
+<style>
+    .signup-wrapper {
+        min-height: calc(100vh - 160px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        background: radial-gradient(circle at top left, #f1f5f9 0%, #e2e8f0 100%);
+    }
+
+    .signup-card {
+        background: #ffffff;
+        width: 100%;
+        max-width: 480px;
+        border-radius: 16px;
+        box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+        border: 1px solid #e2e8f0;
+        padding: 40px 36px;
+    }
+
+    .signup-brand {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .signup-brand img {
+        height: 64px;
+        width: 64px;
+        border-radius: 12px;
+        object-fit: cover;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+    }
+
+    .signup-brand h2 {
+        font-size: 24px;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 6px;
+    }
+
+    .signup-brand p {
+        color: #64748b;
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 8px;
+    }
+
+    .input-field-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .input-field-wrapper i {
+        position: absolute;
+        left: 14px;
+        color: #94a3b8;
+        font-size: 16px;
+        pointer-events: none;
+    }
+
+    .input-field-wrapper input {
+        width: 100%;
+        height: 48px;
+        padding: 10px 14px 10px 42px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 14px;
+        color: #0f172a;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+    }
+
+    .input-field-wrapper input:focus {
+        outline: none;
+        background-color: #ffffff;
+        border-color: #0284c7;
+        box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+    }
+
+    .hint-text {
+        font-size: 12px;
+        color: #64748b;
+        margin-top: 6px;
+    }
+
+    .btn-signup {
+        width: 100%;
+        height: 48px;
+        background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .btn-signup:hover {
+        background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+        box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4);
+        transform: translateY(-1px);
+    }
+
+    .signup-footer {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 14px;
+        color: #64748b;
+    }
+
+    .signup-footer a {
+        color: #0284c7;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .signup-footer a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="signup-wrapper">
+    <div class="signup-card">
+        <div class="signup-brand">
+            <img src="/images/shinedental.jpeg" alt="Shine Dental Logo">
+            <h2>Create Account</h2>
+            <p>Fill in your details to register as staff</p>
+        </div>
+
+        <form action="/account/signup" method="POST">
+            <div class="form-group">
+                <label for="firstname">Full Name</label>
+                <div class="input-field-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="firstname" name="name" placeholder="Dr. John Doe" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <div class="input-field-wrapper">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="john@shinedental.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-field-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required
+                        pattern="(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}"
+                        title="Password must be at least 6 characters long and include 1 capital letter, 1 number, and 1 special character">
+                </div>
+                <p class="hint-text">Password must include 1 capital letter, 1 number, and 1 special character.</p>
+            </div>
+
+            <button type="submit" class="btn-signup">
+                Register Account <i class="fa-solid fa-user-plus"></i>
+            </button>
+        </form>
+
+        <div class="signup-footer">
+            <p>Already have an account? <a href="/account/login">Login here</a></p>
+        </div>
+    </div>
+</div>

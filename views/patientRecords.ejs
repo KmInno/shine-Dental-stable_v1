@@ -1,0 +1,1565 @@
+
+<!-- =========================================================
+     SHINE DENTAL
+     PATIENT RECORD / VISIT HISTORY
+========================================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+>
+
+<style>
+    /* =========================================================
+       DESIGN SYSTEM
+    ========================================================= */
+
+    .patient-record-page {
+        --primary: #589f14;
+        --primary-dark: #467f10;
+        --primary-light: #eef7e6;
+
+        --blue: #2563eb;
+        --blue-light: #eff6ff;
+
+        --success: #16a34a;
+        --success-light: #ecfdf3;
+
+        --warning: #d97706;
+        --warning-light: #fffbeb;
+
+        --danger: #dc2626;
+        --danger-light: #fef2f2;
+
+        --text-strong: #17202b;
+        --text: #4b5563;
+        --text-soft: #8a94a3;
+
+        --border: #e5e7eb;
+        --background: #f5f7fa;
+        --surface: #ffffff;
+
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+
+        --shadow-sm:
+            0 2px 8px rgba(15, 23, 42, 0.05);
+
+        --shadow-md:
+            0 8px 25px rgba(15, 23, 42, 0.08);
+    }
+
+
+    /* =========================================================
+       PAGE
+    ========================================================= */
+
+    .patient-record-page {
+        width: 100%;
+        max-width: 1200px;
+
+        margin: 0 auto;
+        padding: 28px 24px 55px;
+
+        background: var(--background);
+        color: var(--text);
+
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
+    }
+
+
+    /* =========================================================
+       TOP BAR
+    ========================================================= */
+
+    .record-topbar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+
+        margin-bottom: 22px;
+    }
+
+    .topbar-content {
+        min-width: 0;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        margin-bottom: 13px;
+        padding: 8px 12px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+
+        background: var(--surface);
+        color: var(--text);
+
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+
+        box-shadow: var(--shadow-sm);
+
+        transition:
+            background .2s ease,
+            border-color .2s ease,
+            color .2s ease,
+            transform .2s ease;
+    }
+
+    .back-link:hover {
+        background: var(--primary-light);
+        border-color: #cfe2bd;
+        color: var(--primary-dark);
+        transform: translateX(-2px);
+    }
+
+    .back-link i {
+        color: var(--primary);
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin: 0 0 5px;
+
+        color: var(--text-strong);
+
+        font-size: 27px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .page-title i {
+        color: var(--primary);
+    }
+
+    .page-subtitle {
+        margin: 0;
+
+        color: var(--text-soft);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       PATIENT PROFILE
+    ========================================================= */
+
+    .patient-profile {
+        position: relative;
+        overflow: hidden;
+
+        margin-bottom: 22px;
+        padding: 24px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .patient-profile::after {
+        content: "";
+
+        position: absolute;
+        top: -70px;
+        right: -60px;
+
+        width: 190px;
+        height: 190px;
+
+        border-radius: 50%;
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(88, 159, 20, .10),
+                rgba(88, 159, 20, 0)
+            );
+    }
+
+    .profile-header {
+        position: relative;
+        z-index: 1;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .patient-identity {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        min-width: 0;
+    }
+
+    .patient-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 68px;
+        height: 68px;
+
+        flex-shrink: 0;
+
+        border-radius: 18px;
+
+        background:
+            linear-gradient(
+                135deg,
+                var(--primary),
+                #73b62e
+            );
+
+        color: #fff;
+
+        font-size: 25px;
+        font-weight: 700;
+
+        box-shadow:
+            0 8px 20px rgba(88, 159, 20, .20);
+    }
+
+    .identity-details {
+        min-width: 0;
+    }
+
+    .patient-name {
+        margin: 0 0 5px;
+
+        color: var(--text-strong);
+
+        font-size: 23px;
+        font-weight: 700;
+
+        overflow-wrap: anywhere;
+    }
+
+    .patient-subline {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 9px;
+
+        color: var(--text-soft);
+
+        font-size: 12px;
+    }
+
+    .patient-subline i {
+        color: var(--primary);
+    }
+
+    .subline-dot {
+        color: #cbd5e1;
+    }
+
+
+    /* =========================================================
+       VISIT COUNT
+    ========================================================= */
+
+    .visit-summary {
+        position: relative;
+        z-index: 1;
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        padding: 10px 13px;
+
+        border: 1px solid var(--border);
+        border-radius: 10px;
+
+        background: #fafbfc;
+
+        white-space: nowrap;
+    }
+
+    .visit-summary-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+
+        border-radius: 9px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .visit-summary-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .visit-summary-number {
+        color: var(--text-strong);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .visit-summary-label {
+        color: var(--text-soft);
+        font-size: 9px;
+    }
+
+
+    /* =========================================================
+       PATIENT DETAILS GRID
+    ========================================================= */
+
+    .patient-details-grid {
+        position: relative;
+        z-index: 1;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            );
+
+        gap: 12px;
+
+        margin-top: 22px;
+    }
+
+    .detail-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+
+        min-width: 0;
+
+        padding: 13px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+
+        background: #fafbfc;
+    }
+
+    .detail-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+
+        flex-shrink: 0;
+
+        border-radius: 9px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .detail-content {
+        min-width: 0;
+    }
+
+    .detail-label {
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: var(--text-soft);
+
+        font-size: 9px;
+        font-weight: 700;
+
+        letter-spacing: .5px;
+        text-transform: uppercase;
+    }
+
+    .detail-value {
+        display: block;
+
+        color: var(--text-strong);
+
+        font-size: 12px;
+        font-weight: 600;
+
+        overflow-wrap: anywhere;
+    }
+
+
+    /* =========================================================
+       NEXT VISIT STATUS
+    ========================================================= */
+
+    .visit-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 6px 9px;
+
+        border-radius: 999px;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    .visit-status.upcoming {
+        background: var(--success-light);
+        color: #15803d;
+    }
+
+    .visit-status.none {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+    .visit-status i {
+        font-size: 7px;
+    }
+
+
+    /* =========================================================
+       HISTORY CARD
+    ========================================================= */
+
+    .history-card {
+        overflow: hidden;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .history-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+
+        padding: 18px 20px;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .history-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .history-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+
+        border-radius: 10px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .history-title-group h2 {
+        margin: 0 0 3px;
+
+        color: var(--text-strong);
+
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .history-title-group p {
+        margin: 0;
+
+        color: var(--text-soft);
+        font-size: 10px;
+    }
+
+    .history-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 7px 10px;
+
+        border-radius: 999px;
+
+        background: #f3f4f6;
+        color: var(--text);
+
+        font-size: 10px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       HISTORY TABLE
+    ========================================================= */
+
+    .history-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .visits-table {
+        width: 100%;
+        min-width: 650px;
+
+        border-collapse: collapse;
+    }
+
+    .visits-table thead {
+        background: #fafbfc;
+    }
+
+    .visits-table th {
+        padding: 12px 18px;
+
+        border-bottom: 1px solid var(--border);
+
+        color: #737d8a;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        letter-spacing: .45px;
+        text-align: left;
+        text-transform: uppercase;
+    }
+
+    .visits-table td {
+        padding: 15px 18px;
+
+        border-bottom: 1px solid #f0f2f4;
+
+        color: var(--text);
+
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    .visits-table tbody tr {
+        transition: background .18s ease;
+    }
+
+    .visits-table tbody tr:hover {
+        background: #fcfefb;
+    }
+
+    .visits-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    /* =========================================================
+       VISIT DATE
+    ========================================================= */
+
+    .visit-date {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .date-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 35px;
+        height: 35px;
+
+        flex-shrink: 0;
+
+        border-radius: 9px;
+
+        background: var(--blue-light);
+        color: var(--blue);
+    }
+
+    .date-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .date-main {
+        color: var(--text-strong);
+        font-weight: 700;
+    }
+
+    .date-label {
+        color: var(--text-soft);
+        font-size: 9px;
+    }
+
+
+    /* =========================================================
+       SERVICES
+    ========================================================= */
+
+    .services {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .service-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        padding: 6px 9px;
+
+        border: 1px solid #dce9d2;
+        border-radius: 7px;
+
+        background: #f7fbf3;
+        color: #46652e;
+
+        font-size: 10px;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .service-badge i {
+        color: var(--primary);
+        font-size: 9px;
+    }
+
+    .service-plain {
+        color: var(--text);
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       HISTORY FOOTER
+    ========================================================= */
+
+    .history-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+
+        padding: 13px 18px;
+
+        border-top: 1px solid var(--border);
+
+        background: #fafbfc;
+    }
+
+    .footer-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+    }
+
+    .footer-info strong {
+        color: var(--text-strong);
+    }
+
+    .footer-info i {
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       EMPTY / ERROR STATE
+    ========================================================= */
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        min-height: 300px;
+
+        padding: 45px 20px;
+
+        text-align: center;
+    }
+
+    .empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 76px;
+        height: 76px;
+        margin-bottom: 17px;
+
+        border-radius: 50%;
+
+        background: #f1f5f9;
+        color: #cbd5e1;
+
+        font-size: 30px;
+    }
+
+    .empty-state h3 {
+        margin: 0 0 7px;
+
+        color: var(--text-strong);
+        font-size: 18px;
+    }
+
+    .empty-state p {
+        max-width: 450px;
+
+        margin: 0;
+
+        color: var(--text-soft);
+
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .error-state .empty-icon {
+        background: var(--danger-light);
+        color: #ef4444;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1000px) {
+
+        .patient-details-grid {
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+        }
+    }
+
+
+    @media (max-width: 700px) {
+
+        .patient-record-page {
+            padding: 20px 14px 45px;
+        }
+
+        .record-topbar {
+            flex-direction: column;
+        }
+
+        .page-title {
+            font-size: 23px;
+        }
+
+        .patient-profile {
+            padding: 18px;
+        }
+
+        .profile-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .patient-identity {
+            align-items: flex-start;
+        }
+
+        .patient-avatar {
+            width: 58px;
+            height: 58px;
+            border-radius: 15px;
+            font-size: 22px;
+        }
+
+        .patient-name {
+            font-size: 20px;
+        }
+
+        .visit-summary {
+            width: 100%;
+        }
+
+        .patient-details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .history-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .history-count {
+            align-self: flex-start;
+        }
+    }
+
+
+    @media (max-width: 450px) {
+
+        .patient-identity {
+            flex-direction: column;
+        }
+
+        .history-footer {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+</style>
+
+
+<div class="patient-record-page">
+
+
+    <% if (patient) { %>
+
+
+        <%
+            /* =====================================================
+               PATIENT DATA
+            ====================================================== */
+
+            const patientName =
+                patient.patient_name || 'Unknown Patient';
+
+            const patientInitial =
+                patientName
+                    .trim()
+                    .charAt(0)
+                    .toUpperCase() || 'P';
+
+            const visitCount =
+                Array.isArray(history)
+                    ? history.length
+                    : 0;
+        %>
+
+
+        <!-- =====================================================
+             PAGE HEADER
+        ====================================================== -->
+
+        <header class="record-topbar">
+
+            <div class="topbar-content">
+
+                <a
+                    href="/appointments"
+                    class="back-link"
+                >
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back to Appointments
+                </a>
+
+                <h1 class="page-title">
+
+                    <i class="fa-solid fa-user-clock"></i>
+
+                    Patient History
+
+                </h1>
+
+                <p class="page-subtitle">
+
+                    Review patient information and
+                    previous dental visits.
+
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             PATIENT PROFILE
+        ====================================================== -->
+
+        <section class="patient-profile">
+
+
+            <!-- Profile Header -->
+
+            <div class="profile-header">
+
+
+                <div class="patient-identity">
+
+                    <div class="patient-avatar">
+                        <%= patientInitial %>
+                    </div>
+
+
+                    <div class="identity-details">
+
+                        <h2 class="patient-name">
+                            <%= patientName %>
+                        </h2>
+
+
+                        <div class="patient-subline">
+
+                            <span>
+
+                                <i class="fa-solid fa-phone"></i>
+
+                                <%= patient.patient_phone
+                                    ? formatPhone(
+                                        patient.patient_phone
+                                    )
+                                    : 'No phone number'
+                                %>
+
+                            </span>
+
+
+                            <span class="subline-dot">
+                                •
+                            </span>
+
+
+                            <span>
+
+                                <i class="fa-solid fa-calendar-check"></i>
+
+                                Patient Record
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Visit Count -->
+
+                <div class="visit-summary">
+
+                    <div class="visit-summary-icon">
+
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    </div>
+
+
+                    <div class="visit-summary-text">
+
+                        <span class="visit-summary-number">
+
+                            <%= visitCount %>
+
+                        </span>
+
+                        <span class="visit-summary-label">
+
+                            Total Visits
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PATIENT DETAILS
+            ================================================== -->
+
+            <div class="patient-details-grid">
+
+
+                <!-- Phone -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-phone"></i>
+
+                    </div>
+
+
+                    <div class="detail-content">
+
+                        <span class="detail-label">
+                            Phone
+                        </span>
+
+                        <span class="detail-value">
+
+                            <%= patient.patient_phone
+                                ? formatPhone(
+                                    patient.patient_phone
+                                )
+                                : 'N/A'
+                            %>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Gender -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-venus-mars"></i>
+
+                    </div>
+
+
+                    <div class="detail-content">
+
+                        <span class="detail-label">
+                            Gender
+                        </span>
+
+                        <span class="detail-value">
+
+                            <%= patient.gender || 'N/A' %>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Age -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-cake-candles"></i>
+
+                    </div>
+
+
+                    <div class="detail-content">
+
+                        <span class="detail-label">
+                            Age
+                        </span>
+
+                        <span class="detail-value">
+
+                            <% if (
+                                patient.age !== null &&
+                                patient.age !== undefined &&
+                                patient.age !== ''
+                            ) { %>
+
+                                <%= patient.age %> years
+
+                            <% } else { %>
+
+                                N/A
+
+                            <% } %>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Next Visit -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-calendar-plus"></i>
+
+                    </div>
+
+
+                    <div class="detail-content">
+
+                        <span class="detail-label">
+                            Next Visit
+                        </span>
+
+
+                        <% if (patient.next_visit) { %>
+
+                            <span class="visit-status upcoming">
+
+                                <i class="fa-solid fa-circle"></i>
+
+                                <%= new Date(
+                                    patient.next_visit
+                                ).toLocaleDateString(
+                                    'en-GB'
+                                ) %>
+
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="visit-status none">
+
+                                <i class="fa-solid fa-minus"></i>
+
+                                Not scheduled
+
+                            </span>
+
+                        <% } %>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Address -->
+
+                <div class="detail-card">
+
+                    <div class="detail-icon">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                    </div>
+
+
+                    <div class="detail-content">
+
+                        <span class="detail-label">
+                            Address
+                        </span>
+
+                        <span class="detail-value">
+
+                            <%= patient.patient_address || 'N/A' %>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             VISIT HISTORY
+        ====================================================== -->
+
+        <section class="history-card">
+
+
+            <!-- History Header -->
+
+            <div class="history-header">
+
+                <div class="history-title-wrap">
+
+                    <div class="history-icon">
+
+                        <i class="fa-solid fa-tooth"></i>
+
+                    </div>
+
+
+                    <div class="history-title-group">
+
+                        <h2>
+                            Visit History
+                        </h2>
+
+                        <p>
+                            Previous dental visits and treatments
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <span class="history-count">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    <%= visitCount %>
+                    <%= visitCount === 1
+                        ? 'Visit'
+                        : 'Visits'
+                    %>
+
+                </span>
+
+            </div>
+
+
+            <% if (history && history.length > 0) { %>
+
+
+                <!-- =================================================
+                     VISIT TABLE
+                ================================================== -->
+
+                <div class="history-table-wrapper">
+
+                    <table class="visits-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Visit Date
+                                </th>
+
+                                <th>
+                                    Service / Treatment
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            <% history.forEach(visit => { %>
+
+                                <%
+                                    /*
+                                     * Normalize the service data.
+                                     *
+                                     * Supported formats:
+                                     *
+                                     * 1. Plain string
+                                     * 2. JSON string
+                                     * 3. Array
+                                     * 4. Service object
+                                     */
+
+                                    let services = [];
+
+
+                                    if (visit.service) {
+
+                                        try {
+
+                                            if (
+                                                typeof visit.service ===
+                                                'string'
+                                            ) {
+
+                                                const parsed =
+                                                    JSON.parse(
+                                                        visit.service
+                                                    );
+
+                                                services =
+                                                    Array.isArray(
+                                                        parsed
+                                                    )
+                                                        ? parsed
+                                                        : [parsed];
+
+                                            } else if (
+                                                Array.isArray(
+                                                    visit.service
+                                                )
+                                            ) {
+
+                                                services =
+                                                    visit.service;
+
+                                            } else {
+
+                                                services = [
+                                                    visit.service
+                                                ];
+
+                                            }
+
+                                        } catch (error) {
+
+                                            /*
+                                             * Not valid JSON.
+                                             * Treat the original value
+                                             * as plain text.
+                                             */
+
+                                            services = [
+                                                visit.service
+                                            ];
+                                        }
+
+                                    }
+
+
+                                    /*
+                                     * Convert service objects into
+                                     * readable names.
+                                     */
+
+                                    services =
+                                        services.map(service => {
+
+                                            if (
+                                                typeof service ===
+                                                'object' &&
+                                                service !== null
+                                            ) {
+
+                                                return (
+                                                    service.name ||
+                                                    service.service ||
+                                                    'N/A'
+                                                );
+                                            }
+
+                                            return String(service);
+                                        });
+                                %>
+
+
+                                <tr>
+
+
+                                    <!-- =================================
+                                         VISIT DATE
+                                    ================================== -->
+
+                                    <td>
+
+                                        <div class="visit-date">
+
+                                            <div class="date-icon">
+
+                                                <i class="fa-solid fa-calendar-day"></i>
+
+                                            </div>
+
+
+                                            <div class="date-content">
+
+                                                <span class="date-main">
+
+                                                    <%= new Date(
+                                                        visit.visit_date
+                                                    ).toLocaleDateString(
+                                                        'en-GB'
+                                                    ) %>
+
+                                                </span>
+
+                                                <span class="date-label">
+
+                                                    Dental visit
+
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- =================================
+                                         SERVICES
+                                    ================================== -->
+
+                                    <td>
+
+                                        <% if (services.length > 0) { %>
+
+                                            <div class="services">
+
+                                                <% services.forEach(service => { %>
+
+                                                    <span class="service-badge">
+
+                                                        <i class="fa-solid fa-tooth"></i>
+
+                                                        <%= service %>
+
+                                                    </span>
+
+                                                <% }) %>
+
+                                            </div>
+
+                                        <% } else { %>
+
+                                            <span class="service-plain">
+                                                No service recorded
+                                            </span>
+
+                                        <% } %>
+
+                                    </td>
+
+
+                                </tr>
+
+                            <% }) %>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- =================================================
+                     HISTORY FOOTER
+                ================================================== -->
+
+                <div class="history-footer">
+
+                    <span class="footer-info">
+
+                        <i class="fa-solid fa-file-medical"></i>
+
+                        Total recorded visits:
+
+                        <strong>
+                            <%= visitCount %>
+                        </strong>
+
+                    </span>
+
+
+                    <span class="footer-info">
+
+                        <i class="fa-solid fa-shield-heart"></i>
+
+                        Shine Dental Surgery
+
+                    </span>
+
+                </div>
+
+
+            <% } else { %>
+
+
+                <!-- =================================================
+                     NO HISTORY
+                ================================================== -->
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+
+                        <i class="fa-solid fa-calendar-xmark"></i>
+
+                    </div>
+
+                    <h3>
+                        No Visit History
+                    </h3>
+
+                    <p>
+                        There are currently no previous dental
+                        visits recorded for this patient.
+                    </p>
+
+                </div>
+
+
+            <% } %>
+
+
+        </section>
+
+
+    <% } else { %>
+
+
+        <!-- =====================================================
+             PATIENT NOT FOUND
+        ====================================================== -->
+
+        <section class="history-card">
+
+            <div class="empty-state error-state">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-user-slash"></i>
+
+                </div>
+
+
+                <h3>
+                    Patient Not Found
+                </h3>
+
+
+                <p>
+
+                    <%= message ||
+                        'The requested patient record could not be found.'
+                    %>
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+    <% } %>
+
+</div>

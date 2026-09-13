@@ -1,0 +1,3282 @@
+
+<title>Create Receipt</title>
+
+<style>
+    /* =========================================================
+       DESIGN SYSTEM
+    ========================================================= */
+
+    :root {
+        --primary: #589f14;
+        --primary-dark: #467f10;
+        --primary-light: #eef7e6;
+
+        --blue: #2563eb;
+        --blue-dark: #1d4ed8;
+        --blue-light: #eff6ff;
+
+        --success: #16a34a;
+        --success-light: #ecfdf3;
+
+        --warning: #d97706;
+        --warning-light: #fffbeb;
+
+        --danger: #dc2626;
+        --danger-dark: #b91c1c;
+        --danger-light: #fef2f2;
+
+        --text-strong: #17202b;
+        --text: #4b5563;
+        --text-soft: #8a94a3;
+
+        --border: #e4e8ee;
+        --background: #f5f7fa;
+        --surface: #ffffff;
+
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+
+        --shadow-sm:
+            0 2px 8px rgba(15, 23, 42, 0.05);
+
+        --shadow-md:
+            0 8px 24px rgba(15, 23, 42, 0.08);
+
+        --shadow-lg:
+            0 16px 40px rgba(15, 23, 42, 0.12);
+    }
+
+
+    /* =========================================================
+       GLOBAL
+    ========================================================= */
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+
+        background: var(--background);
+        color: var(--text);
+
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
+    }
+
+    button,
+    input,
+    select {
+        font: inherit;
+    }
+
+
+    /* =========================================================
+       PAGE
+    ========================================================= */
+
+    .receipt-page {
+        width: 100%;
+        max-width: 1000px;
+
+        margin: 0 auto;
+        padding: 30px 20px 60px;
+    }
+
+
+    /* =========================================================
+       PAGE HEADER
+    ========================================================= */
+
+    .page-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+
+        margin-bottom: 24px;
+    }
+
+    .page-heading {
+        min-width: 0;
+    }
+
+    .page-title {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+
+        margin: 0 0 6px;
+
+        color: var(--text-strong);
+
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .page-title i {
+        color: var(--primary);
+    }
+
+    .page-subtitle {
+        margin: 0;
+
+        color: var(--text-soft);
+
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .page-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 9px 13px;
+
+        border: 1px solid var(--border);
+        border-radius: 999px;
+
+        background: var(--surface);
+        color: var(--text);
+
+        font-size: 11px;
+        font-weight: 700;
+
+        box-shadow: var(--shadow-sm);
+        white-space: nowrap;
+    }
+
+    .page-badge i {
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       FORM
+    ========================================================= */
+
+    .receipt-form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+
+    /* =========================================================
+       SECTION CARD
+    ========================================================= */
+
+    .form-section {
+        overflow: hidden;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+
+        padding: 17px 20px;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .section-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+
+        border-radius: 10px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+
+        flex-shrink: 0;
+    }
+
+    .section-heading {
+        min-width: 0;
+    }
+
+    .section-title {
+        margin: 0 0 3px;
+
+        color: var(--text-strong);
+
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .section-description {
+        margin: 0;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .section-body {
+        padding: 20px;
+    }
+
+
+    /* =========================================================
+       EXISTING PATIENT DISPLAY
+    ========================================================= */
+
+    .patient-info-section {
+        display: none;
+
+        margin-bottom: 0;
+        padding: 16px;
+
+        border: 1px solid #dbe9cc;
+        border-left: 4px solid var(--primary);
+        border-radius: var(--radius-md);
+
+        background:
+            linear-gradient(
+                135deg,
+                #f8fcf3,
+                #f2f8eb
+            );
+    }
+
+    .existing-patient-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin-bottom: 10px;
+    }
+
+    .existing-patient-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+
+        border-radius: 9px;
+
+        background: var(--primary-light);
+        color: var(--primary);
+    }
+
+    .existing-patient-title {
+        margin: 0;
+
+        color: var(--text-strong);
+
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .patient-display-grid {
+        display: grid;
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 8px;
+    }
+
+    .patient-display-item {
+        padding: 8px 10px;
+
+        border-radius: 7px;
+
+        background: rgba(255, 255, 255, 0.7);
+    }
+
+    .patient-display-label {
+        display: block;
+
+        margin-bottom: 3px;
+
+        color: var(--text-soft);
+
+        font-size: 9px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    .patient-display-value {
+        color: var(--text-strong);
+
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       PATIENT LOOKUP
+    ========================================================= */
+
+    .patient-lookup {
+        padding: 16px;
+
+        border: 1px solid #eadfae;
+        border-left: 4px solid #e1b92c;
+        border-radius: var(--radius-md);
+
+        background:
+            linear-gradient(
+                135deg,
+                #fffdf4,
+                #fff9e5
+            );
+    }
+
+    .lookup-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin-bottom: 12px;
+    }
+
+    .lookup-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 35px;
+        height: 35px;
+
+        border-radius: 9px;
+
+        background: var(--warning-light);
+        color: var(--warning);
+    }
+
+    .lookup-title {
+        margin: 0;
+
+        color: var(--text-strong);
+
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .lookup-description {
+        margin: 2px 0 0;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+    }
+
+    .lookup-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .lookup-input {
+        flex: 1;
+
+        min-height: 42px;
+
+        padding: 10px 12px;
+
+        border: 1px solid #d9d6c4;
+        border-radius: var(--radius-sm);
+
+        background: #fff;
+
+        color: var(--text-strong);
+
+        outline: none;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .lookup-input:focus {
+        border-color: var(--warning);
+
+        box-shadow:
+            0 0 0 3px rgba(217, 119, 6, .10);
+    }
+
+    .lookup-input::placeholder {
+        color: #9aa1aa;
+    }
+
+    .lookup-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        min-height: 42px;
+
+        padding: 10px 16px;
+
+        border: none;
+        border-radius: var(--radius-sm);
+
+        background: var(--blue);
+        color: #fff;
+
+        font-size: 12px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition:
+            background .2s ease,
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .lookup-btn:hover {
+        background: var(--blue-dark);
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 5px 12px rgba(37, 99, 235, .20);
+    }
+
+    .lookup-help {
+        display: block;
+
+        margin-top: 9px;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .lookup-result {
+        display: none;
+
+        margin-top: 12px;
+        padding: 11px 12px;
+
+        border-radius: 8px;
+
+        font-size: 11px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       FORM GRID
+    ========================================================= */
+
+    .form-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 16px;
+    }
+
+    .form-group {
+        min-width: 0;
+    }
+
+    .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        margin: 0 0 6px;
+
+        color: var(--text-strong);
+
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .required-mark {
+        color: var(--danger);
+    }
+
+    .form-control {
+        width: 100%;
+        min-height: 42px;
+
+        padding: 10px 12px;
+
+        border: 1px solid #d9dee6;
+        border-radius: var(--radius-sm);
+
+        background: #fff;
+        color: var(--text-strong);
+
+        outline: none;
+
+        font-size: 13px;
+
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease,
+            background .2s ease;
+    }
+
+    .form-control:hover {
+        border-color: #cbd2dc;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+
+        box-shadow:
+            0 0 0 3px rgba(88, 159, 20, .10);
+    }
+
+    .form-control:read-only {
+        background: #f8fafc;
+        color: var(--text);
+    }
+
+    .form-help {
+        display: block;
+
+        margin-top: 5px;
+
+        color: var(--text-soft);
+
+        font-size: 9px;
+    }
+
+
+    /* =========================================================
+       SERVICES
+    ========================================================= */
+
+    .services-section {
+        overflow: hidden;
+    }
+
+    .services-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .services-table {
+        width: 100%;
+        min-width: 700px;
+
+        border-collapse: collapse;
+    }
+
+    .services-table thead {
+        background: #f8fafc;
+    }
+
+    .services-table th {
+        padding: 11px 12px;
+
+        border-bottom: 1px solid var(--border);
+
+        color: #737d8a;
+
+        font-size: 9px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: .4px;
+
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .services-table td {
+        padding: 10px 12px;
+
+        border-bottom: 1px solid #f0f2f4;
+
+        vertical-align: middle;
+    }
+
+    .services-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .services-table tbody tr:hover {
+        background: #fcfefb;
+    }
+
+    .service-input {
+        width: 100%;
+        min-height: 38px;
+
+        padding: 8px 10px;
+
+        border: 1px solid #d9dee6;
+        border-radius: 7px;
+
+        outline: none;
+
+        font-size: 12px;
+    }
+
+    .service-input:focus {
+        border-color: var(--primary);
+
+        box-shadow:
+            0 0 0 3px rgba(88, 159, 20, .08);
+    }
+
+    .service-name {
+        min-width: 210px;
+    }
+
+    .service-price {
+        min-width: 120px;
+    }
+
+    .service-qty {
+        min-width: 80px;
+    }
+
+    .service-amount {
+        background: #f8fafc;
+        font-weight: 700;
+    }
+
+    .remove-service-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px !important;
+        height: 34px;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        border: none;
+        border-radius: 8px;
+
+        background: var(--danger-light);
+        color: var(--danger);
+
+        cursor: pointer;
+
+        transition:
+            background .2s ease,
+            color .2s ease,
+            transform .2s ease;
+    }
+
+    .remove-service-btn:hover {
+        background: #fee2e2;
+        color: var(--danger-dark);
+
+        transform: scale(1.04);
+    }
+
+
+    /* =========================================================
+       SERVICES FOOTER
+    ========================================================= */
+
+    .services-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+
+        padding: 13px 16px;
+
+        border-top: 1px solid var(--border);
+
+        background: #fafbfc;
+    }
+
+    .add-service-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        min-height: 38px;
+
+        padding: 8px 14px;
+
+        border: 1px solid #cfe2bd;
+        border-radius: 8px;
+
+        background: var(--primary-light);
+        color: var(--primary-dark);
+
+        font-size: 11px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition:
+            background .2s ease,
+            border-color .2s ease,
+            transform .2s ease;
+    }
+
+    .add-service-btn:hover {
+        background: #e2f0d5;
+        border-color: #bcd6a8;
+
+        transform: translateY(-1px);
+    }
+
+    .service-hint {
+        color: var(--text-soft);
+        font-size: 10px;
+    }
+
+
+    /* =========================================================
+       PAYMENT SUMMARY
+    ========================================================= */
+
+    .payment-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 16px;
+    }
+
+    .payment-card {
+        padding: 15px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+
+        background: #fafbfc;
+    }
+
+    .payment-card.highlight {
+        border-color: #cfe2bd;
+        background:
+            linear-gradient(
+                135deg,
+                #f8fcf3,
+                #f2f8eb
+            );
+    }
+
+    .payment-label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+
+        margin-bottom: 6px;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: .45px;
+    }
+
+    .payment-label i {
+        color: var(--primary);
+    }
+
+    .payment-total {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+
+        color: var(--text-strong);
+
+        font-size: 25px;
+        font-weight: 700;
+    }
+
+    .payment-total small {
+        color: var(--text-soft);
+        font-size: 10px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       SUBMIT AREA
+    ========================================================= */
+
+    .submit-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+
+        padding: 18px 20px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .submit-note {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .submit-note i {
+        color: var(--primary);
+        font-size: 16px;
+    }
+
+    .submit-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        min-height: 44px;
+
+        padding: 10px 20px;
+
+        border: none;
+        border-radius: 9px;
+
+        background:
+            linear-gradient(
+                135deg,
+                var(--primary),
+                #6eae2d
+            );
+
+        color: #fff;
+
+        font-size: 12px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 5px 14px rgba(88, 159, 20, .20);
+
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease,
+            background .2s ease;
+    }
+
+    .submit-btn:hover {
+        background:
+            linear-gradient(
+                135deg,
+                var(--primary-dark),
+                #5f9824
+            );
+
+        transform: translateY(-1px);
+
+        box-shadow:
+            0 8px 18px rgba(88, 159, 20, .25);
+    }
+
+    .submit-btn:active {
+        transform: translateY(0);
+    }
+
+
+    /* =========================================================
+       MODAL
+    ========================================================= */
+
+    .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+
+        display: none;
+
+        padding: 20px;
+
+        background: rgba(15, 23, 42, .55);
+
+        backdrop-filter: blur(3px);
+
+        animation: fadeIn .2s ease;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 560px;
+
+        margin: 8vh auto 0;
+
+        overflow: hidden;
+
+        border-radius: var(--radius-lg);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-lg);
+
+        animation: slideDown .25s ease;
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+
+        padding: 18px 20px;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+    }
+
+    .modal-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+
+        border-radius: 10px;
+
+        background: var(--warning-light);
+        color: var(--warning);
+    }
+
+    .modal-header h2 {
+        margin: 0;
+
+        color: var(--text-strong);
+
+        font-size: 17px;
+    }
+
+    .modal-header p {
+        margin: 3px 0 0;
+
+        color: var(--text-soft);
+
+        font-size: 10px;
+    }
+
+    .close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 34px;
+        height: 34px;
+
+        border-radius: 8px;
+
+        color: #8d96a2;
+
+        cursor: pointer;
+
+        transition:
+            background .2s ease,
+            color .2s ease;
+    }
+
+    .close:hover {
+        background: #f3f4f6;
+        color: var(--text-strong);
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .patient-record-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+
+        overflow: hidden;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+    }
+
+    .record-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+
+        padding: 12px 14px;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .record-row:last-child {
+        border-bottom: none;
+    }
+
+    .record-label {
+        color: var(--text-soft);
+
+        font-size: 10px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: .4px;
+    }
+
+    .record-value {
+        color: var(--text-strong);
+
+        font-size: 12px;
+        font-weight: 600;
+
+        text-align: right;
+    }
+
+    .record-value.patient-id {
+        color: var(--blue);
+        font-weight: 700;
+    }
+
+    .modal-footer {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+
+        padding: 16px 20px;
+
+        border-top: 1px solid var(--border);
+
+        background: #fafbfc;
+    }
+
+    .modal-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        min-height: 42px;
+
+        padding: 10px 14px;
+
+        border: none;
+        border-radius: 8px;
+
+        font-size: 11px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition:
+            background .2s ease,
+            transform .2s ease,
+            box-shadow .2s ease;
+    }
+
+    .modal-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .modal-btn-primary {
+        background: var(--success);
+        color: #fff;
+
+        box-shadow:
+            0 4px 10px rgba(22, 163, 74, .18);
+    }
+
+    .modal-btn-primary:hover {
+        background: #15803d;
+    }
+
+    .modal-btn-secondary {
+        background: var(--blue);
+        color: #fff;
+
+        box-shadow:
+            0 4px 10px rgba(37, 99, 235, .18);
+    }
+
+    .modal-btn-secondary:hover {
+        background: var(--blue-dark);
+    }
+
+
+    /* =========================================================
+       ANIMATIONS
+    ========================================================= */
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 800px) {
+
+        .receipt-page {
+            padding: 22px 15px 45px;
+        }
+
+        .page-header {
+            flex-direction: column;
+        }
+
+        .page-badge {
+            align-self: flex-start;
+        }
+
+        .form-grid,
+        .payment-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full-width {
+            grid-column: auto;
+        }
+
+        .lookup-row {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .lookup-btn {
+            width: 100%;
+        }
+
+        .patient-display-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .submit-section {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .submit-btn {
+            width: 100%;
+        }
+    }
+
+
+    @media (max-width: 600px) {
+
+        .page-title {
+            font-size: 23px;
+        }
+
+        .section-header,
+        .section-body {
+            padding: 16px;
+        }
+
+        .services-footer {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .add-service-btn {
+            width: 100%;
+        }
+
+        .service-hint {
+            display: none;
+        }
+
+        .modal {
+            padding: 12px;
+        }
+
+        .modal-content {
+            margin-top: 5vh;
+        }
+
+        .modal-footer {
+            grid-template-columns: 1fr;
+        }
+
+        .record-row {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .record-value {
+            text-align: left;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<div class="receipt-page">
+
+
+    <!-- =======================================================
+         HEADER
+    ======================================================== -->
+
+    <header class="page-header">
+
+        <div class="page-heading">
+
+            <h1 class="page-title">
+
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+
+                <span id="pageTitle">
+                    Create Receipt
+                </span>
+
+            </h1>
+
+            <p class="page-subtitle">
+
+                Record a patient payment and create
+                a new dental receipt.
+
+            </p>
+
+        </div>
+
+
+        <div class="page-badge">
+
+            <i class="fa-solid fa-shield-heart"></i>
+
+            Shine Dental Surgery
+
+        </div>
+
+    </header>
+
+
+    <!-- =======================================================
+         RECEIPT FORM
+    ======================================================== -->
+
+    <form
+        id="receiptForm"
+        class="receipt-form"
+        action="/receipt/create"
+        method="POST"
+    >
+
+
+        <!-- ===================================================
+             PATIENT SECTION
+        ==================================================== -->
+
+        <section class="form-section">
+
+
+            <div class="section-header">
+
+                <div class="section-icon">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <div class="section-heading">
+
+                    <h2 class="section-title">
+                        Patient Information
+                    </h2>
+
+                    <p class="section-description">
+                        Identify the patient and update their contact details.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+
+                <!-- =============================================
+                     EXISTING PATIENT
+                ============================================== -->
+
+                <div
+                    id="patientInfoDisplay"
+                    class="patient-info-section"
+                >
+
+                    <div class="existing-patient-header">
+
+                        <div class="existing-patient-icon">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        </div>
+
+                        <h3 class="existing-patient-title">
+                            Existing Patient Selected
+                        </h3>
+
+                    </div>
+
+
+                    <div class="patient-display-grid">
+
+                        <div class="patient-display-item">
+
+                            <span class="patient-display-label">
+                                Patient
+                            </span>
+
+                            <span
+                                id="displayPatientName"
+                                class="patient-display-value"
+                            ></span>
+
+                        </div>
+
+
+                        <div class="patient-display-item">
+
+                            <span class="patient-display-label">
+                                Phone
+                            </span>
+
+                            <span
+                                id="displayPatientPhone"
+                                class="patient-display-value"
+                            ></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =============================================
+                     PATIENT LOOKUP
+                ============================================== -->
+
+                <div class="patient-lookup">
+
+                    <div class="lookup-header">
+
+                        <div class="lookup-icon">
+
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3 class="lookup-title">
+                                Find Existing Patient
+                            </h3>
+
+                            <p class="lookup-description">
+                                Search using a patient ID.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="lookup-row">
+
+                        <input
+                            type="text"
+                            id="lookupPatientId"
+                            class="lookup-input"
+                            placeholder="e.g. sds-26-02-001"
+                            autocomplete="off"
+                        >
+
+
+                        <button
+                            type="button"
+                            id="lookupPatientBtn"
+                            class="lookup-btn"
+                        >
+
+                            <i class="fa-solid fa-search"></i>
+
+                            Lookup
+
+                        </button>
+
+                    </div>
+
+
+                    <small class="lookup-help">
+
+                        Old-format patient IDs will automatically
+                        be reformatted when possible.
+
+                    </small>
+
+
+                    <div
+                        id="lookupResult"
+                        class="lookup-result"
+                    ></div>
+
+                </div>
+
+
+                <div style="height: 16px;"></div>
+
+
+                <!-- =============================================
+                     PATIENT FIELDS
+                ============================================== -->
+
+                <div id="patientFieldsContainer">
+
+                    <div class="form-grid">
+
+
+                        <!-- Patient Name -->
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="patientName"
+                            >
+                                Patient Name
+
+                                <span class="required-mark">
+                                    *
+                                </span>
+                            </label>
+
+                            <input
+                                id="patientName"
+                                type="text"
+                                name="patient_name"
+                                class="form-control"
+                                required
+                                autocomplete="name"
+                                placeholder="Enter patient's full name"
+                            >
+
+                        </div>
+
+
+                        <!-- Phone -->
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="patientPhone"
+                            >
+                                Patient Phone
+
+                                <span class="required-mark">
+                                    *
+                                </span>
+                            </label>
+
+                            <input
+                                id="patientPhone"
+                                type="tel"
+                                name="patient_phone"
+                                class="form-control"
+                                required
+                                placeholder="+2567XXXXXXXX"
+                                pattern="^\+2567[0-9]{8}$"
+                                title="Enter number in format +2567XXXXXXXX"
+                                autocomplete="tel"
+                            >
+
+                        </div>
+
+
+                        <!-- Address -->
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="patientAddress"
+                            >
+                                Address
+                            </label>
+
+                            <input
+                                id="patientAddress"
+                                type="text"
+                                name="patient_address"
+                                class="form-control"
+                                placeholder="Patient address"
+                                autocomplete="street-address"
+                            >
+
+                        </div>
+
+
+                        <!-- Gender -->
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="patientGender"
+                            >
+                                Gender
+                            </label>
+
+                            <select
+                                id="patientGender"
+                                name="patient_gender"
+                                class="form-control"
+                            >
+
+                                <option value="">
+                                    -- Select Gender --
+                                </option>
+
+                                <option value="Male">
+                                    Male
+                                </option>
+
+                                <option value="Female">
+                                    Female
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Age -->
+
+                        <div class="form-group">
+
+                            <label
+                                class="form-label"
+                                for="patientAge"
+                            >
+                                Age
+                            </label>
+
+                            <input
+                                id="patientAge"
+                                type="number"
+                                name="patient_age"
+                                class="form-control"
+                                min="0"
+                                max="150"
+                                placeholder="Age"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             VISIT INFORMATION
+        ==================================================== -->
+
+        <section class="form-section">
+
+
+            <div class="section-header">
+
+                <div class="section-icon">
+
+                    <i class="fa-solid fa-calendar-check"></i>
+
+                </div>
+
+                <div class="section-heading">
+
+                    <h2 class="section-title">
+                        Appointment Information
+                    </h2>
+
+                    <p class="section-description">
+                        Schedule the patient's next visit when applicable.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+                <div class="form-grid">
+
+
+                    <!-- Next Visit -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="nextVisit"
+                        >
+                            Next Visit Date
+                        </label>
+
+                        <input
+                            id="nextVisit"
+                            type="date"
+                            name="patient_next_visit"
+                            class="form-control"
+                        >
+
+                    </div>
+
+
+                    <!-- Room -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="roomNumber"
+                        >
+                            Next Visit Room
+                        </label>
+
+                        <input
+                            id="roomNumber"
+                            type="text"
+                            name="room_number"
+                            class="form-control"
+                            placeholder="e.g. Room 2"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             SERVICES SECTION
+        ==================================================== -->
+
+        <section class="form-section services-section">
+
+
+            <div class="section-header">
+
+                <div class="section-icon">
+
+                    <i class="fa-solid fa-tooth"></i>
+
+                </div>
+
+                <div class="section-heading">
+
+                    <h2 class="section-title">
+                        Services &amp; Treatment
+                    </h2>
+
+                    <p class="section-description">
+                        Add the dental services provided during this visit.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="services-table-wrapper">
+
+                <table class="services-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Service
+                            </th>
+
+                            <th>
+                                Unit Price
+                            </th>
+
+                            <th>
+                                Qty
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Remove
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="servicesContainer"
+                    ></tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Services Footer -->
+
+            <div class="services-footer">
+
+                <button
+                    type="button"
+                    id="addServiceBtn"
+                    class="add-service-btn"
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Add Service
+
+                </button>
+
+
+                <span class="service-hint">
+
+                    Add one or more services to calculate
+                    the receipt total automatically.
+
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             PAYMENT SECTION
+        ==================================================== -->
+
+        <section class="form-section">
+
+
+            <div class="section-header">
+
+                <div class="section-icon">
+
+                    <i class="fa-solid fa-money-bill-wave"></i>
+
+                </div>
+
+                <div class="section-heading">
+
+                    <h2 class="section-title">
+                        Payment Information
+                    </h2>
+
+                    <p class="section-description">
+                        Record payment method, amount paid, and balance.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-body">
+
+
+                <div class="form-grid">
+
+
+                    <!-- Payment Method -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="paymentMethod"
+                        >
+                            Mode of Payment
+
+                            <span class="required-mark">
+                                *
+                            </span>
+                        </label>
+
+                        <select
+                            id="paymentMethod"
+                            name="mode_of_payment"
+                            class="form-control"
+                            required
+                        >
+
+                            <option value="">
+                                Select payment method
+                            </option>
+
+                            <option value="cash">
+                                Cash
+                            </option>
+
+                            <option value="mobile money">
+                                Mobile Money
+                            </option>
+
+                            <option value="visa">
+                                Visa
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Amount Paid -->
+
+                    <div class="form-group">
+
+                        <label
+                            class="form-label"
+                            for="amount_paid"
+                        >
+                            Amount Paid (UGX)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="amount_paid"
+                            name="amount_paid"
+                            class="form-control"
+                            value="0"
+                            min="0"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- Payment Summary -->
+
+                <div
+                    style="
+                        height: 16px;
+                    "
+                ></div>
+
+
+                <div class="payment-grid">
+
+
+                    <!-- Total -->
+
+                    <div class="payment-card">
+
+                        <div class="payment-label">
+
+                            <i class="fa-solid fa-calculator"></i>
+
+                            Total Amount
+
+                        </div>
+
+
+                        <div class="payment-total">
+
+                            <span id="displayTotal">
+                                UGX 0
+                            </span>
+
+                        </div>
+
+
+                        <input
+                            type="hidden"
+                            id="total"
+                            name="total"
+                        >
+
+                    </div>
+
+
+                    <!-- Balance -->
+
+                    <div class="payment-card highlight">
+
+                        <div class="payment-label">
+
+                            <i class="fa-solid fa-wallet"></i>
+
+                            Remaining Balance
+
+                        </div>
+
+
+                        <div class="payment-total">
+
+                            <span id="displayBalance">
+                                UGX 0
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Hidden balance field -->
+
+                <input
+                    type="hidden"
+                    id="balance"
+                    name="balance"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================
+             HIDDEN FIELDS
+        ==================================================== -->
+
+        <input
+            type="hidden"
+            id="service"
+            name="service"
+        >
+
+        <input
+            type="hidden"
+            id="use_patient_id"
+            name="use_patient_id"
+            value=""
+        >
+
+        <input
+            type="hidden"
+            id="force_new_id"
+            name="force_new_id"
+            value=""
+        >
+
+
+        <!-- ===================================================
+             SUBMIT
+        ==================================================== -->
+
+        <section class="submit-section">
+
+            <div class="submit-note">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Review the patient, services, and payment
+                    details before creating the receipt.
+                </span>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+
+                <i class="fa-solid fa-file-circle-check"></i>
+
+                Create Receipt
+
+            </button>
+
+        </section>
+
+
+    </form>
+
+</div>
+
+
+<!-- =========================================================
+     PATIENT RECORD MODAL
+========================================================= -->
+
+<div
+    id="patientModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+
+        <!-- Modal Header -->
+
+        <div class="modal-header">
+
+            <div class="modal-title-wrap">
+
+                <div class="modal-icon">
+
+                    <i class="fa-solid fa-user-check"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        Patient Record Found
+                    </h2>
+
+                    <p>
+                        An existing patient matches this information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <span
+                class="close"
+                id="closePatientModal"
+                aria-label="Close"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </span>
+
+        </div>
+
+
+        <!-- Modal Body -->
+
+        <div class="modal-body">
+
+            <div class="patient-record-info">
+
+
+                <div class="record-row">
+
+                    <span class="record-label">
+                        Name
+                    </span>
+
+                    <span
+                        id="modalPatientName"
+                        class="record-value"
+                    ></span>
+
+                </div>
+
+
+                <div class="record-row">
+
+                    <span class="record-label">
+                        Patient ID
+                    </span>
+
+                    <span
+                        id="modalPatientId"
+                        class="record-value patient-id"
+                    ></span>
+
+                </div>
+
+
+                <div class="record-row">
+
+                    <span class="record-label">
+                        Total Receipts
+                    </span>
+
+                    <span
+                        id="modalReceiptCount"
+                        class="record-value"
+                    ></span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- Modal Footer -->
+
+        <div class="modal-footer">
+
+            <button
+                type="button"
+                class="modal-btn modal-btn-primary"
+                id="useExistingBtn"
+            >
+
+                <i class="fa-solid fa-user-check"></i>
+
+                Use Existing Record
+
+            </button>
+
+
+            <button
+                type="button"
+                class="modal-btn modal-btn-secondary"
+                id="createNewBtn"
+            >
+
+                <i class="fa-solid fa-user-plus"></i>
+
+                Create New Patient
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    /* =========================================================
+       1. GLOBAL STATE
+    ========================================================= */
+
+    let currentPatient = null;
+
+
+    /* =========================================================
+       2. DOM REFERENCES
+    ========================================================= */
+
+    const receiptForm =
+        document.getElementById('receiptForm');
+
+    const servicesContainer =
+        document.getElementById('servicesContainer');
+
+    const patientFieldsContainer =
+        document.getElementById(
+            'patientFieldsContainer'
+        );
+
+    const patientInfoDisplay =
+        document.getElementById(
+            'patientInfoDisplay'
+        );
+
+    const pageTitle =
+        document.getElementById('pageTitle');
+
+    const totalInput =
+        document.getElementById('total');
+
+    const amountPaidInput =
+        document.getElementById('amount_paid');
+
+    const balanceInput =
+        document.getElementById('balance');
+
+    const serviceHiddenInput =
+        document.getElementById('service');
+
+    const usePatientIdInput =
+        document.getElementById(
+            'use_patient_id'
+        );
+
+    const forceNewIdInput =
+        document.getElementById(
+            'force_new_id'
+        );
+
+    const patientModal =
+        document.getElementById(
+            'patientModal'
+        );
+
+    const lookupPatientIdInput =
+        document.getElementById(
+            'lookupPatientId'
+        );
+
+    const lookupResult =
+        document.getElementById(
+            'lookupResult'
+        );
+
+    const displayTotal =
+        document.getElementById(
+            'displayTotal'
+        );
+
+    const displayBalance =
+        document.getElementById(
+            'displayBalance'
+        );
+
+
+    /* =========================================================
+       3. MONEY FORMATTER
+    ========================================================= */
+
+    function formatMoney(value) {
+
+        return Number(value || 0)
+            .toLocaleString('en-US');
+    }
+
+
+    /* =========================================================
+       4. PHONE NUMBER
+    ========================================================= */
+
+    document
+        .getElementById('patientPhone')
+        .addEventListener(
+            'blur',
+            function () {
+
+                const value =
+                    this.value.trim();
+
+                if (value.startsWith('0')) {
+
+                    this.value =
+                        '+256' +
+                        value.substring(1);
+
+                }
+
+            }
+        );
+
+
+    /* =========================================================
+       5. ADD SERVICE
+    ========================================================= */
+
+    function addService() {
+
+        const row =
+            document.createElement('tr');
+
+
+        row.innerHTML = `
+            <td>
+                <input
+                    type="text"
+                    class="service-input service-name"
+                    placeholder="Service name"
+                    required
+                >
+            </td>
+
+            <td>
+                <input
+                    type="number"
+                    class="service-input service-price price"
+                    value="0"
+                    min="0"
+                    placeholder="0"
+                >
+            </td>
+
+            <td>
+                <input
+                    type="number"
+                    class="service-input service-qty qty"
+                    value="1"
+                    min="1"
+                    placeholder="1"
+                >
+            </td>
+
+            <td>
+                <input
+                    type="number"
+                    class="service-input service-amount amount"
+                    value="0"
+                    readonly
+                >
+            </td>
+
+            <td>
+                <button
+                    type="button"
+                    class="remove-service-btn"
+                    title="Remove service"
+                    aria-label="Remove service"
+                >
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </td>
+        `;
+
+
+        servicesContainer.appendChild(row);
+
+
+        /* Recalculate on input */
+
+        row
+            .querySelectorAll('input')
+            .forEach(input => {
+
+                input.addEventListener(
+                    'input',
+                    calculateTotal
+                );
+
+            });
+
+
+        /* Remove row */
+
+        row
+            .querySelector(
+                '.remove-service-btn'
+            )
+            .addEventListener(
+                'click',
+                function () {
+
+                    row.remove();
+
+                    calculateTotal();
+
+                }
+            );
+
+
+        calculateTotal();
+    }
+
+
+    /* =========================================================
+       6. CALCULATE TOTAL
+    ========================================================= */
+
+    function calculateTotal() {
+
+        let total = 0;
+
+
+        document
+            .querySelectorAll(
+                '#servicesContainer tr'
+            )
+            .forEach(row => {
+
+                const price =
+                    parseFloat(
+                        row.querySelector(
+                            '.price'
+                        ).value
+                    ) || 0;
+
+
+                const qty =
+                    parseFloat(
+                        row.querySelector(
+                            '.qty'
+                        ).value
+                    ) || 1;
+
+
+                const amount =
+                    price * qty;
+
+
+                row.querySelector(
+                    '.amount'
+                ).value =
+                    amount;
+
+
+                total += amount;
+
+            });
+
+
+        totalInput.value =
+            total;
+
+
+        displayTotal.textContent =
+            `UGX ${formatMoney(total)}`;
+
+
+        calculateBalance();
+    }
+
+
+    /* =========================================================
+       7. CALCULATE BALANCE
+    ========================================================= */
+
+    function calculateBalance() {
+
+        const total =
+            parseFloat(
+                totalInput.value
+            ) || 0;
+
+
+        const paid =
+            parseFloat(
+                amountPaidInput.value
+            ) || 0;
+
+
+        const balance =
+            total - paid;
+
+
+        balanceInput.value =
+            balance;
+
+
+        displayBalance.textContent =
+            `UGX ${formatMoney(balance)}`;
+
+
+        /*
+         * Visual indication for overpayment,
+         * remaining balance, or fully paid.
+         */
+
+        if (balance > 0) {
+
+            displayBalance.style.color =
+                '#dc2626';
+
+        } else if (balance < 0) {
+
+            displayBalance.style.color =
+                '#2563eb';
+
+        } else {
+
+            displayBalance.style.color =
+                '#16a34a';
+        }
+    }
+
+
+    amountPaidInput.addEventListener(
+        'input',
+        calculateBalance
+    );
+
+
+    /* =========================================================
+       8. PREPARE SERVICES BEFORE SUBMISSION
+    ========================================================= */
+
+    receiptForm.addEventListener(
+        'submit',
+        function () {
+
+            const services = [];
+
+
+            document
+                .querySelectorAll(
+                    '#servicesContainer tr'
+                )
+                .forEach(row => {
+
+                    services.push({
+
+                        name:
+                            row.querySelector(
+                                '.service-name'
+                            ).value,
+
+                        qty:
+                            row.querySelector(
+                                '.qty'
+                            ).value,
+
+                        amount:
+                            row.querySelector(
+                                '.amount'
+                            ).value
+
+                    });
+
+                });
+
+
+            serviceHiddenInput.value =
+                JSON.stringify(
+                    services
+                );
+        }
+    );
+
+
+    /* =========================================================
+       9. DUPLICATE PATIENT MODAL
+    ========================================================= */
+
+    function handleDuplicateName(patients) {
+
+        if (
+            !patients ||
+            patients.length === 0
+        ) {
+            return;
+        }
+
+
+        currentPatient =
+            patients[0];
+
+
+        document.getElementById(
+            'modalPatientName'
+        ).textContent =
+            currentPatient.patient_name ||
+            'N/A';
+
+
+        document.getElementById(
+            'modalPatientId'
+        ).textContent =
+            currentPatient.patient_id ||
+            'N/A';
+
+
+        document.getElementById(
+            'modalReceiptCount'
+        ).textContent =
+            currentPatient.receipt_count ||
+            0;
+
+
+        patientModal.style.display =
+            'block';
+    }
+
+
+    function closePatientModal() {
+
+        patientModal.style.display =
+            'none';
+
+        currentPatient = null;
+    }
+
+
+    /* =========================================================
+       10. USE EXISTING PATIENT
+    ========================================================= */
+
+    function useExistingPatient() {
+
+        if (
+            !currentPatient ||
+            !currentPatient.patient_id
+        ) {
+            return;
+        }
+
+
+        document.querySelector(
+            'input[name="patient_name"]'
+        ).value =
+            currentPatient.patient_name ||
+            '';
+
+
+        document.querySelector(
+            'input[name="patient_phone"]'
+        ).value =
+            currentPatient.patient_phone ||
+            '';
+
+
+        document.querySelector(
+            'input[name="patient_address"]'
+        ).value =
+            currentPatient.patient_address ||
+            '';
+
+
+        document.querySelector(
+            'select[name="patient_gender"]'
+        ).value =
+            currentPatient.gender ||
+            '';
+
+
+        document.querySelector(
+            'input[name="patient_age"]'
+        ).value =
+            currentPatient.age ||
+            '';
+
+
+        patientFieldsContainer.style.display =
+            'none';
+
+
+        patientInfoDisplay.style.display =
+            'block';
+
+
+        document.getElementById(
+            'displayPatientName'
+        ).textContent =
+            currentPatient.patient_name;
+
+
+        document.getElementById(
+            'displayPatientPhone'
+        ).textContent =
+            currentPatient.patient_phone;
+
+
+        pageTitle.textContent =
+            'Add Receipt to Existing Patient';
+
+
+        usePatientIdInput.value =
+            currentPatient.patient_id;
+
+
+        closePatientModal();
+    }
+
+
+    /* =========================================================
+       11. CREATE NEW PATIENT
+    ========================================================= */
+
+    function createNewPatient() {
+
+        forceNewIdInput.value =
+            'true';
+
+
+        closePatientModal();
+    }
+
+
+    /* =========================================================
+       12. PATIENT LOOKUP
+    ========================================================= */
+
+    async function lookupPatientId() {
+
+        const patientId =
+            lookupPatientIdInput.value.trim();
+
+
+        if (!patientId) {
+
+            showLookupResult(
+                'Please enter a patient ID.',
+                'error'
+            );
+
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    '/receipt/validate-id',
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json'
+                        },
+
+                        body: JSON.stringify({
+                            patient_id:
+                                patientId
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!data.success) {
+
+                showLookupResult(
+                    data.message ||
+                    'Error validating patient ID.',
+                    'error'
+                );
+
+                return;
+            }
+
+
+            /* =============================================
+               PATIENT FOUND
+            ============================================== */
+
+            if (
+                data.exists &&
+                data.patientData
+            ) {
+
+                const formattedId =
+                    data.formattedId;
+
+
+                showLookupResult(
+                    `
+                    <strong>
+                        ✓ Patient found
+                    </strong>
+                    <br>
+                    ${data.patientData.patient_name}
+                    <br>
+                    Phone:
+                    ${data.patientData.patient_phone}
+                    <br>
+                    Patient ID:
+                    <strong>${formattedId}</strong>
+                    `,
+                    'success'
+                );
+
+
+                setTimeout(() => {
+
+                    usePatientIdInput.value =
+                        formattedId;
+
+
+                    document.querySelector(
+                        'input[name="patient_name"]'
+                    ).value =
+                        data.patientData.patient_name;
+
+
+                    document.querySelector(
+                        'input[name="patient_phone"]'
+                    ).value =
+                        data.patientData.patient_phone;
+
+
+                    patientFieldsContainer
+                        .style.display =
+                        'none';
+
+
+                    patientInfoDisplay
+                        .style.display =
+                        'block';
+
+
+                    document.getElementById(
+                        'displayPatientName'
+                    ).textContent =
+                        'Patient: ' +
+                        data.patientData
+                            .patient_name;
+
+
+                    document.getElementById(
+                        'displayPatientPhone'
+                    ).textContent =
+                        'Phone: ' +
+                        data.patientData
+                            .patient_phone;
+
+
+                    pageTitle.textContent =
+                        'Add Receipt to Existing Patient';
+
+
+                    document
+                        .querySelector(
+                            '.receipt-page'
+                        )
+                        .scrollIntoView({
+                            behavior:
+                                'smooth'
+                        });
+
+                }, 500);
+
+
+                return;
+            }
+
+
+            /* =============================================
+               NOT FOUND
+            ============================================== */
+
+            showLookupResult(
+                `
+                ID Reformatted:
+                <strong>${data.formattedId}</strong>
+                <br>
+                No existing patient was found.
+                This can be created as a new patient.
+                `,
+                'info'
+            );
+
+        } catch (error) {
+
+            console.error(
+                'Patient lookup error:',
+                error
+            );
+
+
+            showLookupResult(
+                'Unable to look up patient. Please try again.',
+                'error'
+            );
+        }
+    }
+
+
+    /* =========================================================
+       13. LOOKUP RESULT
+    ========================================================= */
+
+    function showLookupResult(
+        message,
+        type
+    ) {
+
+        lookupResult.innerHTML =
+            message;
+
+
+        lookupResult.style.display =
+            'block';
+
+
+        const styles = {
+
+            success: {
+                border:
+                    '#16a34a',
+                background:
+                    '#ecfdf3',
+                color:
+                    '#166534'
+            },
+
+            error: {
+                border:
+                    '#dc2626',
+                background:
+                    '#fef2f2',
+                color:
+                    '#991b1b'
+            },
+
+            info: {
+                border:
+                    '#2563eb',
+                background:
+                    '#eff6ff',
+                color:
+                    '#1e40af'
+            }
+
+        };
+
+
+        const selected =
+            styles[type] ||
+            styles.info;
+
+
+        lookupResult.style.borderLeft =
+            `4px solid ${selected.border}`;
+
+
+        lookupResult.style.backgroundColor =
+            selected.background;
+
+
+        lookupResult.style.color =
+            selected.color;
+    }
+
+
+    /* =========================================================
+       14. URL PATIENT INFORMATION
+    ========================================================= */
+
+    function loadPatientFromUrl() {
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const patientName =
+            params.get('patient');
+
+
+        const patientPhone =
+            params.get('phone');
+
+
+        if (
+            !patientName ||
+            !patientPhone
+        ) {
+            return;
+        }
+
+
+        patientFieldsContainer
+            .style.display =
+            'none';
+
+
+        patientInfoDisplay
+            .style.display =
+            'block';
+
+
+        document.getElementById(
+            'displayPatientName'
+        ).textContent =
+            'Patient: ' +
+            patientName;
+
+
+        document.getElementById(
+            'displayPatientPhone'
+        ).textContent =
+            'Phone: ' +
+            patientPhone;
+
+
+        pageTitle.textContent =
+            'Add Receipt to Existing Patient';
+
+
+        document.querySelector(
+            'input[name="patient_name"]'
+        ).value =
+            patientName;
+
+
+        document.querySelector(
+            'input[name="patient_phone"]'
+        ).value =
+            patientPhone;
+    }
+
+
+    /* =========================================================
+       15. DUPLICATE NAME CHECK
+    ========================================================= */
+
+    async function checkPatientName() {
+
+        const patientName =
+            this.value.trim();
+
+
+        if (!patientName) {
+            return;
+        }
+
+
+        /*
+         * Don't check duplicates when
+         * using an existing patient.
+         */
+        if (
+            patientFieldsContainer
+                .style.display ===
+            'none'
+        ) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    '/receipt/check-name',
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'Content-Type':
+                                'application/json'
+                        },
+
+                        body: JSON.stringify({
+                            patient_name:
+                                patientName
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                data.success &&
+                data.exists &&
+                data.patients &&
+                data.patients.length > 0
+            ) {
+
+                handleDuplicateName(
+                    data.patients
+                );
+            }
+
+        } catch (error) {
+
+            console.error(
+                'Duplicate patient check error:',
+                error
+            );
+        }
+    }
+
+
+    /* =========================================================
+       16. EVENT LISTENERS
+    ========================================================= */
+
+    document
+        .getElementById(
+            'useExistingBtn'
+        )
+        .addEventListener(
+            'click',
+            useExistingPatient
+        );
+
+
+    document
+        .getElementById(
+            'createNewBtn'
+        )
+        .addEventListener(
+            'click',
+            createNewPatient
+        );
+
+
+    document
+        .getElementById(
+            'closePatientModal'
+        )
+        .addEventListener(
+            'click',
+            closePatientModal
+        );
+
+
+    document
+        .getElementById(
+            'addServiceBtn'
+        )
+        .addEventListener(
+            'click',
+            addService
+        );
+
+
+    document
+        .getElementById(
+            'lookupPatientBtn'
+        )
+        .addEventListener(
+            'click',
+            lookupPatientId
+        );
+
+
+    document
+        .getElementById(
+            'patientName'
+        )
+        .addEventListener(
+            'blur',
+            checkPatientName
+        );
+
+
+    /* =========================================================
+       17. MODAL CLOSE
+    ========================================================= */
+
+    document.addEventListener(
+        'click',
+        function (event) {
+
+            if (
+                event.target ===
+                patientModal
+            ) {
+
+                closePatientModal();
+            }
+        }
+    );
+
+
+    document.addEventListener(
+        'keydown',
+        function (event) {
+
+            if (
+                event.key ===
+                'Escape'
+            ) {
+
+                closePatientModal();
+            }
+        }
+    );
+
+
+    /* =========================================================
+       18. INITIALIZE
+    ========================================================= */
+
+    document.addEventListener(
+        'DOMContentLoaded',
+        function () {
+
+            /* Start with one service */
+            addService();
+
+
+            /* Load patient from URL */
+            loadPatientFromUrl();
+
+
+            /* Initialize totals */
+            calculateTotal();
+
+        }
+    );
+</script>

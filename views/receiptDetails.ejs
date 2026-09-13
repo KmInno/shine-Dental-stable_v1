@@ -1,0 +1,680 @@
+<style>
+    /* =========================
+       Base
+    ========================= */
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* =========================
+       Receipt
+    ========================= */
+
+    .receipt {
+        width: 700px;
+        min-height: 210mm;
+        margin: 0 auto;
+        padding: 20px;
+        background-image: url('/images/shinedental-water_mark.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 350px;
+    }
+
+    .receipt-logo {
+        display: block;
+        width: 100%;
+        /* max-width: 300px; */
+        /* height: auto; */
+        margin: 0 auto;
+    }
+
+    .receipt-title {
+        margin: 10px 0;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    /* =========================
+       Patient Information
+    ========================= */
+
+    .patient-info {
+        margin-top: 20px;
+    }
+
+    .patient-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 30px;
+    }
+
+    .patient-details,
+    .receipt-details {
+        flex: 1;
+    }
+
+    .patient-details {
+        text-align: left;
+    }
+
+    .receipt-details {
+        text-align: right;
+    }
+
+    .patient-info span {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    /* =========================
+       Tables
+    ========================= */
+
+    .services-table {
+        width: 100%;
+        margin-top: 15px;
+        border-collapse: collapse;
+    }
+
+    .services-table,
+    .services-table th,
+    .services-table td {
+        border: 1px solid black;
+    }
+
+    .services-table th,
+    .services-table td {
+        padding: 6px;
+        font-size: 13px;
+    }
+
+    .services-table th {
+        text-align: center;
+    }
+
+    .services-table td:nth-child(3) {
+        text-align: center;
+    }
+
+    .services-table td:last-child {
+        text-align: right;
+    }
+
+    .total-row td {
+        font-weight: bold;
+    }
+
+    /* =========================
+       Amount in Words
+    ========================= */
+
+    .amount-words {
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    #amount-in-words {
+        font-style: italic;
+    }
+
+    /* =========================
+       Summary
+    ========================= */
+
+    .summary-wrapper {
+        overflow: hidden;
+        margin-top: 15px;
+    }
+
+    .summary-box {
+        width: 250px;
+        margin-left: auto;
+        border-collapse: collapse;
+    }
+
+    .summary-box td {
+        padding: 6px;
+        border: 1px solid black;
+        font-size: 13px;
+    }
+
+    .summary-box td:last-child {
+        text-align: right;
+    }
+
+    /* =========================
+       Footer
+    ========================= */
+
+    .receipt-footer {
+        margin-top: 30px;
+    }
+
+    .served-by {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .thank-you {
+        margin-top: 60px;
+        text-align: center;
+        font-style: italic;
+        font-size: 14px;
+    }
+
+    .copyright {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 12px;
+        font-style: italic;
+        color: #adaeaf;
+    }
+
+    /* =========================
+       Action Buttons
+    ========================= */
+
+    .receipt-actions {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin: 24px auto;
+    }
+
+    .receipt-actions button {
+        padding: 10px 20px;
+        border: 1px solid #0284c7;
+        border-radius: 6px;
+        background-color: #0284c7;
+        color: white;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .receipt-actions button:hover {
+        background-color: #0369a1;
+    }
+
+    .receipt-actions a {
+        text-decoration: none;
+    }
+
+    /* =========================
+       Print
+    ========================= */
+
+    @page {
+        size: A5 portrait;
+        margin: 0;
+    }
+
+    @media print {
+        body {
+            margin: 0;
+        }
+
+        .receipt {
+            width: 148mm;
+            min-height: 210mm;
+            margin: 0;
+            /* padding: 10mm; */
+            background-image: url('/images/shinedental-water_mark.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 450px;
+        }
+
+        .receipt-actions {
+            display: none;
+        }
+
+        .copyright {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            margin: 0;
+            text-align: center;
+            font-size: 12px;
+            font-style: italic;
+            color: #adaeaf;
+        }
+    }
+</style>
+
+
+<!-- =========================
+     Printable Receipt
+========================= -->
+
+<div class="receipt">
+
+    <!-- Logo -->
+    <img
+        class="receipt-logo"
+        src="/images/reciept_logo.png"
+        alt="Shine Dental Surgery"
+    >
+
+    <!-- Title -->
+    <h1 class="receipt-title">
+        Payment Receipt
+    </h1>
+
+
+    <!-- =========================
+         Patient Information
+    ========================= -->
+
+    <div class="patient-info">
+
+        <div class="patient-header">
+
+            <!-- Patient -->
+            <div class="patient-details">
+
+                <span>
+                    <strong>Patient Name:</strong>
+                    <%= receipt.patient_name %>
+                </span>
+
+                <span>
+                    <strong>Tel:</strong>
+                    <%= receipt.patient_phone %>
+                </span>
+
+                <span>
+                    <strong>Date:</strong>
+                    <%= new Date(receipt.created_at).toLocaleDateString('en-GB') %>
+                </span>
+
+                <% if (receipt.next_visit) { %>
+                    <span>
+                        <strong>Next Visit:</strong>
+                        <%= new Date(receipt.next_visit).toLocaleDateString('en-GB') %>
+                    </span>
+                <% } %>
+
+            </div>
+
+
+            <!-- Receipt -->
+            <div class="receipt-details">
+
+                <span>
+                    <strong>Receipt Number:</strong>
+                    RCP-<%= String(receipt.id).padStart(6, '0') %>
+                </span>
+
+                <span>
+                    <strong>Patient Number:</strong>
+
+                    <% if (!receipt.patient_id) { %>
+
+                        <%
+                            const year = new Date(receipt.created_at)
+                                .getFullYear()
+                                .toString()
+                                .slice(-2);
+                        %>
+
+                        SDS-<%= year %>-<%= receipt.id %>
+
+                    <% } else { %>
+
+                        <%= formatPatientId(receipt.patient_id) %>
+
+                    <% } %>
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             Services
+        ========================= -->
+
+        <%
+            let services = [];
+
+            try {
+                if (typeof receipt.service === 'string') {
+                    const parsed = JSON.parse(receipt.service);
+
+                    services = Array.isArray(parsed)
+                        ? parsed
+                        : [parsed];
+
+                } else if (Array.isArray(receipt.service)) {
+                    services = receipt.service;
+
+                } else if (receipt.service) {
+                    services = [receipt.service];
+                }
+
+            } catch (error) {
+                services = receipt.service
+                    ? [receipt.service]
+                    : [];
+            }
+        %>
+
+
+        <table class="services-table">
+
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Mode of Payment</th>
+                    <th>Qty</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <% services.forEach(function(item) { %>
+
+                    <tr>
+
+                        <td>
+                            <%= item.name || item.service || item %>
+                        </td>
+
+                        <td>
+                            <%= receipt.mode_of_payment %>
+                        </td>
+
+                        <td>
+                            <%= item.qty || 1 %>
+                        </td>
+
+                        <td>
+                            UGX
+                            <%= Number(item.amount || 0).toLocaleString('en-US') %>
+                        </td>
+
+                    </tr>
+
+                <% }) %>
+
+
+                <!-- Total -->
+                <tr class="total-row">
+
+                    <td colspan="3" style="text-align: right;">
+                        Total Amount
+                    </td>
+
+                    <td>
+                        UGX
+                        <%= Number(
+                            receipt.total || receipt.total_amount || 0
+                        ).toLocaleString('en-US') %>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <!-- =========================
+             Amount in Words
+        ========================= -->
+
+        <div class="amount-words">
+
+            <strong>Amount Paid in Words:</strong>
+
+            <span id="amount-in-words"></span>
+
+        </div>
+
+
+        <!-- =========================
+             Payment Summary
+        ========================= -->
+
+        <div class="summary-wrapper">
+
+            <table class="summary-box">
+
+                <tr>
+                    <td>
+                        <strong>Amount Paid</strong>
+                    </td>
+
+                    <td>
+                        UGX
+                        <%= Number(
+                            receipt.amount_paid || 0
+                        ).toLocaleString('en-US') %>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <strong>Balance</strong>
+                    </td>
+
+                    <td>
+                        UGX
+                        <%= Number(
+                            receipt.balance || 0
+                        ).toLocaleString('en-US') %>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <!-- =========================
+             Footer
+        ========================= -->
+
+        <div class="receipt-footer">
+
+            <p class="served-by">
+
+                <strong>Served By:</strong>
+
+                <%= typeof servedBy !== 'undefined'
+                    ? servedBy
+                    : (
+                        typeof user !== 'undefined' && user
+                            ? (
+                                user.name ||
+                                user.email ||
+                                user.username
+                            )
+                            : '_________'
+                    )
+                %>
+
+            </p>
+
+
+            <p class="thank-you">
+                Thank you for choosing Shine Dental Surgery.
+            </p>
+
+
+            <p class="copyright">
+                © Shine Dental Surgery
+                <%= new Date().getFullYear() %>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     Screen-only Actions
+========================= -->
+
+<div class="receipt-actions">
+
+    <button
+        type="button"
+        onclick="window.print()"
+    >
+        Print
+    </button>
+
+    <a href="/receipts">
+        <button type="button">
+            Back
+        </button>
+    </a>
+
+</div>
+
+
+<!-- =========================
+     Amount to Words
+========================= -->
+
+<script>
+    function numberToWordsFull(num) {
+        if (num === 0) {
+            return 'zero';
+        }
+
+        const ones = [
+            '',
+            'one',
+            'two',
+            'three',
+            'four',
+            'five',
+            'six',
+            'seven',
+            'eight',
+            'nine',
+            'ten',
+            'eleven',
+            'twelve',
+            'thirteen',
+            'fourteen',
+            'fifteen',
+            'sixteen',
+            'seventeen',
+            'eighteen',
+            'nineteen'
+        ];
+
+        const tens = [
+            '',
+            '',
+            'twenty',
+            'thirty',
+            'forty',
+            'fifty',
+            'sixty',
+            'seventy',
+            'eighty',
+            'ninety'
+        ];
+
+        const scales = [
+            '',
+            'thousand',
+            'million',
+            'billion',
+            'trillion'
+        ];
+
+
+        function chunkToWords(n) {
+            let words = [];
+
+            if (n >= 100) {
+                words.push(
+                    ones[Math.floor(n / 100)],
+                    'hundred'
+                );
+
+                n %= 100;
+
+                if (n > 0) {
+                    words.push('and');
+                }
+            }
+
+            if (n >= 20) {
+                words.push(tens[Math.floor(n / 10)]);
+
+                if (n % 10 !== 0) {
+                    words.push(ones[n % 10]);
+                }
+
+            } else if (n > 0) {
+                words.push(ones[n]);
+            }
+
+            return words.join(' ');
+        }
+
+
+        let words = [];
+        let scale = 0;
+        let remaining = Math.floor(num);
+
+
+        while (remaining > 0) {
+
+            const chunk = remaining % 1000;
+
+            if (chunk !== 0) {
+
+                let chunkWords = chunkToWords(chunk);
+
+                if (scales[scale]) {
+                    chunkWords += ' ' + scales[scale];
+                }
+
+                words.unshift(chunkWords);
+            }
+
+            remaining = Math.floor(remaining / 1000);
+            scale++;
+        }
+
+
+        return words.join(', ');
+    }
+
+
+    const totalAmount = Math.round(
+        Number(<%= receipt.amount_paid || 0 %>) || 0
+    );
+
+
+    const amountInWords = numberToWordsFull(totalAmount);
+
+
+    document.getElementById('amount-in-words').textContent =
+        amountInWords.charAt(0).toUpperCase() +
+        amountInWords.slice(1) +
+        ' shillings';
+</script>
+

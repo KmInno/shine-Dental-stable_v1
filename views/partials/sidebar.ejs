@@ -1,0 +1,160 @@
+<% if (typeof user !== 'undefined' && user) { %>
+    <% const currentTitle = typeof title !== 'undefined' ? title : ''; %>
+
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <button id="sidebarToggle" class="sidebar-toggle-btn" type="button" aria-label="Collapse sidebar" title="Collapse / Expand Sidebar">
+            <i class="fa-solid fa-angle-left"></i>
+        </button>
+    </div>
+
+    <ul class="sidebar-menu">
+        <li class="sidebar-title">Menu</li>
+
+        <li>
+            <a href="/" class="<%= currentTitle === 'Dashboard' ? 'active' : '' %>" title="Dashboard">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/appointments" class="<%= currentTitle.includes('Appointment') ? 'active' : '' %>" title="Appointments">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Appointments</span>
+            </a>
+        </li>
+
+        <li class="sidebar-title">Documents</li>
+
+        <li>
+            <a href="/invoices" class="<%= currentTitle.includes('Invoice') && currentTitle !== 'Create Invoice' ? 'active' : '' %>" title="Invoices">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Invoices</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/invoices/new" class="<%= currentTitle === 'Create Invoice' ? 'active' : '' %>" title="New Invoice">
+                <i class="fa-solid fa-plus"></i>
+                <span>New Invoice</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/receipts" class="<%= currentTitle.includes('Receipt') && currentTitle !== 'Receipt Form' ? 'active' : '' %>" title="Receipts">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Receipts</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/receipt" class="<%= currentTitle === 'Receipt Form' ? 'active' : '' %>" title="New Receipt">
+                <i class="fa-solid fa-plus"></i>
+                <span>New Receipt</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/treatment/" class="<%= currentTitle.includes('Treatment') ? 'active' : '' %>" title="Treatment Notes">
+                <i class="fa-solid fa-stethoscope"></i>
+                <span>Treatment Notes</span>
+            </a>
+        </li>
+
+        <li class="sidebar-title">Reports & Finance</li>
+
+        <li>
+            <a href="/sales-report/daily" class="<%= currentTitle.includes('Sales Report') ? 'active' : '' %>" title="Sales Report">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Sales Report</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/expenses" class="<%= currentTitle.includes('Expenses') ? 'active' : '' %>" title="Expenses">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <span>Expenses</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/labwork" class="<%= currentTitle.includes('Lab Work') ? 'active' : '' %>" title="Lab Work">
+                <i class="fa-solid fa-flask"></i>
+                <span>Lab Work</span>
+            </a>
+        </li>
+
+        <li class="sidebar-title">Old Database</li>
+        <li>
+            <a href="/database-old" class="<%= currentTitle === 'Database Old' ? 'active' : '' %>" title="Database Old">
+                <i class="fa-solid fa-database"></i>
+                <span>Database Old</span>
+            </a>
+        </li>
+
+        <li class="sidebar-title">Account</li>
+
+        <li>
+            <a href="/account/logout" class="logout-link" title="Logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </li>
+    </ul>
+</aside>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const mobileToggle = document.getElementById('mobileToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        if (!sidebar) return;
+
+        // Desktop collapse toggle
+        if (toggleBtn) {
+            function applySidebarState(collapsed) {
+                sidebar.classList.toggle('collapsed', collapsed);
+                const icon = toggleBtn.querySelector('i');
+                if (icon) {
+                    icon.className = collapsed ? 'fa-solid fa-angle-right' : 'fa-solid fa-angle-left';
+                }
+                toggleBtn.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+            }
+
+            const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            applySidebarState(collapsed);
+
+            toggleBtn.addEventListener('click', function () {
+                const isCollapsed = !sidebar.classList.contains('collapsed');
+                localStorage.setItem('sidebarCollapsed', String(isCollapsed));
+                applySidebarState(isCollapsed);
+            });
+        }
+
+        // Mobile sidebar toggle logic
+        function closeMobileSidebar() {
+            sidebar.classList.remove('mobile-open');
+            if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        }
+
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', function () {
+                const isOpen = sidebar.classList.contains('mobile-open');
+                if (isOpen) {
+                    closeMobileSidebar();
+                } else {
+                    sidebar.classList.add('mobile-open');
+                    if (sidebarOverlay) sidebarOverlay.classList.add('active');
+                }
+            });
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileSidebar);
+        }
+    });
+</script>
+<% } %>

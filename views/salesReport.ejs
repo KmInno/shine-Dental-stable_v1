@@ -1,0 +1,1712 @@
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+>
+
+<style>
+    /* =========================================================
+       SALES REPORT DASHBOARD
+    ========================================================= */
+
+    :root {
+        --primary: #667eea;
+        --primary-dark: #5568d9;
+        --primary-soft: #eef1ff;
+
+        --success: #28a745;
+        --success-soft: #eaf8ee;
+
+        --warning: #ffc107;
+        --warning-soft: #fff8df;
+
+        --info: #17a2b8;
+        --info-soft: #e8f8fb;
+
+        --danger: #dc3545;
+        --danger-soft: #fdecee;
+
+        --orange: #fd7e14;
+        --orange-soft: #fff1e6;
+
+        --text-dark: #2f3542;
+        --text: #555;
+        --text-muted: #8c94a4;
+
+        --border: #e6e9ef;
+        --background: #f6f7fb;
+        --surface: #ffffff;
+
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.07);
+        --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.10);
+    }
+
+
+    /* =========================================================
+       PAGE
+    ========================================================= */
+
+    .sales-report-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px 20px 50px;
+    }
+
+
+    /* =========================================================
+       HEADER
+    ========================================================= */
+
+    .report-header {
+        margin-bottom: 28px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .report-header h1 {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        margin: 0 0 8px;
+
+        color: var(--text-dark);
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .report-header h1 i {
+        color: var(--primary);
+    }
+
+    .report-header p {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       REPORT NAVIGATION
+    ========================================================= */
+
+    .report-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 24px;
+    }
+
+    .nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+
+        min-height: 42px;
+        padding: 10px 18px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+
+        background: var(--surface);
+        color: var(--text);
+
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+
+        transition:
+            background 0.2s ease,
+            color 0.2s ease,
+            border-color 0.2s ease,
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .nav-btn:hover {
+        color: var(--primary);
+        border-color: #cbd2ff;
+        background: var(--primary-soft);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .nav-btn.active {
+        color: #fff;
+        border-color: var(--primary);
+        background: var(--primary);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.28);
+    }
+
+    .nav-btn.active:hover {
+        color: #fff;
+        background: var(--primary-dark);
+        border-color: var(--primary-dark);
+    }
+
+
+    /* =========================================================
+       FILTER PANEL
+    ========================================================= */
+
+    .filter-section {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+
+        margin-bottom: 26px;
+        padding: 18px 20px;
+
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--primary);
+        border-radius: var(--radius-md);
+
+        background:
+            linear-gradient(
+                135deg,
+                #fafbff 0%,
+                #f4f6fb 100%
+            );
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .filter-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+
+        margin: 0;
+
+        color: var(--text-dark);
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .filter-label i {
+        color: var(--primary);
+    }
+
+    .filter-section input,
+    .filter-section select {
+        min-height: 40px;
+        padding: 9px 12px;
+
+        border: 1px solid #d8dce5;
+        border-radius: var(--radius-sm);
+
+        background: #fff;
+        color: var(--text-dark);
+
+        font-family: inherit;
+        font-size: 14px;
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .filter-section input:focus,
+    .filter-section select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.10);
+    }
+
+    .filter-date-label {
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       METRIC GRID
+    ========================================================= */
+
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fit,
+            minmax(210px, 1fr)
+        );
+        gap: 18px;
+
+        margin-bottom: 28px;
+    }
+
+
+    /* =========================================================
+       METRIC CARD
+    ========================================================= */
+
+    .metric-card {
+        position: relative;
+        overflow: hidden;
+
+        min-height: 155px;
+        padding: 20px;
+
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--primary);
+        border-radius: var(--radius-md);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .metric-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .metric-card::after {
+        content: "";
+
+        position: absolute;
+        top: -24px;
+        right: -24px;
+
+        width: 85px;
+        height: 85px;
+
+        border-radius: 50%;
+        background: rgba(102, 126, 234, 0.06);
+    }
+
+    .metric-icon {
+        position: relative;
+        z-index: 1;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 42px;
+        height: 42px;
+        margin-bottom: 14px;
+
+        border-radius: 10px;
+
+        background: var(--primary-soft);
+        color: var(--primary);
+
+        font-size: 19px;
+    }
+
+    .metric-label {
+        position: relative;
+        z-index: 1;
+
+        margin-bottom: 6px;
+
+        color: var(--text-muted);
+
+        font-size: 11px;
+        font-weight: 700;
+        line-height: 1.4;
+
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+    }
+
+    .metric-value {
+        position: relative;
+        z-index: 1;
+
+        margin-bottom: 4px;
+
+        color: var(--text-dark);
+
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 1.2;
+
+        overflow-wrap: anywhere;
+    }
+
+    .metric-currency {
+        position: relative;
+        z-index: 1;
+
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       METRIC COLORS
+    ========================================================= */
+
+    .metric-card.cash {
+        border-left-color: var(--success);
+    }
+
+    .metric-card.cash .metric-icon {
+        color: var(--success);
+        background: var(--success-soft);
+    }
+
+    .metric-card.visa {
+        border-left-color: var(--warning);
+    }
+
+    .metric-card.visa .metric-icon {
+        color: #c99a00;
+        background: var(--warning-soft);
+    }
+
+    .metric-card.mobile {
+        border-left-color: var(--info);
+    }
+
+    .metric-card.mobile .metric-icon {
+        color: var(--info);
+        background: var(--info-soft);
+    }
+
+    .metric-card.balance {
+        border-left-color: var(--orange);
+    }
+
+    .metric-card.balance .metric-icon {
+        color: var(--orange);
+        background: var(--orange-soft);
+    }
+
+    .metric-card.expense {
+        border-left-color: var(--danger);
+    }
+
+    .metric-card.expense .metric-icon {
+        color: var(--danger);
+        background: var(--danger-soft);
+    }
+
+    .metric-card.neutral {
+        border-left-color: var(--primary);
+    }
+
+    .metric-card.positive {
+        border-left-color: var(--success);
+    }
+
+    .metric-card.positive .metric-icon {
+        color: var(--success);
+        background: var(--success-soft);
+    }
+
+
+    /* =========================================================
+       REPORT SECTION
+    ========================================================= */
+
+    .report-section {
+        margin-bottom: 28px;
+        padding: 24px;
+
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+
+        background: var(--surface);
+
+        box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        margin-bottom: 18px;
+        padding-bottom: 14px;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin: 0;
+
+        color: var(--text-dark);
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .section-title i {
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       TABLE
+    ========================================================= */
+
+    .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+        border-radius: var(--radius-sm);
+    }
+
+    .breakdown-table {
+        width: 100%;
+        min-width: 820px;
+        border-collapse: collapse;
+    }
+
+    .breakdown-table thead {
+        background: #f7f8fb;
+    }
+
+    .breakdown-table th {
+        padding: 13px 14px;
+
+        border-bottom: 2px solid var(--border);
+
+        color: var(--text-dark);
+
+        font-size: 12px;
+        font-weight: 700;
+
+        text-align: right;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        white-space: nowrap;
+    }
+
+    .breakdown-table th:first-child {
+        text-align: left;
+    }
+
+    .breakdown-table td {
+        padding: 13px 14px;
+
+        border-bottom: 1px solid var(--border);
+
+        color: var(--text);
+
+        font-size: 14px;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .breakdown-table td:first-child {
+        color: var(--text-dark);
+        font-weight: 600;
+        text-align: left;
+    }
+
+    .breakdown-table tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .breakdown-table tbody tr:hover {
+        background: #fafbfe;
+    }
+
+    .amount-expense {
+        color: var(--danger) !important;
+        font-weight: 700;
+    }
+
+    .amount-positive {
+        color: var(--success) !important;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       EXPENSE LIST
+    ========================================================= */
+
+    .expense-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .expense-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+
+        padding: 14px 16px;
+
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--danger);
+        border-radius: var(--radius-sm);
+
+        background: #fafbfc;
+
+        transition:
+            background 0.2s ease,
+            transform 0.2s ease;
+    }
+
+    .expense-item:hover {
+        background: #f5f7fa;
+        transform: translateX(3px);
+    }
+
+    .expense-item-content {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+        flex: 1;
+    }
+
+    .expense-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+
+        border-radius: 9px;
+
+        background: var(--danger-soft);
+        color: var(--danger);
+
+        flex-shrink: 0;
+    }
+
+    .expense-details {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        min-width: 0;
+    }
+
+    .expense-description {
+        color: var(--text-dark);
+        font-size: 14px;
+        font-weight: 600;
+
+        overflow-wrap: anywhere;
+    }
+
+    .expense-category {
+        width: fit-content;
+
+        padding: 3px 9px;
+
+        border-radius: 999px;
+
+        background: #eceef2;
+        color: #626b78;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .expense-amount {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        color: var(--danger);
+
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .no-data {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        padding: 45px 20px;
+
+        color: var(--text-muted);
+        text-align: center;
+        font-style: italic;
+    }
+
+    .no-data i {
+        margin-bottom: 12px;
+
+        color: #d8dce5;
+
+        font-size: 44px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 992px) {
+        .metrics-grid {
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(190px, 1fr)
+            );
+        }
+    }
+
+    @media (max-width: 768px) {
+        .sales-report-container {
+            padding: 20px 14px 40px;
+        }
+
+        .report-header h1 {
+            font-size: 24px;
+        }
+
+        .report-nav {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .nav-btn {
+            width: 100%;
+        }
+
+        .filter-section {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .filter-group {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+        }
+
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .metric-card {
+            min-height: 140px;
+        }
+
+        .report-section {
+            padding: 18px;
+        }
+
+        .section-header {
+            align-items: flex-start;
+        }
+
+        .expense-item {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .expense-amount {
+            padding-left: 50px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .report-nav {
+            grid-template-columns: 1fr;
+        }
+
+        .report-header h1 {
+            font-size: 21px;
+        }
+
+        .metric-value {
+            font-size: 22px;
+        }
+    }
+
+
+    /* =========================================================
+       PRINT
+    ========================================================= */
+
+    @media print {
+        .report-nav,
+        .filter-section {
+            display: none !important;
+        }
+
+        .sales-report-container {
+            max-width: none;
+            padding: 0;
+        }
+
+        .report-header {
+            margin-bottom: 20px;
+        }
+
+        .metric-card,
+        .report-section {
+            box-shadow: none;
+            break-inside: avoid;
+        }
+
+        .metric-card:hover,
+        .expense-item:hover {
+            transform: none;
+        }
+    }
+</style>
+
+
+<%
+    /* =========================================================
+       EJS HELPERS
+    ========================================================= */
+
+    const formatMoney = (value) =>
+        Number(value || 0).toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+
+    const reportNames = {
+        daily: 'Daily',
+        weekly: 'Weekly',
+        monthly: 'Monthly',
+        annual: 'Annual'
+    };
+
+    const currentReportName =
+        reportNames[reportType] || 'Sales';
+
+    const metricCards = [
+        {
+            className: 'neutral',
+            icon: 'fa-money-bill-wave',
+            label: `Total ${currentReportName} Sales`,
+            value: sales && sales.total_sales
+        },
+        {
+            className: 'cash',
+            icon: 'fa-coins',
+            label: 'Cash Sales',
+            value: sales && sales.cash_sales
+        },
+        {
+            className: 'visa',
+            icon: 'fa-credit-card',
+            label: 'Visa Sales',
+            value: sales && sales.visa_sales
+        },
+        {
+            className: 'mobile',
+            icon: 'fa-mobile-alt',
+            label: 'Mobile Money',
+            value: sales && sales.mobile_sales
+        },
+        {
+            className: 'balance',
+            icon: 'fa-wallet',
+            label: 'Total Balance',
+            value: sales && sales.total_balance
+        },
+        {
+            className: 'expense',
+            icon: 'fa-arrow-down',
+            label: 'Total Expenses',
+            value: totalExpenses
+        },
+        {
+            className: 'neutral',
+            icon: 'fa-filter-circle-dollar',
+            label: 'Total Without Mobile Money',
+            value: totalWithoutMobileMoney
+        },
+        {
+            className: 'neutral',
+            icon: 'fa-equals',
+            label: 'Final Total',
+            value: finalTotal
+        },
+        {
+            className: 'neutral',
+            icon: 'fa-arrow-up',
+            label: 'Before Expenses',
+            value: beforeExpenses
+        },
+        {
+            className: 'positive',
+            icon: 'fa-check-circle',
+            label: 'After Expenses',
+            value: afterExpenses
+        }
+    ];
+%>
+
+
+<div class="sales-report-container">
+
+    <!-- =======================================================
+         HEADER
+    ======================================================== -->
+
+    <header class="report-header">
+
+        <h1>
+            <i class="fas fa-chart-line"></i>
+            Sales &amp; Financial Report
+        </h1>
+
+        <p>
+            Track daily, weekly, monthly, and annual sales
+            broken down by payment method.
+        </p>
+
+    </header>
+
+
+    <!-- =======================================================
+         REPORT NAVIGATION
+    ======================================================== -->
+
+    <nav class="report-nav">
+
+        <a
+            href="/sales-report/daily"
+            class="nav-btn <%= reportType === 'daily' ? 'active' : '' %>"
+        >
+            <i class="fas fa-calendar-day"></i>
+            Daily
+        </a>
+
+        <a
+            href="/sales-report/weekly"
+            class="nav-btn <%= reportType === 'weekly' ? 'active' : '' %>"
+        >
+            <i class="fas fa-calendar-week"></i>
+            Weekly
+        </a>
+
+        <% if (user && user.usertype === 'admin') { %>
+
+            <a
+                href="/sales-report/monthly"
+                class="nav-btn <%= reportType === 'monthly' ? 'active' : '' %>"
+            >
+                <i class="fas fa-calendar-alt"></i>
+                Monthly
+            </a>
+
+            <a
+                href="/sales-report/annual"
+                class="nav-btn <%= reportType === 'annual' ? 'active' : '' %>"
+            >
+                <i class="fas fa-calendar"></i>
+                Annual
+            </a>
+
+        <% } %>
+
+    </nav>
+
+
+    <!-- =======================================================
+         DAILY REPORT
+    ======================================================== -->
+
+    <% if (reportType === 'daily') { %>
+
+        <!-- Date Filter -->
+
+        <div class="filter-section">
+
+            <div class="filter-group">
+
+                <label
+                    class="filter-label"
+                    for="dailyDate"
+                >
+                    <i class="fas fa-calendar-check"></i>
+                    Select Date
+                </label>
+
+                <input
+                    type="date"
+                    id="dailyDate"
+                    value="<%= selectedDate %>"
+                    onchange="
+                        window.location.href =
+                        '/sales-report/daily?date=' +
+                        encodeURIComponent(this.value);
+                    "
+                >
+
+            </div>
+
+            <span class="filter-date-label">
+                <%= new Date(selectedDate).toLocaleDateString(
+                    'en-US',
+                    {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }
+                ) %>
+            </span>
+
+        </div>
+
+
+        <!-- Metrics -->
+
+        <div class="metrics-grid">
+
+            <% metricCards.forEach(metric => { %>
+
+                <div class="metric-card <%= metric.className %>">
+
+                    <div class="metric-icon">
+                        <i class="fas <%= metric.icon %>"></i>
+                    </div>
+
+                    <div class="metric-label">
+                        <%= metric.label %>
+                    </div>
+
+                    <div class="metric-value">
+                        <%= formatMoney(metric.value) %>
+                    </div>
+
+                    <div class="metric-currency">
+                        UGX
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+
+        <!-- Expenses -->
+
+        <div class="report-section">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    Expenses for Today
+                </h2>
+
+            </div>
+
+
+            <% if (expenses && expenses.length > 0) { %>
+
+                <div class="expense-list">
+
+                    <% expenses.forEach(expense => { %>
+
+                        <div class="expense-item">
+
+                            <div class="expense-item-content">
+
+                                <div class="expense-icon">
+                                    <i class="fas fa-receipt"></i>
+                                </div>
+
+                                <div class="expense-details">
+
+                                    <div class="expense-description">
+                                        <%= expense.description || expense.work_type || expense.category %>
+                                    </div>
+
+                                    <span class="expense-category">
+                                        <%= expense.category %>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="expense-amount">
+
+                                <i class="fas fa-minus-circle"></i>
+
+                                <%= formatMoney(expense.amount) %>
+                                UGX
+
+                            </div>
+
+                        </div>
+
+                    <% }) %>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="no-data">
+
+                    <i class="fas fa-receipt"></i>
+
+                    <span>
+                        No expenses recorded for this day.
+                    </span>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    <% } %>
+
+
+    <!-- =======================================================
+         WEEKLY REPORT
+    ======================================================== -->
+
+    <% if (reportType === 'weekly') { %>
+
+        <!-- Metrics -->
+
+        <div class="metrics-grid">
+
+            <% metricCards.forEach(metric => { %>
+
+                <div class="metric-card <%= metric.className %>">
+
+                    <div class="metric-icon">
+                        <i class="fas <%= metric.icon %>"></i>
+                    </div>
+
+                    <div class="metric-label">
+                        <%= metric.label %>
+                    </div>
+
+                    <div class="metric-value">
+                        <%= formatMoney(metric.value) %>
+                    </div>
+
+                    <div class="metric-currency">
+                        UGX
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+
+        <!-- Weekly Breakdown -->
+
+        <div class="report-section">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Daily Breakdown for the Week
+                </h2>
+
+            </div>
+
+
+            <% if (dailyBreakdown && dailyBreakdown.length > 0) { %>
+
+                <div class="table-scroll">
+
+                    <table class="breakdown-table">
+
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Total Sales</th>
+                                <th>Cash</th>
+                                <th>Visa</th>
+                                <th>Mobile Money</th>
+                                <th>Balance</th>
+                                <th>Expenses</th>
+                                <th>After Expenses</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <% dailyBreakdown.forEach(day => { %>
+
+                                <tr>
+
+                                    <td>
+                                        <%= new Date(
+                                            day.sale_date
+                                        ).toLocaleDateString(
+                                            'en-US',
+                                            {
+                                                weekday: 'short',
+                                                month: 'numeric',
+                                                day: 'numeric'
+                                            }
+                                        ) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.total_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.cash_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.visa_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.mobile_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.total_balance) %>
+                                    </td>
+
+                                    <td class="amount-expense">
+                                        <%= formatMoney(day.daily_expenses) %>
+                                    </td>
+
+                                    <td class="amount-positive">
+                                        <%= formatMoney(
+                                            (day.total_sales || 0) -
+                                            (day.daily_expenses || 0)
+                                        ) %>
+                                    </td>
+
+                                </tr>
+
+                            <% }) %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="no-data">
+
+                    <i class="fas fa-chart-bar"></i>
+
+                    <span>
+                        No daily sales data available for this week.
+                    </span>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    <% } %>
+
+
+    <!-- =======================================================
+         MONTHLY REPORT
+    ======================================================== -->
+
+    <% if (reportType === 'monthly') { %>
+
+        <%
+            const selectedMonthData =
+                months.find(month => month.value === selectedMonth);
+
+            const selectedMonthName =
+                selectedMonthData
+                    ? selectedMonthData.name
+                    : 'Selected Month';
+        %>
+
+
+        <!-- Month Filter -->
+
+        <div class="filter-section">
+
+            <div class="filter-group">
+
+                <label
+                    class="filter-label"
+                    for="monthSelect"
+                >
+                    <i class="fas fa-calendar-alt"></i>
+                    Month
+                </label>
+
+                <select id="monthSelect">
+
+                    <% months.forEach(month => { %>
+
+                        <option
+                            value="<%= month.value %>"
+                            <%= month.value === selectedMonth
+                                ? 'selected'
+                                : '' %>
+                        >
+                            <%= month.name %>
+                        </option>
+
+                    <% }) %>
+
+                </select>
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label
+                    class="filter-label"
+                    for="yearSelect"
+                >
+                    <i class="fas fa-hashtag"></i>
+                    Year
+                </label>
+
+                <input
+                    type="number"
+                    id="yearSelect"
+                    value="<%= selectedYear %>"
+                    min="2000"
+                    max="2099"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- Metrics -->
+
+        <div class="metrics-grid">
+
+            <% metricCards.forEach(metric => { %>
+
+                <div class="metric-card <%= metric.className %>">
+
+                    <div class="metric-icon">
+                        <i class="fas <%= metric.icon %>"></i>
+                    </div>
+
+                    <div class="metric-label">
+                        <%= metric.label %>
+                    </div>
+
+                    <div class="metric-value">
+                        <%= formatMoney(metric.value) %>
+                    </div>
+
+                    <div class="metric-currency">
+                        UGX
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+
+        <!-- Monthly Breakdown -->
+
+        <div class="report-section">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    <i class="fas fa-chart-bar"></i>
+
+                    Daily Breakdown for
+                    <%= selectedMonthName %>
+                    <%= selectedYear %>
+
+                </h2>
+
+            </div>
+
+
+            <% if (dailyBreakdown && dailyBreakdown.length > 0) { %>
+
+                <div class="table-scroll">
+
+                    <table class="breakdown-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Date</th>
+                                <th>Total Sales</th>
+                                <th>Cash</th>
+                                <th>Visa</th>
+                                <th>Mobile Money</th>
+                                <th>Balance</th>
+                                <th>Expenses</th>
+                                <th>After Expenses</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <% dailyBreakdown.forEach(day => { %>
+
+                                <tr>
+
+                                    <td>
+                                        <%= new Date(
+                                            day.sale_date
+                                        ).toLocaleDateString(
+                                            'en-US',
+                                            {
+                                                weekday: 'short',
+                                                month: 'numeric',
+                                                day: 'numeric'
+                                            }
+                                        ) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.total_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.cash_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.visa_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.mobile_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(day.total_balance) %>
+                                    </td>
+
+                                    <td class="amount-expense">
+                                        <%= formatMoney(day.daily_expenses) %>
+                                    </td>
+
+                                    <td class="amount-positive">
+                                        <%= formatMoney(
+                                            (day.total_sales || 0) -
+                                            (day.daily_expenses || 0)
+                                        ) %>
+                                    </td>
+
+                                </tr>
+
+                            <% }) %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="no-data">
+
+                    <i class="fas fa-chart-bar"></i>
+
+                    <span>
+                        No daily sales data available for
+                        <%= selectedMonthName %>.
+                    </span>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    <% } %>
+
+
+    <!-- =======================================================
+         ANNUAL REPORT
+    ======================================================== -->
+
+    <% if (reportType === 'annual') { %>
+
+        <!-- Year Filter -->
+
+        <div class="filter-section">
+
+            <div class="filter-group">
+
+                <label
+                    class="filter-label"
+                    for="annualYearSelect"
+                >
+                    <i class="fas fa-hashtag"></i>
+                    Year
+                </label>
+
+                <input
+                    type="number"
+                    id="annualYearSelect"
+                    value="<%= selectedYear %>"
+                    min="2000"
+                    max="2099"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- Metrics -->
+
+        <div class="metrics-grid">
+
+            <% metricCards.forEach(metric => { %>
+
+                <div class="metric-card <%= metric.className %>">
+
+                    <div class="metric-icon">
+                        <i class="fas <%= metric.icon %>"></i>
+                    </div>
+
+                    <div class="metric-label">
+                        <%= metric.label %>
+                    </div>
+
+                    <div class="metric-value">
+                        <%= formatMoney(metric.value) %>
+                    </div>
+
+                    <div class="metric-currency">
+                        UGX
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+
+        <!-- Annual Breakdown -->
+
+        <div class="report-section">
+
+            <div class="section-header">
+
+                <h2 class="section-title">
+
+                    <i class="fas fa-chart-bar"></i>
+
+                    Monthly Breakdown for
+                    <%= selectedYear %>
+
+                </h2>
+
+            </div>
+
+
+            <% if (monthlyBreakdown && monthlyBreakdown.length > 0) { %>
+
+                <div class="table-scroll">
+
+                    <table class="breakdown-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Month</th>
+                                <th>Total Sales</th>
+                                <th>Cash</th>
+                                <th>Visa</th>
+                                <th>Mobile Money</th>
+                                <th>Balance</th>
+                                <th>Expenses</th>
+                                <th>After Expenses</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <% monthlyBreakdown.forEach(month => { %>
+
+                                <tr>
+
+                                    <td>
+                                        <%= new Date(
+                                            2024,
+                                            month.month - 1
+                                        ).toLocaleDateString(
+                                            'en-US',
+                                            {
+                                                month: 'long'
+                                            }
+                                        ) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(month.total_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(month.cash_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(month.visa_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(month.mobile_sales) %>
+                                    </td>
+
+                                    <td>
+                                        <%= formatMoney(month.total_balance) %>
+                                    </td>
+
+                                    <td class="amount-expense">
+                                        <%= formatMoney(month.monthly_expenses) %>
+                                    </td>
+
+                                    <td class="amount-positive">
+                                        <%= formatMoney(
+                                            (month.total_sales || 0) -
+                                            (month.monthly_expenses || 0)
+                                        ) %>
+                                    </td>
+
+                                </tr>
+
+                            <% }) %>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="no-data">
+
+                    <i class="fas fa-chart-bar"></i>
+
+                    <span>
+                        No monthly sales data available for
+                        <%= selectedYear %>.
+                    </span>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    <% } %>
+
+</div>
+
+
+<script>
+    /* =========================================================
+       MONTHLY REPORT FILTER
+    ========================================================= */
+
+    const monthSelect = document.getElementById('monthSelect');
+    const yearSelect = document.getElementById('yearSelect');
+
+    if (monthSelect && yearSelect) {
+
+        function updateMonthlyReport() {
+
+            const month = monthSelect.value;
+            const year = yearSelect.value;
+
+            window.location.href =
+                '/sales-report/monthly' +
+                '?month=' +
+                encodeURIComponent(month) +
+                '&year=' +
+                encodeURIComponent(year);
+        }
+
+        monthSelect.addEventListener(
+            'change',
+            updateMonthlyReport
+        );
+
+        yearSelect.addEventListener(
+            'change',
+            updateMonthlyReport
+        );
+    }
+
+
+    /* =========================================================
+       ANNUAL REPORT FILTER
+    ========================================================= */
+
+    const annualYearSelect =
+        document.getElementById('annualYearSelect');
+
+    if (annualYearSelect) {
+
+        annualYearSelect.addEventListener(
+            'change',
+            function () {
+
+                const year = this.value;
+
+                window.location.href =
+                    '/sales-report/annual?year=' +
+                    encodeURIComponent(year);
+            }
+        );
+    }
+</script>

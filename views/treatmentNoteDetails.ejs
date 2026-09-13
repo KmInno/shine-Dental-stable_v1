@@ -1,0 +1,242 @@
+<style>
+    * {
+        line-height: 0.8;
+    }
+
+    .receipt {
+        width: 700px;
+        height: 210mm;
+        margin: auto;
+        padding: 20px;
+        background-image: url('/images/shinedental-water_mark.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 350px;
+    }
+
+    .btn-print {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .btn-print button {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.3s ease;
+    }
+
+    .footer {
+        margin-top: 30px;
+        position: absolute;
+        bottom: 20px;
+        text-align: center;
+        font-size: 12px;
+        color: #444;
+        border-top: 1px dashed #ccc;
+        padding-top: 10px;
+    }
+
+    .notes-section {
+        text-align: center;
+    }
+
+    .company-header img {
+        width: 700px;
+    }
+
+    .date-wrapper,
+    .phone-section {
+        text-align: right;
+    }
+
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        gap: 16px;
+    }
+
+    strong {
+        color: #2563eb;
+    }
+
+    .field-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        line-height: 0.5;
+        padding: 1px;
+    }
+
+    .field-label {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding-bottom: 2px;
+    }
+
+    .field-dotted {
+        flex: 1;
+        border-bottom: 1.5px dotted #aaa;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        padding-bottom: 2px;
+        min-width: 60px;
+        line-height: 0.8;
+    }
+
+    .field-dotted span {
+        color: #2563eb;
+        background: white;
+        padding: 0 6px;
+        white-space: nowrap;
+        line-height: 0.8;
+    }
+
+    @media print {
+        .company-header img {
+            width: 550px;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .field-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            line-height: 0.5;
+            padding: 1px;
+        }
+
+        .receipt {
+            height: 750px;
+            width: 100%;
+            font-size: 15px;
+            margin-top: 0;
+            margin-bottom: 0;
+            background-image: url('/images/shinedental-water_mark.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 450px;
+        }
+
+        button {
+            display: none;
+        }
+
+        .field-dotted span {
+            background: white;
+        }
+    }
+</style>
+
+    <div class="receipt">
+        <div class="container">
+
+            <!-- Logo -->
+            <div class="header-top">
+                <div class="company-header">
+                    <img src="/images/treatment_note2.png" alt="shine Logo">
+                </div>
+            </div>
+
+            <div class="spacing" style="line-height: .6;">
+
+
+
+                <!-- Date -->
+                <div class="date-wrapper">
+                    <div class="field-row" style="justify-content: flex-end;">
+                        <strong class="field-label">DATE:</strong>
+                        <div class="field-dotted" style="max-width: 160px;">
+                            <span>
+                                <%= new Date(note.treatment_date).toLocaleDateString('en-GB') %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Name -->
+                <div class="field-row">
+                    <strong class="field-label">PATIENT'S NAME:</strong>
+                    <div class="field-dotted">
+                        <span>
+                            <%= note.patient_name %>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Age, Sex, Address Row -->
+                <div class="form-row">
+                    <div class="field-row" style="flex: 1;">
+                        <strong class="field-label">AGE:</strong>
+                        <div class="field-dotted">
+                            <span>
+                                <%= note.age || 'N/A' %>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field-row" style="flex: 1;">
+                        <strong class="field-label">SEX:</strong>
+                        <div class="field-dotted">
+                            <span>
+                                <%= note.gender || 'N/A' %>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field-row" style="flex: 2;">
+                        <strong class="field-label">ADDRESS:</strong>
+                        <div class="field-dotted">
+                            <span>
+                                <%= note.patient_address || 'N/A' %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="phone-section">
+                    <div class="field-row" style="justify-content: flex-end;">
+                        <strong class="field-label">TEL:</strong>
+                        <div class="field-dotted" style="max-width: 200px;">
+                            <span>
+                                <%= note.patient_phone || 'N/A' %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Treatment Notes -->
+                <div class="notes-section" style="margin-top: 20px;">
+                    <div style="color: #2563eb; font-weight: bold;">TREATMENT NOTES</div>
+                    <div class="notes-content"></div>
+                </div>
+
+                <!-- Footer -->
+                <div class="footer">
+                    <p>
+                        FOR: Teeth Filling, Crowns & Braces, Scaling & Polishing,
+                        Teeth Whitening & Root Canal Therapy (RCT)
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="btn-print">
+        <button onclick="window.print()">Print</button>
+    </div>
+</body>
+
+<script>
+    // Optional JavaScript for future enhancements
+</script>
