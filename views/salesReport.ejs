@@ -404,6 +404,15 @@
         background: var(--danger-soft);
     }
 
+    .metric-card.unpaid {
+        border-left-color: var(--warning);
+    }
+
+    .metric-card.unpaid .metric-icon {
+        color: #c99a00;
+        background: var(--warning-soft);
+    }
+
     .metric-card.neutral {
         border-left-color: var(--primary);
     }
@@ -845,6 +854,12 @@
             icon: 'fa-arrow-down',
             label: 'Total Expenses',
             value: totalExpenses
+        },
+        {
+            className: 'unpaid',
+            icon: 'fa-hourglass-half',
+            label: 'Unpaid Lab Work',
+            value: pendingLabWorkTotal
         },
         {
             className: 'neutral',

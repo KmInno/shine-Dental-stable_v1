@@ -1006,6 +1006,7 @@
 <% /*=========================================================SAFE / DERIVED
     VALUES=========================================================*/ const sales=Number(dailySales || 0); const
     expenses=Number(dailyExpenses || 0); const labWork=Number(dailyLabWork || 0); const netBalance=sales - expenses;
+    const pendingLabWorkTotal=Number(pendingLabWork || 0);
     const paidCount=Number(paidSalesCount || 0); const outstanding=Number(outstandingAmount || 0); const
     receiptTotalCount=Number(receiptsCount || 0); const invoiceTotalCount=Number(invoicesCount || 0); %>
 
@@ -1113,6 +1114,34 @@
                     <%= labWork.toLocaleString('en-US') %>
                         lab work
 
+                </div>
+
+            </div>
+
+
+            <!-- Unpaid Lab Work -->
+
+            <div class="kpi-card outstanding">
+
+                <div class="kpi-icon">
+
+                    <i class="fa-solid fa-hourglass-half"></i>
+
+                </div>
+
+                <div class="kpi-label">
+                    Unpaid Lab Work
+                </div>
+
+                <div class="kpi-value">
+
+                    UGX
+                    <%= pendingLabWorkTotal.toLocaleString('en-US') %>
+
+                </div>
+
+                <div class="kpi-unit">
+                    pending expenses excluded
                 </div>
 
             </div>

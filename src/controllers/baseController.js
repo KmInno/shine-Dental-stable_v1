@@ -30,6 +30,7 @@ baseController.buildHome = async function (req, res, next) {
         const dailySalesData = await SalesReportModel.getDailySalesSummary(today);
         const dailyExpensesData = await ExpensesModel.getTotalExpensesByDate(today);
         const dailyLabWork = await LabWorkModel.getTotalLabWorkByDate(today);
+        const pendingLabWork = await LabWorkModel.getPendingLabWorkTotalByDate(today);
         const dailyExpenses = dailyExpensesData + dailyLabWork;
 
         // Calculate paid and outstanding using local timezone
@@ -68,6 +69,7 @@ baseController.buildHome = async function (req, res, next) {
                 dailySales: dailySalesData.total_sales || 0,
                 dailyExpenses,
                 dailyLabWork,
+                pendingLabWork,
                 paidSalesCount: paidSalesCount,
                 outstandingAmount: outstandingAmount,
                 upcomingAppointments
@@ -115,6 +117,7 @@ baseController.buildHome = async function (req, res, next) {
             dailySales: dailySalesData.total_sales || 0,
             dailyExpenses,
             dailyLabWork,
+            pendingLabWork,
             paidSalesCount: paidSalesCount,
             outstandingAmount: outstandingAmount,
             recentReceipts,

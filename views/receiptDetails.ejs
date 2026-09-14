@@ -99,18 +99,29 @@
 
     .services-table th {
         text-align: center;
+        background-color: #ffffff;
     }
 
+
+    .services-table td:nth-child(3) {
+        text-align: center;
+    }
     .services-table td:nth-child(3) {
         text-align: center;
     }
 
     .services-table td:last-child {
         text-align: right;
+        /* background-color: #ffffff; */
     }
 
     .total-row td {
         font-weight: bold;
+        background-color: #f3ded8;
+    }
+
+    .summary-box tr:nth-child(2) {
+        background-color: #f3ded8;
     }
 
     /* =========================
@@ -227,7 +238,9 @@
             min-height: 210mm;
             margin: 0;
             /* padding: 10mm; */
-            background-image: url('/images/shinedental-water_mark.png');
+            /* Keep the watermark visible without affecting receipt content. */
+            background-image: linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
+                url('/images/shinedental-water_mark.png');
             background-repeat: no-repeat;
             background-position: center;
             background-size: 450px;
@@ -266,7 +279,7 @@
     >
 
     <!-- Title -->
-    <h1 class="receipt-title">
+    <h1 class="receipt-title" style="color: #050fd7; font-weight: bold; font-size: 20px;">
         Payment Receipt
     </h1>
 
@@ -300,7 +313,7 @@
                 <% if (receipt.next_visit) { %>
                     <span>
                         <strong>Next Visit:</strong>
-                        <%= new Date(receipt.next_visit).toLocaleDateString('en-GB') %>
+                        <strong style="color: red;"><%= new Date(receipt.next_visit).toLocaleDateString('en-GB') %></strong>
                     </span>
                 <% } %>
 
@@ -312,7 +325,7 @@
 
                 <span>
                     <strong>Receipt Number:</strong>
-                    RCP-<%= String(receipt.id).padStart(6, '0') %>
+                    <strong style="color: red;">RCP-<%= String(receipt.id).padStart(6, '0') %></strong>
                 </span>
 
                 <span>

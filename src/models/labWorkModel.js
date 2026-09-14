@@ -88,12 +88,29 @@ async function getTotalLabWorkByDate(date) {
     try {
         await ensureLabWorkTable(db);
         const [result] = await db.query(
-            "SELECT SUM(CAST(price AS DECIMAL(10,2))) AS total FROM lab_work WHERE created_date = ?",
+            "SELECT SUM(CAST(price AS DECIMAL(10,2))) AS total FROM lab_work WHERE created_date = ? AND status = 'paid'",
             [date]
         );
         return parseFloat(result[0].total) || 0;
     } catch (error) {
         logger.error(`Error in getTotalLabWorkByDate: ${error.message}`, error);
+        throw error;
+    } finally {
+        await db.end();
+    }
+}
+
+async function getPendingLabWorkTotalByDate(date) {
+    const db = await initializeDatabase();
+    try {
+        await ensureLabWorkTable(db);
+        const [result] = await db.query(
+            "SELECT SUM(CAST(price AS DECIMAL(10,2))) AS total FROM lab_work WHERE created_date = ? AND status = 'pending'",
+            [date]
+        );
+        return parseFloat(result[0].total) || 0;
+    } catch (error) {
+        logger.error(`Error in getPendingLabWorkTotalByDate: ${error.message}`, error);
         throw error;
     } finally {
         await db.end();
@@ -124,5 +141,6 @@ module.exports = {
     getLabWorkByDateRange,
     getAllLabWork,
     getTotalLabWorkByDate,
+    getPendingLabWorkTotalByDate,
     deleteLabWork
 };

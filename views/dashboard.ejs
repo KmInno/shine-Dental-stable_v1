@@ -1055,6 +1055,9 @@
     const todayExpenses =
         Number(dailyExpenses || 0);
 
+    const pendingLabWorkTotal =
+        Number(pendingLabWork || 0);
+
     const todayNet =
         todaySales - todayExpenses;
 
@@ -1204,6 +1207,34 @@
                 ).toLocaleString('en-US') %>
                 lab work
 
+            </div>
+
+        </div>
+
+
+        <!-- Unpaid Lab Work -->
+
+        <div class="financial-card outstanding">
+
+            <div class="financial-icon">
+
+                <i class="fa-solid fa-hourglass-half"></i>
+
+            </div>
+
+            <div class="financial-label">
+                Unpaid Lab Work
+            </div>
+
+            <div class="financial-value">
+
+                UGX
+                <%= pendingLabWorkTotal.toLocaleString('en-US') %>
+
+            </div>
+
+            <div class="financial-subtext">
+                Pending expenses excluded
             </div>
 
         </div>

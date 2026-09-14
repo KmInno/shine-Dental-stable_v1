@@ -4,11 +4,19 @@ const LabWorkModel = require("../models/labWorkModel");
 const logger = require("../utils/logger");
 
 function getLabWorkTotal(labWork) {
-    return labWork.reduce((sum, work) => sum + (parseFloat(work.price) || 0), 0);
+    return labWork
+        .filter(work => work.status === "paid")
+        .reduce((sum, work) => sum + (parseFloat(work.price) || 0), 0);
+}
+
+function getPendingLabWorkTotal(labWork) {
+    return labWork
+        .filter(work => work.status === "pending")
+        .reduce((sum, work) => sum + (parseFloat(work.price) || 0), 0);
 }
 
 function mapLabWorkAsExpenses(labWork) {
-    return labWork.map(work => ({
+    return labWork.filter(work => work.status === "paid").map(work => ({
         ...work,
         description: work.work_type,
         category: "Lab work",
@@ -62,6 +70,7 @@ async function getDailyReport(req, res, next) {
         const dailyExpenses = await ExpensesModel.getExpensesByDate(selectedDate);
         const dailyLabWork = await LabWorkModel.getLabWorkByDate(selectedDate);
         const totalExpenses = (await ExpensesModel.getTotalExpensesByDate(selectedDate)) + getLabWorkTotal(dailyLabWork);
+        const pendingLabWorkTotal = getPendingLabWorkTotal(dailyLabWork);
         const allDailyExpenses = addExpenses(dailyExpenses, dailyLabWork);
 
         // Calculate net sales
@@ -76,6 +85,7 @@ async function getDailyReport(req, res, next) {
             today: today,
             sales: dailySales,
             totalExpenses: totalExpenses || 0,
+            pendingLabWorkTotal,
             beforeExpenses: beforeExpenses,
             afterExpenses: afterExpenses,
             ...reportTotals,
@@ -109,6 +119,7 @@ async function getWeeklyReport(req, res, next) {
         const weeklyExpenses = await ExpensesModel.getExpensesByDateRange(startDate, endDate);
         const weeklyLabWork = await LabWorkModel.getLabWorkByDateRange(startDate, endDate);
         const totalWeeklyExpenses = weeklyExpenses.reduce((sum, exp) => sum + (parseFloat(exp.amount) || 0), 0) + getLabWorkTotal(weeklyLabWork);
+        const pendingLabWorkTotal = getPendingLabWorkTotal(weeklyLabWork);
         const allWeeklyExpenses = addExpenses(weeklyExpenses, weeklyLabWork);
 
         // Add daily expenses to each day in the breakdown
@@ -135,6 +146,7 @@ async function getWeeklyReport(req, res, next) {
             sales: weeklyTotals,
             dailyBreakdown: dailyBreakdownWithExpenses,
             totalExpenses: totalWeeklyExpenses,
+            pendingLabWorkTotal,
             beforeExpenses: beforeExpenses,
             afterExpenses: afterExpenses,
             ...reportTotals,
@@ -164,6 +176,7 @@ async function getMonthlyReport(req, res, next) {
         const monthlyExpenses = await ExpensesModel.getExpensesByDateRange(startDate, endDate);
         const monthlyLabWork = await LabWorkModel.getLabWorkByDateRange(startDate, endDate);
         const totalMonthlyExpenses = monthlyExpenses.reduce((sum, exp) => sum + (parseFloat(exp.amount) || 0), 0) + getLabWorkTotal(monthlyLabWork);
+        const pendingLabWorkTotal = getPendingLabWorkTotal(monthlyLabWork);
         const allMonthlyExpenses = addExpenses(monthlyExpenses, monthlyLabWork);
 
         // Add daily expenses to each day in the breakdown
@@ -207,6 +220,7 @@ async function getMonthlyReport(req, res, next) {
             sales: monthlyTotals,
             dailyBreakdown: dailyBreakdownWithExpenses,
             totalExpenses: totalMonthlyExpenses,
+            pendingLabWorkTotal,
             beforeExpenses: beforeExpenses,
             afterExpenses: afterExpenses,
             ...reportTotals,
@@ -239,6 +253,7 @@ async function getAnnualReport(req, res, next) {
             `${selectedYear}-12-31`
         );
         const totalAnnualExpenses = annualExpenses.reduce((sum, exp) => sum + (parseFloat(exp.amount) || 0), 0) + getLabWorkTotal(annualLabWork);
+        const pendingLabWorkTotal = getPendingLabWorkTotal(annualLabWork);
         const allAnnualExpenses = addExpenses(annualExpenses, annualLabWork);
 
         // Add monthly expenses to each month in the breakdown
@@ -265,6 +280,7 @@ async function getAnnualReport(req, res, next) {
             sales: annualTotals,
             monthlyBreakdown: monthlyBreakdownWithExpenses,
             totalExpenses: totalAnnualExpenses,
+            pendingLabWorkTotal,
             beforeExpenses: beforeExpenses,
             afterExpenses: afterExpenses,
             ...reportTotals,
