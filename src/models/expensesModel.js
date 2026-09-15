@@ -39,7 +39,7 @@ async function getAllExpenses() {
     const db = await initializeDatabase();
     try {
         await ensureExpenseDateColumn(db);
-        const [result] = await db.query("SELECT * FROM expenses ORDER BY COALESCE(expense_date, DATE(created_at)) DESC");
+        const [result] = await db.query("SELECT e.*, u.name AS creator_name, u.email AS creator_email FROM expenses e LEFT JOIN users u ON u.id = e.created_by ORDER BY COALESCE(e.expense_date, DATE(e.created_at)) DESC");
         return result;
     } catch (error) {
         logger.error(`Error in getAllExpenses: ${error.message}`, error);
@@ -54,7 +54,7 @@ async function getExpensesByDate(date) {
     const db = await initializeDatabase();
     try {
         await ensureExpenseDateColumn(db);
-        const [result] = await db.query("SELECT * FROM expenses WHERE DATE(COALESCE(expense_date, created_at)) = ? ORDER BY created_at DESC", [date]);
+        const [result] = await db.query("SELECT e.*, u.name AS creator_name, u.email AS creator_email FROM expenses e LEFT JOIN users u ON u.id = e.created_by WHERE DATE(COALESCE(e.expense_date, e.created_at)) = ? ORDER BY e.created_at DESC", [date]);
         return result;
     } catch (error) {
         logger.error(`Error in getExpensesByDate: ${error.message}`, error);
@@ -68,7 +68,7 @@ async function getExpensesByDate(date) {
 async function getExpenseById(id) {
     const db = await initializeDatabase();
     try {
-        const [result] = await db.query("SELECT * FROM expenses WHERE id = ?", [id]);
+        const [result] = await db.query("SELECT e.*, u.name AS creator_name, u.email AS creator_email FROM expenses e LEFT JOIN users u ON u.id = e.created_by WHERE e.id = ?", [id]);
         return result.length > 0 ? result[0] : null;
     } catch (error) {
         logger.error(`Error in getExpenseById: ${error.message}`, error);
@@ -84,7 +84,7 @@ async function getExpensesByDateRange(startDate, endDate) {
     try {
         await ensureExpenseDateColumn(db);
         const [result] = await db.query(
-            "SELECT * FROM expenses WHERE DATE(COALESCE(expense_date, created_at)) BETWEEN ? AND ? ORDER BY created_at DESC",
+            "SELECT e.*, u.name AS creator_name, u.email AS creator_email FROM expenses e LEFT JOIN users u ON u.id = e.created_by WHERE DATE(COALESCE(e.expense_date, e.created_at)) BETWEEN ? AND ? ORDER BY e.created_at DESC",
             [startDate, endDate]
         );
         return result;

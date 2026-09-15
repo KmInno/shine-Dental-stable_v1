@@ -8,7 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             background: #f5f5f5;
-            padding: 20px;
+            /* padding: 20px; */
         }
 
         .admin-container {
@@ -355,17 +355,28 @@
                                 <th>Receipt</th>
                                 <th>Date</th>
                                 <th>Patient</th>
+                                <th>Initials</th>
                                 <th>Contact</th>
                                 <th>Amount Paid</th>
                                 <th>Payment</th>
                                 <th>Balance</th>
                                 <th>Actions</th>
                             </tr>
+
                         </thead>
                         <tbody>
                             <% receipts.forEach(receipt => { %>
                                 <%
                                     const patientName = receipt.patient_name || 'N/A';
+                                    const initialsParts = String(receipt.initials || '')
+                                        .trim()
+                                        .split(/\s+/)
+                                        .filter(Boolean);
+                                    const displayInitials = initialsParts.length >= 3 && initialsParts[0].toLowerCase() === 'dr.'
+                                        ? `Dr. ${initialsParts[1].charAt(0)}${initialsParts[2].charAt(0)}`
+                                        : initialsParts.slice(0, 2)
+                                            .map(part => part.charAt(0).toUpperCase())
+                                            .join('');
                                     const patientInitial = patientName.trim().charAt(0).toUpperCase();
                                     const balance = Number(receipt.balance || 0);
                                     const paymentMethod = String(receipt.mode_of_payment || '').toLowerCase();
@@ -396,6 +407,7 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <td><%= displayInitials %></td>
                                     <td>
                                         <% if (receipt.patient_phone) { %>
                                             <a class="phone-link" href="https://wa.me/<%= String(receipt.patient_phone).replace(/\D/g, '') %>" target="_blank" rel="noopener noreferrer">

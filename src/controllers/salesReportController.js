@@ -21,8 +21,8 @@ function mapLabWorkAsExpenses(labWork) {
         description: work.work_type,
         category: "Lab work",
         amount: work.price,
-        date: work.created_date,
-        expense_date: work.created_date
+        date: work.cleared_date || work.created_date,
+        expense_date: work.cleared_date || work.created_date
     }));
 }
 

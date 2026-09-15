@@ -8,6 +8,7 @@ async function addReceipt(req, res) {
     try {
         const {
             patient_name,
+            initials,
             patient_phone,
             patient_address,
             patient_gender,
@@ -52,6 +53,7 @@ async function addReceipt(req, res) {
 
         const receipt = await ReceiptItem.createReceipt(
             patient_name.trim(),
+            initials && initials.trim() ? initials : null,
             patient_phone.trim(),
             finalAddress,
             finalGender,
@@ -214,6 +216,7 @@ async function updateReceipt(req, res, next) {
         const receipt_id = req.params.receipt_id;
         const {
             patient_name,
+            initials,
             patient_phone,
             patient_address,
             patient_gender,
@@ -251,6 +254,7 @@ async function updateReceipt(req, res, next) {
         const updated = await ReceiptItem.updateReceipt(
             receipt_id,
             patient_name.trim(),
+            initials && initials.trim() ? initials : null,
             patient_phone.trim(),
             patient_address && patient_address.trim() ? patient_address : null,
             patient_gender && patient_gender.trim() ? patient_gender : null,

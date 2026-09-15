@@ -6,6 +6,7 @@ CREATE TABLE receipts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     patient_id VARCHAR(50) NULL,
     patient_name VARCHAR(255) NOT NULL,
+    initials VARCHAR(100) DEFAULT NULL,
     patient_phone VARCHAR(20) NOT NULL,
     patient_address VARCHAR(500),
     gender ENUM('Male', 'Female', 'Other'),

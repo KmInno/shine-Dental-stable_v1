@@ -4,7 +4,7 @@
     .labwork-header { border-top: 3px solid #007bff; margin-bottom: 20px; }
     .labwork-header h1 { margin: 0 0 6px; color: #333; }
     .labwork-header p { margin: 0; color: #666; }
-    .labwork-form { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; align-items: end; margin-bottom: 24px; }
+    .labwork-form { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; align-items: end; margin-bottom: 24px; }
     .labwork-form label { display: block; color: #555; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
     .labwork-form input, .labwork-form select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
     .labwork-form button { padding: 10px 16px; border: 0; border-radius: 4px; background: #007bff; color: #fff; cursor: pointer; font-weight: 600; }
@@ -18,6 +18,7 @@
     .status-paid { background: #dff5e5; color: #18753a; }
     .status-pending { background: #fff1d6; color: #9a6500; }
     .delete-labwork { border: 0; background: transparent; color: #dc3545; cursor: pointer; font-size: 16px; }
+    .labwork-status-select { padding: 5px 8px; border: 1px solid #ccc; border-radius: 4px; }
     .empty-state { color: #777; padding: 28px 0; text-align: center; }
     .alert { display: none; padding: 10px 14px; margin-bottom: 16px; border-radius: 4px; }
     .alert-success { display: block; background: #dff5e5; color: #18753a; }
@@ -62,7 +63,7 @@
                 <label for="workDate">Date created *</label>
                 <input id="workDate" name="created_date" type="date" value="<%= selectedDate %>" required>
             </div>
-            <button type="submit"><i class="fas fa-plus"></i> Add Lab Work</button>
+            <button id="labworkSubmit" type="submit"><i class="fas fa-plus"></i> Add Lab Work</button>
         </form>
 
         <div class="labwork-summary">
@@ -80,7 +81,8 @@
                             <th>Price (UGX)</th>
                             <th>Status</th>
                             <th>Date created</th>
-                            <th>Action</th>
+                            <th>Date cleared</th>
+                            <% if (user && user.usertype === 'admin') { %><th>Update</th><% } %>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,7 +93,15 @@
                                 <td><strong><%= Number(item.price).toLocaleString('en-US', {minimumFractionDigits: 2}) %></strong></td>
                                 <td><span class="status status-<%= item.status %>"><%= item.status %></span></td>
                                 <td><%= new Date(item.created_date).toLocaleDateString('en-GB') %></td>
-                                <td><button class="delete-labwork" type="button" onclick="deleteLabWork(<%= item.id %>)" title="Delete lab work"><i class="fas fa-trash"></i></button></td>
+                                <td><%= item.cleared_date ? new Date(item.cleared_date).toLocaleDateString('en-GB') : '-' %></td>
+                                <% if (user && user.usertype === 'admin') { %>
+                                    <td>
+                                        <select class="labwork-status-select" onchange="updateLabWorkStatus(<%= item.id %>, this.value)">
+                                            <option value="pending" <%= item.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                            <option value="paid" <%= item.status === 'paid' ? 'selected' : '' %>>Paid</option>
+                                        </select>
+                                    </td>
+                                <% } %>
                             </tr>
                         <% }) %>
                     </tbody>
@@ -128,14 +138,18 @@
         setTimeout(() => window.location.reload(), 600);
     });
 
-    async function deleteLabWork(id) {
-        if (!confirm('Are you sure you want to delete this lab work?')) return;
-        const response = await fetch(`/labwork/${id}`, { method: 'DELETE' });
+    async function updateLabWorkStatus(id, status) {
+        const response = await fetch(`/labwork/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+        });
         const result = await response.json();
         if (!response.ok) {
-            showLabworkAlert(result.message || 'Error deleting lab work', 'error');
+            showLabworkAlert(result.message || 'Error updating lab work', 'error');
             return;
         }
         window.location.reload();
     }
+
 </script>

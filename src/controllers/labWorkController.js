@@ -52,6 +52,26 @@ async function addLabWork(req, res) {
     }
 }
 
+async function updateLabWork(req, res) {
+    try {
+        const { status } = req.body;
+        const validStatuses = ["paid", "pending"];
+
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: "A valid lab work status is required" });
+        }
+
+        const updated = await LabWorkModel.updateLabWorkStatus(req.params.id, status);
+        if (!updated) {
+            return res.status(404).json({ message: "Lab work not found or permission denied" });
+        }
+        res.json({ message: "Lab work updated successfully" });
+    } catch (error) {
+        logger.error(`Error in updateLabWork: ${error.message}`, error);
+        res.status(500).json({ message: "Error updating lab work" });
+    }
+}
+
 async function deleteLabWork(req, res) {
     try {
         const deleted = await LabWorkModel.deleteLabWork(
@@ -72,5 +92,6 @@ async function deleteLabWork(req, res) {
 module.exports = {
     getLabWorkPage,
     addLabWork,
+    updateLabWork,
     deleteLabWork
 };

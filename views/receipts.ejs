@@ -620,9 +620,9 @@
     }
 
     .currency {
-        color: var(--text-muted);
-        font-size: 10px;
-        font-weight: 600;
+        color: black;
+        font-size: 11px;
+        font-weight: 900;
     }
 
 
@@ -1197,7 +1197,11 @@
 
                             <th>Patient</th>
 
+                            <th>Initials</th>
+
                             <th>Contact</th>
+
+                            <th>Room</th>
 
                             <th>Amount Paid</th>
 
@@ -1220,6 +1224,20 @@
                             <%
                                 const patientName =
                                     receipt.patient_name || 'N/A';
+
+                                const initialsParts =
+                                    String(receipt.initials || '')
+                                        .trim()
+                                        .split(/\s+/)
+                                        .filter(Boolean);
+
+                                const displayInitials =
+                                    initialsParts.length >= 3 &&
+                                    initialsParts[0].toLowerCase() === 'dr.'
+                                        ? `Dr. ${initialsParts[1].charAt(0)}${initialsParts[2].charAt(0)}`.toUpperCase().replace('DR.', 'Dr.')
+                                        : initialsParts.slice(0, 2)
+                                            .map(part => part.charAt(0).toUpperCase())
+                                            .join('');
 
                                 const patientInitial =
                                     patientName
@@ -1359,6 +1377,17 @@
 
 
                                 <!-- =================================
+                                     INITIALS
+                                ================================== -->
+
+                                <td>
+                                    <span class="currency">
+                                        <%= displayInitials %>
+                                    </span>
+                                </td>
+
+
+                                <!-- =================================
                                      PHONE
                                 ================================== -->
 
@@ -1387,6 +1416,19 @@
                                         </span>
 
                                     <% } %>
+
+                                </td>
+
+
+                                <!-- =================================
+                                     ROOM
+                                ================================== -->
+
+                                <td>
+
+                                    <span class="currency">
+                                        <%= receipt.room_number || 'N/A' %>
+                                    </span>
 
                                 </td>
 

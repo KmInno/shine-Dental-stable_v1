@@ -21,11 +21,13 @@ async function getExistingPatientId(db, patient_phone) {
 // Returns multiple matches if same name exists more than once
 async function getExistingPatientByName(db, patient_name) {
     try {
+        await ensureInitialsColumn(db);
         const normalizedPatientName = patient_name.trim().toLowerCase();
         const [exactMatch] = await db.query(
             `SELECT 
                 patient_id, 
                 patient_name, 
+                ANY_VALUE(initials) as initials,
                 patient_phone, 
                 ANY_VALUE(patient_address) as patient_address,
                 ANY_VALUE(gender) as gender,
@@ -50,6 +52,7 @@ async function getExistingPatientByName(db, patient_name) {
             `SELECT 
                 patient_id, 
                 patient_name, 
+                ANY_VALUE(initials) as initials,
                 patient_phone, 
                 ANY_VALUE(patient_address) as patient_address,
                 ANY_VALUE(gender) as gender,
@@ -68,6 +71,13 @@ async function getExistingPatientByName(db, patient_name) {
     } catch (error) {
         logger.error(`Error checking patient by name: ${error.message}`, error);
         return null;
+    }
+}
+
+async function ensureInitialsColumn(db) {
+    const [columns] = await db.query("SHOW COLUMNS FROM receipts LIKE 'initials'");
+    if (columns.length === 0) {
+        await db.query("ALTER TABLE receipts ADD COLUMN initials VARCHAR(100) NULL AFTER patient_name");
     }
 }
 
@@ -159,7 +169,7 @@ async function generatePatientId(db) {
     }
 }
 
-async function createReceipt(patient_name, patient_phone, patient_address, patient_gender, patient_age, patient_next_visit, room_number, service, qty, amount, total, mode_of_payment, amount_paid, balance, options = {}) {
+async function createReceipt(patient_name, initials, patient_phone, patient_address, patient_gender, patient_age, patient_next_visit, room_number, service, qty, amount, total, mode_of_payment, amount_paid, balance, options = {}) {
     const db = await initializeDatabase();
     try {
         let patientId;
@@ -189,11 +199,13 @@ async function createReceipt(patient_name, patient_phone, patient_address, patie
             }
         }
         
-        const sql = `INSERT INTO receipts (patient_id, patient_name, patient_phone, patient_address, gender, age, next_visit, room_number, service, qty, amount, total, mode_of_payment, amount_paid, balance) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        await ensureInitialsColumn(db);
+        const sql = `INSERT INTO receipts (patient_id, patient_name, initials, patient_phone, patient_address, gender, age, next_visit, room_number, service, qty, amount, total, mode_of_payment, amount_paid, balance)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
         const [result] = await db.query(sql, [
             patientId,
             patient_name, 
+            initials || null,
             patient_phone, 
             patient_address || null, 
             patient_gender || null, 
@@ -220,6 +232,7 @@ async function createReceipt(patient_name, patient_phone, patient_address, patie
 async function getReceiptDetails(id) {
     const db = await initializeDatabase();
     try {
+        await ensureInitialsColumn(db);
         const [result] = await db.query(
             `SELECT * FROM receipts WHERE id = ?`,
             [id]
@@ -236,6 +249,7 @@ async function getReceiptDetails(id) {
 async function getReceipts(page, perPage, search) {
     const db = await initializeDatabase();
     try {
+        await ensureInitialsColumn(db);
         const searchTerm = search && search.toString().trim().length > 0
             ? `%${search.toString().trim().toLowerCase()}%`
             : null;
@@ -291,16 +305,18 @@ async function deleteReceipt(id) {
     }
 }
 
-async function updateReceipt(id, patient_name, patient_phone, patient_address, patient_gender, patient_age, patient_next_visit, room_number, service, qty, amount, total, mode_of_payment, amount_paid, balance) {
+async function updateReceipt(id, patient_name, initials, patient_phone, patient_address, patient_gender, patient_age, patient_next_visit, room_number, service, qty, amount, total, mode_of_payment, amount_paid, balance) {
     const db = await initializeDatabase();
     try {
+        await ensureInitialsColumn(db);
         const sql = `
             UPDATE receipts
-            SET patient_name = ?, patient_phone = ?, patient_address = ?, gender = ?, age = ?, next_visit = ?, room_number = ?, service = ?, qty = ?, amount = ?, total = ?, mode_of_payment = ?, amount_paid = ?, balance = ?
+            SET patient_name = ?, initials = ?, patient_phone = ?, patient_address = ?, gender = ?, age = ?, next_visit = ?, room_number = ?, service = ?, qty = ?, amount = ?, total = ?, mode_of_payment = ?, amount_paid = ?, balance = ?
             WHERE id = ?
         `;
         const [result] = await db.query(sql, [
             patient_name,
+            initials || null,
             patient_phone,
             patient_address || null,
             patient_gender || null,
@@ -328,6 +344,7 @@ async function updateReceipt(id, patient_name, patient_phone, patient_address, p
 async function getReceiptsByPatient(patient_phone) {
     const db = await initializeDatabase();
     try {
+        await ensureInitialsColumn(db);
         const [result] = await db.query(
             `SELECT * FROM receipts WHERE patient_phone = ? ORDER BY created_at DESC`,
             [patient_phone]
@@ -344,8 +361,9 @@ async function getReceiptsByPatient(patient_phone) {
 async function getPatientDetails(patient_phone) {
     const db = await initializeDatabase();
     try {
+        await ensureInitialsColumn(db);
         const [result] = await db.query(
-            `SELECT DISTINCT patient_name, patient_phone, patient_address, gender, age FROM receipts WHERE patient_phone = ? LIMIT 1`,
+            `SELECT DISTINCT patient_name, initials, patient_phone, patient_address, gender, age FROM receipts WHERE patient_phone = ? ORDER BY created_at DESC LIMIT 1`,
             [patient_phone]
         );
         return result.length > 0 ? result[0] : null;

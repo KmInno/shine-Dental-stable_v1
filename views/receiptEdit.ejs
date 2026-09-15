@@ -13,6 +13,15 @@
     <label for="patient_name">Patient Name:</label>
     <input type="text" id="patient_name" name="patient_name" value="<%= receipt.patient_name %>" required>
 
+    <label for="initials">Initials:</label>
+    <select id="initials" name="initials">
+        <option value="">Select</option>
+        <option value="Dr. Bosco Kawooya" <%= receipt.initials === 'Dr. Bosco Kawooya' ? 'selected' : '' %>>Dr. Bosco Kawooya</option>
+        <option value="Lwasa Moses" <%= receipt.initials === 'Lwasa Moses' ? 'selected' : '' %>>Lwasa Moses</option>
+        <option value="Kidega Johnson" <%= receipt.initials === 'Kidega Johnson' ? 'selected' : '' %>>Kidega Johnson</option>
+        <option value="Sseguya Mubarack" <%= receipt.initials === 'Sseguya Mubarack' ? 'selected' : '' %>>Sseguya Mubarack</option>
+    </select>
+
     <label for="patient_phone">Patient Phone:</label>
     <input type="text" id="patient_phone" name="patient_phone" value="<%= receipt.patient_phone %>" required>
 

@@ -21,10 +21,10 @@
         min-height: 210mm;
         margin: 0 auto;
         padding: 20px;
-        background-image: url('/images/shinedental-water_mark.png');
+        background-image: url('/images/shinedental_watermark.png');
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 350px;
+        background-size: 450px;
     }
 
     .receipt-logo {
@@ -106,6 +106,7 @@
     .services-table td:nth-child(3) {
         text-align: center;
     }
+
     .services-table td:nth-child(3) {
         text-align: center;
     }
@@ -134,6 +135,7 @@
     }
 
     #amount-in-words {
+        display: inline;
         font-style: italic;
     }
 
@@ -239,11 +241,11 @@
             margin: 0;
             /* padding: 10mm; */
             /* Keep the watermark visible without affecting receipt content. */
-            background-image: linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)),
-                url('/images/shinedental-water_mark.png');
+            background-image: url('/images/shinedental_watermark.png');
+
             background-repeat: no-repeat;
             background-position: center;
-            background-size: 450px;
+            background-size: 400px;
         }
 
         .receipt-actions {
@@ -272,11 +274,7 @@
 <div class="receipt">
 
     <!-- Logo -->
-    <img
-        class="receipt-logo"
-        src="/images/reciept_logo.png"
-        alt="Shine Dental Surgery"
-    >
+    <img class="receipt-logo" src="/images/reciept_logo.png" alt="Shine Dental Surgery">
 
     <!-- Title -->
     <h1 class="receipt-title" style="color: #050fd7; font-weight: bold; font-size: 20px;">
@@ -300,6 +298,11 @@
                     <%= receipt.patient_name %>
                 </span>
 
+                <!-- <span>
+                    <strong>Initials:</strong>
+                    <%= receipt.initials || '' %>
+                </span> -->
+
                 <span>
                     <strong>Tel:</strong>
                     <%= receipt.patient_phone %>
@@ -313,9 +316,11 @@
                 <% if (receipt.next_visit) { %>
                     <span>
                         <strong>Next Visit:</strong>
-                        <strong style="color: red;"><%= new Date(receipt.next_visit).toLocaleDateString('en-GB') %></strong>
+                        <strong style="color: red;">
+                            <%= new Date(receipt.next_visit).toLocaleDateString('en-GB') %>
+                        </strong>
                     </span>
-                <% } %>
+                    <% } %>
 
             </div>
 
@@ -325,7 +330,7 @@
 
                 <span>
                     <strong>Receipt Number:</strong>
-                    <strong style="color: red;">RCP-<%= String(receipt.id).padStart(6, '0') %></strong>
+                    <strong style="color: red;">RCP-<%= String(receipt.id).padStart(6, '0' ) %></strong>
                 </span>
 
                 <span>
@@ -333,20 +338,15 @@
 
                     <% if (!receipt.patient_id) { %>
 
-                        <%
-                            const year = new Date(receipt.created_at)
-                                .getFullYear()
-                                .toString()
-                                .slice(-2);
-                        %>
+                        <% const year=new Date(receipt.created_at) .getFullYear() .toString() .slice(-2); %>
 
-                        SDS-<%= year %>-<%= receipt.id %>
+                            SDS-<%= year %>-<%= receipt.id %>
 
-                    <% } else { %>
+                                    <% } else { %>
 
-                        <%= formatPatientId(receipt.patient_id) %>
+                                        <%= formatPatientId(receipt.patient_id) %>
 
-                    <% } %>
+                                            <% } %>
 
                 </span>
 
@@ -359,181 +359,145 @@
              Services
         ========================= -->
 
-        <%
-            let services = [];
-
-            try {
-                if (typeof receipt.service === 'string') {
-                    const parsed = JSON.parse(receipt.service);
-
-                    services = Array.isArray(parsed)
-                        ? parsed
-                        : [parsed];
-
-                } else if (Array.isArray(receipt.service)) {
-                    services = receipt.service;
-
-                } else if (receipt.service) {
-                    services = [receipt.service];
-                }
-
-            } catch (error) {
-                services = receipt.service
-                    ? [receipt.service]
-                    : [];
-            }
-        %>
+        <% let services=[]; try { if (typeof receipt.service==='string' ) { const parsed=JSON.parse(receipt.service);
+            services=Array.isArray(parsed) ? parsed : [parsed]; } else if (Array.isArray(receipt.service)) {
+            services=receipt.service; } else if (receipt.service) { services=[receipt.service]; } } catch (error) {
+            services=receipt.service ? [receipt.service] : []; } %>
 
 
-        <table class="services-table">
+            <table class="services-table">
 
-            <thead>
-                <tr>
-                    <th>Service</th>
-                    <th>Mode of Payment</th>
-                    <th>Qty</th>
-                    <th>Amount</th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Mode of Payment</th>
+                        <th>Qty</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
 
-            <tbody>
+                <tbody>
 
-                <% services.forEach(function(item) { %>
+                    <% services.forEach(function(item) { %>
+
+                        <tr>
+
+                            <td>
+                                <%= item.name || item.service || item %>
+                            </td>
+
+                            <td>
+                                <%= receipt.mode_of_payment %>
+                            </td>
+
+                            <td>
+                                <%= item.qty || 1 %>
+                            </td>
+
+                            <td>
+                                UGX
+                                <%= Number(item.amount || 0).toLocaleString('en-US') %>
+                            </td>
+
+                        </tr>
+
+                        <% }) %>
+
+
+                            <!-- Total -->
+                            <tr class="total-row">
+
+                                <td colspan="3" style="text-align: right;">
+                                    Total Amount
+                                </td>
+
+                                <td>
+                                    UGX
+                                    <%= Number( receipt.total || receipt.total_amount || 0 ).toLocaleString('en-US') %>
+                                </td>
+
+                            </tr>
+
+                </tbody>
+
+            </table>
+
+
+            <!-- =========================
+             Amount in Words
+        ========================= -->
+
+            <div class="amount-words">
+
+                <strong>Amount Paid in Words:</strong>
+
+                <span id="amount-in-words"></span>
+
+            </div>
+
+
+            <!-- =========================
+             Payment Summary
+        ========================= -->
+
+            <div class="summary-wrapper">
+
+                <table class="summary-box">
 
                     <tr>
-
                         <td>
-                            <%= item.name || item.service || item %>
-                        </td>
-
-                        <td>
-                            <%= receipt.mode_of_payment %>
-                        </td>
-
-                        <td>
-                            <%= item.qty || 1 %>
+                            <strong>Amount Paid</strong>
                         </td>
 
                         <td>
                             UGX
-                            <%= Number(item.amount || 0).toLocaleString('en-US') %>
+                            <%= Number( receipt.amount_paid || 0 ).toLocaleString('en-US') %>
                         </td>
-
                     </tr>
 
-                <% }) %>
+                    <tr>
+                        <td>
+                            <strong>Balance</strong>
+                        </td>
+
+                        <td>
+                            UGX
+                            <%= Number( receipt.balance || 0 ).toLocaleString('en-US') %>
+                        </td>
+                    </tr>
+
+                </table>
+
+            </div>
 
 
-                <!-- Total -->
-                <tr class="total-row">
-
-                    <td colspan="3" style="text-align: right;">
-                        Total Amount
-                    </td>
-
-                    <td>
-                        UGX
-                        <%= Number(
-                            receipt.total || receipt.total_amount || 0
-                        ).toLocaleString('en-US') %>
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-
-        <!-- =========================
-             Amount in Words
-        ========================= -->
-
-        <div class="amount-words">
-
-            <strong>Amount Paid in Words:</strong>
-
-            <span id="amount-in-words"></span>
-
-        </div>
-
-
-        <!-- =========================
-             Payment Summary
-        ========================= -->
-
-        <div class="summary-wrapper">
-
-            <table class="summary-box">
-
-                <tr>
-                    <td>
-                        <strong>Amount Paid</strong>
-                    </td>
-
-                    <td>
-                        UGX
-                        <%= Number(
-                            receipt.amount_paid || 0
-                        ).toLocaleString('en-US') %>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <strong>Balance</strong>
-                    </td>
-
-                    <td>
-                        UGX
-                        <%= Number(
-                            receipt.balance || 0
-                        ).toLocaleString('en-US') %>
-                    </td>
-                </tr>
-
-            </table>
-
-        </div>
-
-
-        <!-- =========================
+            <!-- =========================
              Footer
         ========================= -->
 
-        <div class="receipt-footer">
+            <div class="receipt-footer">
 
-            <p class="served-by">
+                <p class="served-by">
 
-                <strong>Served By:</strong>
+                    <strong>Served By:</strong>
 
-                <%= typeof servedBy !== 'undefined'
-                    ? servedBy
-                    : (
-                        typeof user !== 'undefined' && user
-                            ? (
-                                user.name ||
-                                user.email ||
-                                user.username
-                            )
-                            : '_________'
-                    )
-                %>
+                    <%= typeof servedBy !=='undefined' ? servedBy : ( typeof user !=='undefined' && user ? ( user.name
+                        || user.email || user.username ) : '_________' ) %>
 
-            </p>
+                </p>
 
 
-            <p class="thank-you">
-                Thank you for choosing Shine Dental Surgery.
-            </p>
+                <p class="thank-you">
+                    Thank you for choosing Shine Dental Surgery.
+                </p>
 
 
-            <p class="copyright">
-                © Shine Dental Surgery
-                <%= new Date().getFullYear() %>
-            </p>
+                <p class="copyright">
+                    © Shine Dental Surgery
+                    <%= new Date().getFullYear() %>
+                </p>
 
-        </div>
+            </div>
 
     </div>
 
@@ -546,10 +510,7 @@
 
 <div class="receipt-actions">
 
-    <button
-        type="button"
-        onclick="window.print()"
-    >
+    <button type="button" onclick="window.print()">
         Print
     </button>
 
@@ -690,4 +651,3 @@
         amountInWords.slice(1) +
         ' shillings';
 </script>
-
