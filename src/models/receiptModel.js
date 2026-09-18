@@ -363,7 +363,7 @@ async function getPatientDetails(patient_phone) {
     try {
         await ensureInitialsColumn(db);
         const [result] = await db.query(
-            `SELECT DISTINCT patient_name, initials, patient_phone, patient_address, gender, age FROM receipts WHERE patient_phone = ? ORDER BY created_at DESC LIMIT 1`,
+            `SELECT patient_name, initials, patient_phone, patient_address, gender, age FROM receipts WHERE patient_phone = ? ORDER BY created_at DESC LIMIT 1`,
             [patient_phone]
         );
         return result.length > 0 ? result[0] : null;
